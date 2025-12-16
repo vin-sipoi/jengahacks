@@ -57,7 +57,7 @@ const Hero = () => {
           {/* Stats */}
           <div className="animate-slide-up delay-400 mt-16 grid grid-cols-2 gap-8 md:gap-16">
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-gradient">500+</div>
+              <div className="text-3xl md:text-4xl font-bold text-gradient">100+</div>
               <div className="text-sm text-muted-foreground mt-1">Hackers</div>
             </div>
             <div className="text-center">
