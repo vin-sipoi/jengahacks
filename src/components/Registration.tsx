@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Upload, Linkedin, CheckCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -62,14 +63,54 @@ const Registration = () => {
 
     setIsSubmitting(true);
     
-    // Simulate submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    toast.success("Registration successful! Check your email for confirmation.");
-    setFormData({ fullName: "", email: "", linkedIn: "", resume: null });
-    setHasLinkedIn(false);
-    setHasResume(false);
-    setIsSubmitting(false);
+    try {
+      let resumePath: string | null = null;
+
+      // Upload resume if provided
+      if (formData.resume) {
+        const fileExt = formData.resume.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('resumes')
+          .upload(fileName, formData.resume);
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          throw new Error('Failed to upload resume');
+        }
+        
+        resumePath = fileName;
+      }
+
+      // Insert registration into database
+      const { error: insertError } = await supabase
+        .from('registrations')
+        .insert({
+          full_name: formData.fullName.trim(),
+          email: formData.email.trim().toLowerCase(),
+          linkedin_url: formData.linkedIn.trim() || null,
+          resume_path: resumePath,
+        });
+
+      if (insertError) {
+        console.error('Insert error:', insertError);
+        if (insertError.code === '23505') {
+          throw new Error('This email is already registered');
+        }
+        throw new Error('Failed to submit registration');
+      }
+
+      toast.success("Registration successful! We'll be in touch soon.");
+      setFormData({ fullName: "", email: "", linkedIn: "", resume: null });
+      setHasLinkedIn(false);
+      setHasResume(false);
+    } catch (error) {
+      console.error('Registration error:', error);
+      toast.error(error instanceof Error ? error.message : 'Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -83,7 +124,7 @@ const Registration = () => {
               <span className="text-gradient">Register</span> Now
             </h2>
             <p className="text-muted-foreground text-lg">
-              Secure your spot at JengaHacks 2025. Limited to 500 participants.
+              Secure your spot at JengaHacks 2026. Limited to 500 participants.
             </p>
           </div>
 
