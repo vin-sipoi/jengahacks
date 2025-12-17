@@ -130,7 +130,7 @@ const Registration = () => {
               <span className="text-gradient">Register</span> Now
             </h2>
             <p className="text-muted-foreground text-lg">
-              Secure your spot at JengaHacks 2026. Limited to 500 participants.
+              Secure your spot at JengaHacks 2026. Limited to 200 participants.
             </p>
           </div>
 
