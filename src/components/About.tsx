@@ -14,7 +14,7 @@ const features = [
   {
     icon: Trophy,
     title: "Win Big",
-    description: "Compete for over $50,000 in prizes, mentorship opportunities, and potential investment.",
+    description: "Compete for prizes, mentorship opportunities, and the glory of it all.",
   },
   {
     icon: Lightbulb,
