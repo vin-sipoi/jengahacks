@@ -83,13 +83,19 @@ const Registration = () => {
         resumePath = fileName;
       }
 
+      // Normalize LinkedIn URL
+      let linkedInUrl = formData.linkedIn.trim();
+      if (linkedInUrl && !linkedInUrl.startsWith('http')) {
+        linkedInUrl = `https://${linkedInUrl}`;
+      }
+
       // Insert registration into database
       const { error: insertError } = await supabase
         .from('registrations')
         .insert({
           full_name: formData.fullName.trim(),
           email: formData.email.trim().toLowerCase(),
-          linkedin_url: formData.linkedIn.trim() || null,
+          linkedin_url: linkedInUrl || null,
           resume_path: resumePath,
         });
 
@@ -181,8 +187,8 @@ const Registration = () => {
               <Input
                 id="linkedIn"
                 name="linkedIn"
-                type="url"
-                placeholder="https://linkedin.com/in/yourprofile"
+                type="text"
+                placeholder="linkedin.com/in/yourprofile"
                 value={formData.linkedIn}
                 onChange={handleInputChange}
                 className="bg-muted border-border focus:border-primary"
