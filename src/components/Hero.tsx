@@ -33,7 +33,7 @@ const Hero = () => {
           <div className="animate-slide-up delay-200 flex flex-wrap justify-center gap-6 mb-10">
             <div className="flex items-center gap-2 text-foreground">
               <Calendar className="w-5 h-5 text-primary" />
-              <span>March 15-17, 2025</span>
+              <span>February 21-22, 2026</span>
             </div>
             <div className="flex items-center gap-2 text-foreground">
               <MapPin className="w-5 h-5 text-primary" />
