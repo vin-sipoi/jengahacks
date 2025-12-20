@@ -183,11 +183,40 @@ const Registration = () => {
         resume_path: resumePath,
       };
 
-      // Removed console.log to prevent information disclosure
+      // Try to use Edge Function for IP capture if available, otherwise use direct insert
+      const USE_EDGE_FUNCTION = import.meta.env.VITE_USE_REGISTRATION_EDGE_FUNCTION === 'true';
+      
+      let insertError: { message?: string; code?: string } | null = null;
+      
+      if (USE_EDGE_FUNCTION) {
+        // Use Edge Function to capture IP address
+        const { data: functionData, error: functionError } = await supabase.functions.invoke(
+          'register-with-ip',
+          {
+            body: registrationData,
+          }
+        );
 
-      const { error: insertError } = await supabase
-        .from('registrations')
-        .insert(registrationData);
+        if (functionError) {
+          insertError = functionError;
+        } else if (functionData?.error) {
+          // Handle Edge Function error response
+          if (functionData.code === 'RATE_LIMIT_EXCEEDED') {
+            throw new Error(functionData.error || 'Rate limit exceeded. Maximum 3 registrations per email or 5 per IP per hour.');
+          }
+          if (functionData.code === 'DUPLICATE_EMAIL') {
+            throw new Error(functionData.error || 'This email is already registered');
+          }
+          throw new Error(functionData.error || 'Failed to submit registration');
+        }
+      } else {
+        // Direct database insert (IP will be NULL, but email-based rate limiting still applies)
+        const { error: dbError } = await supabase
+          .from('registrations')
+          .insert(registrationData);
+
+        insertError = dbError;
+      }
 
       if (insertError) {
         // Log error details only in development
@@ -197,7 +226,7 @@ const Registration = () => {
         
         // Check for rate limit violation (custom error code or message)
         if (insertError.message?.includes('rate limit') || insertError.message?.includes('too many')) {
-          throw new Error('Rate limit exceeded. Please try again later.');
+          throw new Error('Rate limit exceeded. Maximum 3 registrations per email or 5 per IP per hour. Please try again later.');
         }
         
         if (insertError.code === '23505') {
@@ -208,8 +237,8 @@ const Registration = () => {
         // Note: RLS policy violations typically return generic errors
         // The rate limit check happens at the database level via the policy
         if (insertError.message?.includes('policy') || insertError.message?.includes('permission')) {
-          // Likely rate limited by RLS policy
-          throw new Error('Rate limit exceeded. Maximum 3 registrations per hour allowed. Please try again later.');
+          // Likely rate limited by RLS policy (email or IP)
+          throw new Error('Rate limit exceeded. Maximum 3 registrations per email or 5 per IP per hour. Please try again later.');
         }
         
         throw new Error('Failed to submit registration');
@@ -346,13 +375,27 @@ const Registration = () => {
                 <ReCAPTCHA
                   ref={recaptchaRef}
                   sitekey={RECAPTCHA_SITE_KEY}
-                  onChange={(token) => setCaptchaToken(token)}
-                  onExpired={() => setCaptchaToken(null)}
-                  onError={() => {
+                  onChange={(token) => {
+                    if (token) {
+                      setCaptchaToken(token);
+                    }
+                  }}
+                  onExpired={() => {
                     setCaptchaToken(null);
-                    toast.error("CAPTCHA verification failed. Please try again.");
+                    toast.error("CAPTCHA expired. Please verify again.");
+                  }}
+                  onError={(error) => {
+                    setCaptchaToken(null);
+                    console.error("reCAPTCHA error:", error);
+                    // Check for specific error types
+                    if (error?.toString().includes("Invalid key type")) {
+                      toast.error("CAPTCHA configuration error. Please contact support.");
+                    } else {
+                      toast.error("CAPTCHA verification failed. Please refresh the page and try again.");
+                    }
                   }}
                   theme="dark"
+                  size="normal"
                 />
               </div>
             )}

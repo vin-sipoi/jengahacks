@@ -17,6 +17,9 @@ vi.mock("@/integrations/supabase/client", () => ({
     from: vi.fn(() => ({
       insert: vi.fn(),
     })),
+    functions: {
+      invoke: vi.fn(),
+    },
   },
 }));
 
@@ -156,6 +159,7 @@ describe("Registration", () => {
 
   it("should disable submit button when submitting", async () => {
     const user = userEvent.setup();
+    vi.stubEnv("VITE_USE_REGISTRATION_EDGE_FUNCTION", "false");
     render(<Registration />);
 
     // Mock successful submission
@@ -216,6 +220,216 @@ describe("Registration", () => {
     expect(label).toBeInTheDocument();
     // The CheckCircle component should be rendered when hasLinkedIn is true
     // We verify by checking the input value which triggers the state change
+  });
+
+  describe("IP Rate Limiting", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+      vi.stubEnv("VITE_RECAPTCHA_SITE_KEY", "test-site-key");
+    });
+
+    it("should use Edge Function when VITE_USE_REGISTRATION_EDGE_FUNCTION is true", async () => {
+      const user = userEvent.setup();
+      vi.stubEnv("VITE_USE_REGISTRATION_EDGE_FUNCTION", "true");
+      
+      const mockInvoke = vi.fn().mockResolvedValue({
+        data: { success: true, data: { id: "123", email: "test@example.com" } },
+        error: null,
+      });
+
+      vi.mocked(supabase.functions.invoke).mockImplementation(mockInvoke);
+
+      render(<Registration />);
+
+      const captchaTrigger = screen.getByTestId("recaptcha-trigger");
+      await user.click(captchaTrigger);
+
+      const nameInput = screen.getByLabelText(/Full Name/i);
+      const emailInput = screen.getByLabelText(/Email Address/i);
+      const linkedInInput = screen.getByLabelText(/LinkedIn Profile/i);
+      const submitButton = screen.getByRole("button", {
+        name: /Complete Registration/i,
+      });
+
+      await user.type(nameInput, "John Doe");
+      await user.type(emailInput, "john@example.com");
+      await user.type(linkedInInput, "linkedin.com/in/test");
+
+      const form = submitButton.closest("form") as HTMLFormElement;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(mockInvoke).toHaveBeenCalledWith("register-with-ip", {
+          body: expect.objectContaining({
+            full_name: "John Doe",
+            email: "john@example.com",
+            linkedin_url: expect.stringContaining("linkedin.com"),
+          }),
+        });
+      });
+    });
+
+    it("should handle IP rate limit error from Edge Function", async () => {
+      const user = userEvent.setup();
+      vi.stubEnv("VITE_USE_REGISTRATION_EDGE_FUNCTION", "true");
+
+      const mockInvoke = vi.fn().mockResolvedValue({
+        data: {
+          error: "Rate limit exceeded. Maximum 3 registrations per email or 5 per IP per hour.",
+          code: "RATE_LIMIT_EXCEEDED",
+        },
+        error: null,
+      });
+
+      vi.mocked(supabase.functions.invoke).mockImplementation(mockInvoke);
+
+      render(<Registration />);
+
+      const captchaTrigger = screen.getByTestId("recaptcha-trigger");
+      await user.click(captchaTrigger);
+
+      const nameInput = screen.getByLabelText(/Full Name/i);
+      const emailInput = screen.getByLabelText(/Email Address/i);
+      const linkedInInput = screen.getByLabelText(/LinkedIn Profile/i);
+      const submitButton = screen.getByRole("button", {
+        name: /Complete Registration/i,
+      });
+
+      await user.type(nameInput, "John Doe");
+      await user.type(emailInput, "john@example.com");
+      await user.type(linkedInInput, "linkedin.com/in/test");
+
+      const form = submitButton.closest("form") as HTMLFormElement;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          expect.stringContaining("Rate limit exceeded")
+        );
+      }, { timeout: 2000 });
+    });
+
+    it("should handle IP rate limit error with specific IP limit message", async () => {
+      const user = userEvent.setup();
+      vi.stubEnv("VITE_USE_REGISTRATION_EDGE_FUNCTION", "true");
+
+      const mockInvoke = vi.fn().mockResolvedValue({
+        data: {
+          error: "Rate limit exceeded. Maximum 5 registrations per IP per hour.",
+          code: "RATE_LIMIT_EXCEEDED",
+        },
+        error: null,
+      });
+
+      vi.mocked(supabase.functions.invoke).mockImplementation(mockInvoke);
+
+      render(<Registration />);
+
+      const captchaTrigger = screen.getByTestId("recaptcha-trigger");
+      await user.click(captchaTrigger);
+
+      const nameInput = screen.getByLabelText(/Full Name/i);
+      const emailInput = screen.getByLabelText(/Email Address/i);
+      const linkedInInput = screen.getByLabelText(/LinkedIn Profile/i);
+      const submitButton = screen.getByRole("button", {
+        name: /Complete Registration/i,
+      });
+
+      await user.type(nameInput, "John Doe");
+      await user.type(emailInput, "john@example.com");
+      await user.type(linkedInInput, "linkedin.com/in/test");
+
+      const form = submitButton.closest("form") as HTMLFormElement;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          expect.stringMatching(/5 per IP|Rate limit exceeded/i)
+        );
+      }, { timeout: 2000 });
+    });
+
+    it("should handle database rate limit error (RLS policy violation)", async () => {
+      const user = userEvent.setup();
+      vi.stubEnv("VITE_USE_REGISTRATION_EDGE_FUNCTION", "false");
+
+      const mockInsert = vi.fn().mockResolvedValue({
+        error: {
+          message: "new row violates row-level security policy",
+          code: "42501",
+        },
+      });
+      vi.mocked(supabase.from).mockReturnValue({
+        insert: mockInsert,
+      } as any);
+
+      render(<Registration />);
+
+      const captchaTrigger = screen.getByTestId("recaptcha-trigger");
+      await user.click(captchaTrigger);
+
+      const nameInput = screen.getByLabelText(/Full Name/i);
+      const emailInput = screen.getByLabelText(/Email Address/i);
+      const linkedInInput = screen.getByLabelText(/LinkedIn Profile/i);
+      const submitButton = screen.getByRole("button", {
+        name: /Complete Registration/i,
+      });
+
+      await user.type(nameInput, "John Doe");
+      await user.type(emailInput, "john@example.com");
+      await user.type(linkedInInput, "linkedin.com/in/test");
+
+      const form = submitButton.closest("form") as HTMLFormElement;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          expect.stringContaining("Rate limit exceeded")
+        );
+      }, { timeout: 2000 });
+    });
+
+    it("should handle Edge Function network errors gracefully", async () => {
+      const user = userEvent.setup();
+      vi.stubEnv("VITE_USE_REGISTRATION_EDGE_FUNCTION", "true");
+
+      const mockInvoke = vi.fn().mockResolvedValue({
+        data: null,
+        error: {
+          message: "Network error",
+          status: 500,
+        },
+      });
+
+      vi.mocked(supabase.functions.invoke).mockImplementation(mockInvoke);
+
+      render(<Registration />);
+
+      const captchaTrigger = screen.getByTestId("recaptcha-trigger");
+      await user.click(captchaTrigger);
+
+      const nameInput = screen.getByLabelText(/Full Name/i);
+      const emailInput = screen.getByLabelText(/Email Address/i);
+      const linkedInInput = screen.getByLabelText(/LinkedIn Profile/i);
+      const submitButton = screen.getByRole("button", {
+        name: /Complete Registration/i,
+      });
+
+      await user.type(nameInput, "John Doe");
+      await user.type(emailInput, "john@example.com");
+      await user.type(linkedInInput, "linkedin.com/in/test");
+
+      const form = submitButton.closest("form") as HTMLFormElement;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      }, { timeout: 3000 });
+      
+      // Verify error was shown (could be "Failed to submit" or generic error)
+      expect(toast.error).toHaveBeenCalled();
+    });
+
   });
 });
 

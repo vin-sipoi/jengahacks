@@ -100,7 +100,10 @@ Add your Supabase credentials and reCAPTCHA site key:
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
 VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+VITE_USE_REGISTRATION_EDGE_FUNCTION=false
 ```
+
+> **Note**: Set `VITE_USE_REGISTRATION_EDGE_FUNCTION=true` to enable IP-based rate limiting via Edge Function (requires deployment of `register-with-ip` function).
 
 > ⚠️ **Note**: Replace the placeholder values with your actual credentials.
 > 
