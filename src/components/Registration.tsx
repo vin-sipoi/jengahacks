@@ -14,6 +14,7 @@ import {
   isValidEmail,
   isValidFullName,
 } from "@/lib/security";
+import { checkRateLimit, formatRetryAfter, recordSubmission } from "@/lib/rateLimit";
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -94,6 +95,16 @@ const Registration = () => {
       return;
     }
 
+    // Check client-side rate limit
+    const rateLimitCheck = checkRateLimit();
+    if (!rateLimitCheck.allowed) {
+      const retryMessage = rateLimitCheck.retryAfter 
+        ? `Rate limit exceeded. Please try again in ${formatRetryAfter(rateLimitCheck.retryAfter)}.`
+        : "Rate limit exceeded. Please try again later.";
+      toast.error(retryMessage);
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -166,13 +177,29 @@ const Registration = () => {
         if (import.meta.env.DEV) {
           console.error('Insert error:', insertError);
         }
+        
+        // Check for rate limit violation (custom error code or message)
+        if (insertError.message?.includes('rate limit') || insertError.message?.includes('too many')) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        }
+        
         if (insertError.code === '23505') {
           throw new Error('This email is already registered');
         }
+        
+        // Check if RLS policy blocked due to rate limit
+        // Note: RLS policy violations typically return generic errors
+        // The rate limit check happens at the database level via the policy
+        if (insertError.message?.includes('policy') || insertError.message?.includes('permission')) {
+          // Likely rate limited by RLS policy
+          throw new Error('Rate limit exceeded. Maximum 3 registrations per hour allowed. Please try again later.');
+        }
+        
         throw new Error('Failed to submit registration');
       }
 
-      // Success - reset form
+      // Success - record submission and reset form
+      recordSubmission();
       toast.success("Registration successful! We'll be in touch soon.");
       setFormData({ fullName: "", email: "", linkedIn: "", resume: null });
       setHasLinkedIn(false);

@@ -17,7 +17,7 @@ JengaHacks is a 48-hour hackathon event taking place in Nairobi, Kenya, bringing
 ## ✨ Features
 
 - 🎨 **Modern UI/UX** - Beautiful, responsive design built with Tailwind CSS and shadcn/ui
-- 📝 **Registration System** - Easy event registration with form validation
+- 📝 **Registration System** - Easy event registration with form validation and rate limiting
 - 🏢 **Sponsor Showcase** - Dedicated section highlighting event sponsors
 - 📱 **Fully Responsive** - Optimized for all devices and screen sizes
 - ⚡ **Fast Performance** - Built with Vite for lightning-fast development and builds
