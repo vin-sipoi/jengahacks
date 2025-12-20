@@ -52,6 +52,9 @@ JengaHacks is a 48-hour hackathon event taking place in Nairobi, Kenya, bringing
 - **ESLint** - Code linting
 - **TypeScript ESLint** - TypeScript-specific linting rules
 - **PostCSS** - CSS processing
+- **Vitest** - Fast unit test framework
+- **React Testing Library** - Component testing utilities
+- **jsdom** - DOM environment for testing
 
 ## 📋 Prerequisites
 
@@ -117,6 +120,10 @@ The application will be available at `http://localhost:8080`
 | `npm run build:dev` | Build in development mode |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint to check code quality |
+| `npm run test` | Run tests in watch mode |
+| `npm run test:run` | Run tests once |
+| `npm run test:ui` | Run tests with Vitest UI |
+| `npm run test:coverage` | Run tests with coverage report |
 
 ## 📁 Project Structure
 
@@ -152,6 +159,52 @@ jengahacks-hub/
 ├── tailwind.config.ts   # Tailwind CSS configuration
 ├── vite.config.ts       # Vite configuration
 └── package.json         # Project dependencies
+```
+
+## 🧪 Testing
+
+The project uses **Vitest** and **React Testing Library** for testing. Tests are located alongside the components they test with the `.test.tsx` or `.test.ts` extension.
+
+### Running Tests
+
+```bash
+# Run tests in watch mode (recommended for development)
+npm run test
+
+# Run tests once
+npm run test:run
+
+# Run tests with UI
+npm run test:ui
+
+# Generate coverage report
+npm run test:coverage
+```
+
+### Writing Tests
+
+Test files should be placed next to the components they test:
+- `src/components/ComponentName.test.tsx`
+- `src/lib/utils.test.ts`
+
+The test setup includes:
+- React Testing Library for component testing
+- Custom render utility with providers (Router, QueryClient, etc.)
+- Mocked Supabase client for integration tests
+- jsdom for DOM simulation
+
+Example test:
+```typescript
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@/test/test-utils";
+import MyComponent from "./MyComponent";
+
+describe("MyComponent", () => {
+  it("should render correctly", () => {
+    render(<MyComponent />);
+    expect(screen.getByText("Hello")).toBeInTheDocument();
+  });
+});
 ```
 
 ## 🎨 Customization
