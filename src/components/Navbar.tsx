@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/jengahacks-logo.png";
 
 const Navbar = () => {
@@ -9,6 +10,7 @@ const Navbar = () => {
   const navLinks = [
     { href: "#about", label: "About" },
     { href: "#sponsors", label: "Sponsors" },
+    { href: "/sponsorship", label: "Become a Sponsor", isRoute: true },
   ];
 
   return (
@@ -22,13 +24,23 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-muted-foreground hover:text-primary transition-colors font-medium"
-              >
-                {link.label}
-              </a>
+              link.isRoute ? (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="text-primary hover:text-primary/80 transition-colors font-medium"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-muted-foreground hover:text-primary transition-colors font-medium"
+                >
+                  {link.label}
+                </a>
+              )
             ))}
             <Button variant="hero" size="sm" asChild>
               <a href="#register">Join Now</a>
@@ -50,14 +62,25 @@ const Navbar = () => {
           <div className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-muted-foreground hover:text-primary transition-colors font-medium"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </a>
+                link.isRoute ? (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className="text-primary hover:text-primary/80 transition-colors font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-muted-foreground hover:text-primary transition-colors font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                )
               ))}
               <Button variant="hero" size="sm" asChild>
                 <a href="#register" onClick={() => setIsOpen(false)}>Join Now</a>
