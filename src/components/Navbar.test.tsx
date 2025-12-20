@@ -18,7 +18,6 @@ describe("Navbar", () => {
   it("should render navigation links", () => {
     render(<Navbar />);
     expect(screen.getByText("About")).toBeInTheDocument();
-    expect(screen.getByText("Sponsors")).toBeInTheDocument();
     expect(screen.getByText("Become a Sponsor")).toBeInTheDocument();
     expect(screen.getByText("Join Now")).toBeInTheDocument();
   });
@@ -28,8 +27,8 @@ describe("Navbar", () => {
     const aboutLink = screen.getByText("About").closest("a");
     expect(aboutLink).toHaveAttribute("href", "#about");
 
-    const sponsorsLink = screen.getByText("Sponsors").closest("a");
-    expect(sponsorsLink).toHaveAttribute("href", "#sponsors");
+    const becomeSponsorLink = screen.getByText("Become a Sponsor").closest("a");
+    expect(becomeSponsorLink).toHaveAttribute("href", "/sponsorship");
   });
 
   it("should toggle mobile menu when menu button is clicked", async () => {
