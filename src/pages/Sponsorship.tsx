@@ -7,7 +7,7 @@ import icon from "@/assets/jengahacks-icon.svg";
 const packages = [
   {
     name: "Bronze",
-    price: "$500",
+    price: "$100",
     icon: Zap,
     color: "from-amber-700 to-amber-500",
     description: "Perfect for startups looking to connect with emerging talent",
@@ -20,7 +20,7 @@ const packages = [
   },
   {
     name: "Silver",
-    price: "$1,500",
+    price: "$200",
     icon: Sparkles,
     color: "from-slate-400 to-slate-300",
     description: "Ideal for growing companies seeking visibility",
@@ -34,7 +34,7 @@ const packages = [
   },
   {
     name: "Gold",
-    price: "$3,000",
+    price: "$500",
     icon: Crown,
     color: "from-yellow-500 to-yellow-300",
     popular: true,
@@ -50,7 +50,7 @@ const packages = [
   },
   {
     name: "Platinum",
-    price: "$5,000",
+    price: "$2,000",
     icon: Gem,
     color: "from-violet-500 to-fuchsia-400",
     description: "Maximum exposure and exclusive partnership benefits",
