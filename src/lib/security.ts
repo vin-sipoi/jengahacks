@@ -110,3 +110,42 @@ export const isValidFullName = (name: string): boolean => {
   return nameRegex.test(name);
 };
 
+/**
+ * Validate WhatsApp number
+ * Accepts international format with or without +, with or without country code
+ * Examples: +254712345678, 254712345678, 0712345678, 712345678
+ */
+export const isValidWhatsAppNumber = (phone: string): boolean => {
+  if (!phone || phone.trim().length === 0) {
+    return false; // Empty is invalid (use null/undefined for optional)
+  }
+
+  const cleaned = phone.trim().replace(/[\s\-\(\)]/g, ''); // Remove spaces, dashes, parentheses
+  
+  // Must be between 7 and 15 digits (E.164 standard allows up to 15 digits)
+  // Allow optional + prefix
+  const phoneRegex = /^\+?[1-9]\d{6,14}$/;
+  return phoneRegex.test(cleaned);
+};
+
+/**
+ * Normalize WhatsApp number to international format
+ * Adds + prefix if missing and ensures proper formatting
+ */
+export const normalizeWhatsAppNumber = (phone: string): string | null => {
+  if (!phone || phone.trim().length === 0) {
+    return null;
+  }
+
+  const cleaned = phone.trim().replace(/[\s\-\(\)]/g, '');
+  
+  // If it doesn't start with +, add it
+  if (!cleaned.startsWith('+')) {
+    // If it starts with 0, remove it (common in some countries)
+    const withoutLeadingZero = cleaned.startsWith('0') ? cleaned.substring(1) : cleaned;
+    return `+${withoutLeadingZero}`;
+  }
+  
+  return cleaned;
+};
+
