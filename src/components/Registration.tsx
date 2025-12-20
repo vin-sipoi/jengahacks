@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Upload, Linkedin, CheckCircle } from "lucide-react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { supabase } from "@/integrations/supabase/client";
 import {
   sanitizeFileName,
@@ -26,7 +27,11 @@ const Registration = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasLinkedIn, setHasLinkedIn] = useState(false);
   const [hasResume, setHasResume] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  
+  const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "";
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -92,6 +97,18 @@ const Registration = () => {
     }
     if (!hasLinkedIn && !hasResume) {
       toast.error("Please provide either your LinkedIn profile or upload your resume");
+      return;
+    }
+
+    // Verify CAPTCHA
+    if (!RECAPTCHA_SITE_KEY) {
+      // If CAPTCHA is not configured, log warning but allow submission in development
+      if (import.meta.env.DEV) {
+        console.warn("reCAPTCHA site key not configured. Skipping CAPTCHA verification.");
+      }
+    } else if (!captchaToken) {
+      toast.error("Please complete the CAPTCHA verification");
+      recaptchaRef.current?.reset();
       return;
     }
 
@@ -204,11 +221,13 @@ const Registration = () => {
       setFormData({ fullName: "", email: "", linkedIn: "", resume: null });
       setHasLinkedIn(false);
       setHasResume(false);
+      setCaptchaToken(null);
       
-      // Reset file input
+      // Reset file input and CAPTCHA
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+      recaptchaRef.current?.reset();
     } catch (error) {
       // Log error details only in development
       if (import.meta.env.DEV) {
@@ -320,6 +339,23 @@ const Registration = () => {
                 </p>
               )}
             </div>
+
+            {/* CAPTCHA */}
+            {RECAPTCHA_SITE_KEY && (
+              <div className="flex justify-center">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={RECAPTCHA_SITE_KEY}
+                  onChange={(token) => setCaptchaToken(token)}
+                  onExpired={() => setCaptchaToken(null)}
+                  onError={() => {
+                    setCaptchaToken(null);
+                    toast.error("CAPTCHA verification failed. Please try again.");
+                  }}
+                  theme="dark"
+                />
+              </div>
+            )}
 
             {/* Submit */}
             <Button

@@ -28,9 +28,25 @@ vi.mock("sonner", () => ({
   },
 }));
 
+// Mock reCAPTCHA
+vi.mock("react-google-recaptcha", () => ({
+  default: ({ onChange, onExpired, onError }: any) => (
+    <div data-testid="recaptcha">
+      <button
+        onClick={() => onChange && onChange("mock-captcha-token")}
+        data-testid="recaptcha-trigger"
+      >
+        Verify CAPTCHA
+      </button>
+    </div>
+  ),
+}));
+
 describe("Registration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock environment variable for CAPTCHA
+    vi.stubEnv("VITE_RECAPTCHA_SITE_KEY", "test-site-key");
   });
 
   it("should render the registration form", () => {
@@ -160,6 +176,10 @@ describe("Registration", () => {
     const submitButton = screen.getByRole("button", {
       name: /Complete Registration/i,
     }) as HTMLButtonElement;
+
+    // Complete CAPTCHA first
+    const captchaTrigger = screen.getByTestId("recaptcha-trigger");
+    await user.click(captchaTrigger);
 
     await user.type(nameInput, "John Doe");
     await user.type(emailInput, "john@example.com");

@@ -94,14 +94,20 @@ Create a `.env` file in the root directory:
 cp .env.example .env
 ```
 
-Add your Supabase credentials:
+Add your Supabase credentials and reCAPTCHA site key:
 
 ```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
 ```
 
-> ⚠️ **Note**: Replace the placeholder values with your actual Supabase credentials.
+> ⚠️ **Note**: Replace the placeholder values with your actual credentials.
+> 
+> **reCAPTCHA Setup**: 
+> 1. Get your site key from [Google reCAPTCHA](https://www.google.com/recaptcha/admin)
+> 2. Add the site key to your `.env` file
+> 3. The form will work without CAPTCHA in development, but requires it in production
 
 ### 4. Start Development Server
 
