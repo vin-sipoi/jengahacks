@@ -145,7 +145,7 @@ const Registration = () => {
   };
 
   return (
-    <section id="register" className="py-24 relative">
+    <section id="register" className="pt-12 pb-24 relative">
       <div className="absolute inset-0 circuit-pattern opacity-10" />
       
       <div className="container mx-auto px-4 relative z-10">
