@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import siliconSavannahLogo from "@/assets/silicon-savannah-logo.png";
 import adamurLogo from "@/assets/adamur-logo.png";
 
@@ -58,12 +59,12 @@ const Sponsors = () => {
             <p className="text-muted-foreground mb-4">
               Partner with us to shape the future of African tech talent.
             </p>
-            <a
-              href="mailto:sponsors@jengahacks.com"
+            <Link
+              to="/sponsorship"
               className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors"
             >
-              Contact Us →
-            </a>
+              Join Us →
+            </Link>
           </div>
         </div>
       </div>
