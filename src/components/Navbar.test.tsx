@@ -11,7 +11,7 @@ vi.mock("@/assets/jengahacks-logo.png", () => ({
 describe("Navbar", () => {
   it("should render the logo", () => {
     render(<Navbar />);
-    const logo = screen.getByAltText("JengaHacks");
+    const logo = screen.getByAltText(/JengaHacks/i);
     expect(logo).toBeInTheDocument();
   });
 

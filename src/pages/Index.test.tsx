@@ -27,6 +27,14 @@ vi.mock("@/components/Footer", () => ({
   default: () => <footer data-testid="footer">Footer</footer>,
 }));
 
+vi.mock("@/components/SEO", () => ({
+  default: () => null,
+}));
+
+vi.mock("@/components/StructuredData", () => ({
+  default: () => null,
+}));
+
 describe("Index Page", () => {
   it("should render all main sections", () => {
     render(<Index />);
@@ -46,8 +54,8 @@ describe("Index Page", () => {
 
   it("should have minimum height styling", () => {
     const { container } = render(<Index />);
-    const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper).toHaveClass("min-h-screen");
+    const wrapper = container.querySelector(".min-h-screen");
+    expect(wrapper).toBeInTheDocument();
   });
 });
 

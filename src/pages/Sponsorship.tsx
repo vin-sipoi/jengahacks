@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Check, ArrowLeft, Sparkles, Zap, Crown, Gem } from "lucide-react";
 import { Link } from "react-router-dom";
 import icon from "@/assets/jengahacks-icon.svg";
+import SEO from "@/components/SEO";
 
 const packages = [
   {
@@ -68,7 +69,13 @@ const packages = [
 
 const Sponsorship = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEO 
+        title="Become a Sponsor | JengaHacks 2026"
+        description="Partner with JengaHacks 2026 and connect with 200+ talented developers, designers, and innovators. Choose from Bronze, Silver, Gold, or Platinum sponsorship packages."
+        url="https://jengahacks.com/sponsorship"
+      />
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-lg sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -76,8 +83,8 @@ const Sponsorship = () => {
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
           </Link>
-          <Link to="/" className="flex items-center gap-2">
-            <img src={icon} alt="JengaHacks" className="h-10 w-auto" />
+          <Link to="/" className="flex items-center gap-2" aria-label="JengaHacks Home">
+            <img src={icon} alt="JengaHacks - East Africa's Premier Hackathon" className="h-10 w-auto" width="40" height="40" />
             <span className="font-londrina text-2xl">
               <span className="text-white">JENGA</span>
               <span style={{ color: '#65bb3a' }}>HACKS</span>
@@ -228,6 +235,7 @@ const Sponsorship = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 

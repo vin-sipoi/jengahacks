@@ -1,14 +1,13 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
+# Allow all search engines
 User-agent: *
 Allow: /
+
+# Disallow admin and private areas (if any)
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://jengahacks.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

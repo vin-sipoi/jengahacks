@@ -4,19 +4,25 @@ import About from "@/components/About";
 import Sponsors from "@/components/Sponsors";
 import Registration from "@/components/Registration";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
+import StructuredData from "@/components/StructuredData";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Sponsors />
-        <Registration />
-      </main>
-      <Footer />
-    </div>
+    <>
+      <SEO />
+      <StructuredData />
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main>
+          <Hero />
+          <About />
+          <Sponsors />
+          <Registration />
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 };
 

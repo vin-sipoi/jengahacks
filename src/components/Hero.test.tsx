@@ -55,7 +55,7 @@ describe("Hero", () => {
 
   it("should render the icon image", () => {
     render(<Hero />);
-    const icon = screen.getByAltText("JengaHacks Icon");
+    const icon = screen.getByAltText(/JengaHacks Logo/i);
     expect(icon).toBeInTheDocument();
   });
 });

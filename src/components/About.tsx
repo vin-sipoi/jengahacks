@@ -40,27 +40,28 @@ const About = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (
-            <div
+            <article
               key={feature.title}
               className="group p-6 bg-card border border-border rounded-xl hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors" aria-hidden="true">
                 <feature.icon className="w-6 h-6 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
               <p className="text-muted-foreground">{feature.description}</p>
-            </div>
+            </article>
           ))}
         </div>
 
         {/* Tracks */}
         <div className="mt-20">
           <h3 className="text-2xl font-bold text-center mb-8">Hackathon Tracks</h3>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4" role="list">
             {["FinTech", "HealthTech", "AgriTech", "EdTech", "Climate Tech", "Open Innovation"].map((track) => (
               <div
                 key={track}
+                role="listitem"
                 className="px-6 py-3 bg-muted rounded-full text-foreground font-medium hover:bg-primary hover:text-primary-foreground transition-colors cursor-default"
               >
                 {track}

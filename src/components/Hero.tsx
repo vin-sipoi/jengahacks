@@ -15,11 +15,14 @@ const Hero = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
           {/* Logo */}
-          <div className="animate-slide-up mb-8 relative">
+          <header className="animate-slide-up mb-8 relative">
             <img 
               src={icon} 
-              alt="JengaHacks Icon" 
+              alt="JengaHacks Logo - East Africa's Premier Hackathon" 
               className="w-64 md:w-80 mx-auto mb-4"
+              width="320"
+              height="320"
+              loading="eager"
             />
             <h1 className="font-londrina text-6xl md:text-8xl tracking-wider">
               <span className="text-white">JENGA</span>
@@ -28,7 +31,7 @@ const Hero = () => {
             <p className="text-lg md:text-xl text-muted-foreground mt-2 tracking-wide">
               Built in Nairobi. Ready for the World.
             </p>
-          </div>
+          </header>
 
           {/* Tagline */}
           <p className="animate-slide-up delay-100 text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl">
@@ -37,14 +40,14 @@ const Hero = () => {
           </p>
 
           {/* Event Details */}
-          <div className="animate-slide-up delay-200 flex flex-wrap justify-center gap-6 mb-10">
-            <div className="flex items-center gap-2 text-foreground">
-              <Calendar className="w-5 h-5 text-primary" />
-              <span>February 21-22, 2026</span>
+          <div className="animate-slide-up delay-200 flex flex-wrap justify-center gap-6 mb-10" itemScope itemType="https://schema.org/Event">
+            <div className="flex items-center gap-2 text-foreground" itemProp="startDate" content="2026-02-21T00:00:00+03:00">
+              <Calendar className="w-5 h-5 text-primary" aria-hidden="true" />
+              <time dateTime="2026-02-21">February 21-22, 2026</time>
             </div>
-            <div className="flex items-center gap-2 text-foreground">
-              <MapPin className="w-5 h-5 text-primary" />
-              <span>iHub, Nairobi</span>
+            <div className="flex items-center gap-2 text-foreground" itemProp="location" itemScope itemType="https://schema.org/Place">
+              <MapPin className="w-5 h-5 text-primary" aria-hidden="true" />
+              <span itemProp="name">iHub, Nairobi</span>
             </div>
           </div>
 
