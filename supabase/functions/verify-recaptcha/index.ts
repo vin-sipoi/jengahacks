@@ -1,8 +1,10 @@
 // Supabase Edge Function to verify reCAPTCHA token server-side
 // This provides an additional layer of security by verifying the CAPTCHA on the server
 
+// @ts-expect-error - Deno types are available in Supabase Edge Functions runtime
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+// @ts-expect-error - Deno global is available in Supabase Edge Functions runtime
 const RECAPTCHA_SECRET_KEY = Deno.env.get("RECAPTCHA_SECRET_KEY");
 
 interface VerifyRequest {
