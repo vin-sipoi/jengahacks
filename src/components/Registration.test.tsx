@@ -284,6 +284,38 @@ describe("Registration", () => {
     });
   });
 
+  it("should validate WhatsApp number format", async () => {
+    const user = userEvent.setup();
+    render(<Registration />);
+
+    const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
+    
+    // Type invalid WhatsApp number
+    await user.type(whatsappInput, "123");
+    fireEvent.blur(whatsappInput);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Please enter a valid WhatsApp number/i)).toBeInTheDocument();
+    });
+  });
+
+  it("should accept valid WhatsApp number", async () => {
+    const user = userEvent.setup();
+    render(<Registration />);
+
+    const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
+    
+    // Type valid WhatsApp number
+    await user.type(whatsappInput, "+254712345678");
+    fireEvent.blur(whatsappInput);
+
+    await waitFor(() => {
+      // Check for success icon
+      const checkIcon = whatsappInput.parentElement?.querySelector('svg[class*="text-primary"]');
+      expect(checkIcon).toBeInTheDocument();
+    });
+  });
+
   describe("IP Rate Limiting", () => {
     beforeEach(() => {
       vi.clearAllMocks();

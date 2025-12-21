@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, Linkedin, CheckCircle, AlertCircle, XCircle, Phone } from "lucide-react";
+import { Upload, Linkedin, CheckCircle, AlertCircle, XCircle, MessageCircle } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -237,21 +237,21 @@ const Registration = () => {
           const fileExt = sanitizedOriginalName.split('.').pop() || 'pdf';
           
           // Generate secure filename with timestamp and random string
-          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
           
           // Double-check file is still valid before upload
           if (!isValidPdfExtension(fileName) || !isValidPdfMimeType(resume.type)) {
             throw new Error('Invalid file type');
           }
-          
-          const { error: uploadError } = await supabase.storage
-            .from('resumes')
+        
+        const { error: uploadError } = await supabase.storage
+          .from('resumes')
             .upload(fileName, resume);
 
-          if (uploadError) {
+        if (uploadError) {
             // Log error details only in development, not in production
             if (import.meta.env.DEV) {
-              console.error('Upload error:', uploadError);
+          console.error('Upload error:', uploadError);
             }
             resumeUploadFailed = true;
             toast.error('Resume upload failed, but registration will continue');
@@ -285,7 +285,7 @@ const Registration = () => {
         email: email,
         whatsapp_number: whatsappNumber,
         linkedin_url: linkedInUrl,
-        resume_path: resumePath,
+          resume_path: resumePath,
       };
 
       // Try to use Edge Function for IP capture if available, otherwise use direct insert
@@ -326,7 +326,7 @@ const Registration = () => {
       if (insertError) {
         // Log error details only in development
         if (import.meta.env.DEV) {
-          console.error('Insert error:', insertError);
+        console.error('Insert error:', insertError);
         }
         
         // Check for rate limit violation (custom error code or message)
@@ -367,7 +367,7 @@ const Registration = () => {
     } catch (error) {
       // Log error details only in development
       if (import.meta.env.DEV) {
-        console.error('Registration error:', error);
+      console.error('Registration error:', error);
       }
       toast.error(error instanceof Error ? error.message : 'Registration failed. Please try again.');
     } finally {
@@ -397,20 +397,20 @@ const Registration = () => {
                 Full Name *
               </Label>
               <div className="relative">
-                <Input
-                  id="fullName"
-                  name="fullName"
-                  type="text"
-                  placeholder="John Doe"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
+              <Input
+                id="fullName"
+                name="fullName"
+                type="text"
+                placeholder="John Doe"
+                value={formData.fullName}
+                onChange={handleInputChange}
                   onBlur={handleBlur}
                   className={cn(
                     "bg-muted border-border focus:border-primary pr-10",
                     errors.fullName && "border-destructive focus:border-destructive",
                     touched.fullName && !errors.fullName && formData.fullName && "border-primary"
                   )}
-                  required
+                required
                   aria-invalid={!!errors.fullName}
                   aria-describedby={errors.fullName ? "fullName-error" : undefined}
                 />
@@ -438,20 +438,20 @@ const Registration = () => {
                 Email Address *
               </Label>
               <div className="relative">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="john@example.com"
-                  value={formData.email}
-                  onChange={handleInputChange}
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="john@example.com"
+                value={formData.email}
+                onChange={handleInputChange}
                   onBlur={handleBlur}
                   className={cn(
                     "bg-muted border-border focus:border-primary pr-10",
                     errors.email && "border-destructive focus:border-destructive",
                     touched.email && !errors.email && formData.email && "border-primary"
                   )}
-                  required
+                required
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? "email-error" : undefined}
                 />
@@ -476,7 +476,7 @@ const Registration = () => {
             {/* WhatsApp */}
             <div className="space-y-2">
               <Label htmlFor="whatsapp" className={cn("flex items-center gap-2", errors.whatsapp && "text-destructive")}>
-                <Phone className="w-4 h-4" />
+                <MessageCircle className="w-4 h-4" />
                 WhatsApp Number
               </Label>
               <div className="relative">
@@ -537,13 +537,13 @@ const Registration = () => {
                 {hasLinkedIn && !errors.linkedIn && <CheckCircle className="w-4 h-4 text-primary" />}
               </Label>
               <div className="relative">
-                <Input
-                  id="linkedIn"
-                  name="linkedIn"
-                  type="text"
-                  placeholder="linkedin.com/in/yourprofile"
-                  value={formData.linkedIn}
-                  onChange={handleInputChange}
+              <Input
+                id="linkedIn"
+                name="linkedIn"
+                type="text"
+                placeholder="linkedin.com/in/yourprofile"
+                value={formData.linkedIn}
+                onChange={handleInputChange}
                   onBlur={handleBlur}
                   className={cn(
                     "bg-muted border-border focus:border-primary pr-10",
