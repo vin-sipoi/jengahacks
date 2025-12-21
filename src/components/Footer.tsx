@@ -41,7 +41,7 @@ const Footer = () => {
               <Github className="w-4 h-4 sm:w-5 sm:h-5" />
             </a>
             <a
-              href="mailto:hello@jengahacks.com"
+              href="mailto:hello@siliconsavannahsolutions.com"
               className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
               aria-label="Email"
             >

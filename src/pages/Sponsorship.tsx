@@ -163,7 +163,7 @@ const Sponsorship = () => {
                     className="w-full"
                     asChild
                   >
-                    <a href="mailto:sponsors@jengahacks.com?subject=Sponsorship Inquiry - {pkg.name} Package">
+                    <a href="mailto:hello@siliconsavannahsolutions.com?subject=Sponsorship Inquiry - {pkg.name} Package">
                       Get Started
                     </a>
                   </Button>
@@ -222,7 +222,7 @@ const Sponsorship = () => {
             Have questions or need a custom package? We'd love to hear from you.
           </p>
           <Button variant="hero" size="lg" className="sm:size-xl" asChild>
-            <a href="mailto:sponsors@jengahacks.com">
+            <a href="mailto:hello@siliconsavannahsolutions.com">
               Contact Us
             </a>
           </Button>
