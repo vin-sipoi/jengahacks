@@ -14,7 +14,6 @@ const Sponsors = () => {
             {t("sponsors.title")}
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-base sm:text-lg px-4">
-            {t("sponsors.subtitle")}
           </p>
         </div>
 

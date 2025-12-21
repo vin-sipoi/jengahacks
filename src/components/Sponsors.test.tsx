@@ -22,13 +22,6 @@ describe("Sponsors", () => {
     expect(screen.getByText(/Sponsors/i)).toBeInTheDocument();
   });
 
-  it("should render the description", () => {
-    render(<Sponsors />);
-    expect(
-      screen.getByText(/Backed by leading tech companies/i)
-    ).toBeInTheDocument();
-  });
-
   it("should render Platinum Partners section", () => {
     render(<Sponsors />);
     expect(screen.getByText("Platinum Partners")).toBeInTheDocument();
