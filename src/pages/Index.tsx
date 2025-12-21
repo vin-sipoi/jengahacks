@@ -8,15 +8,17 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import StructuredData from "@/components/StructuredData";
 import ScrollReveal from "@/components/ScrollReveal";
+import SkipLink from "@/components/SkipLink";
 
 const Index = () => {
   return (
     <>
       <SEO />
       <StructuredData />
+      <SkipLink />
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main>
+        <main id="main-content" tabIndex={-1}>
           <Hero />
           <ScrollReveal direction="up" delay={100}>
             <About />

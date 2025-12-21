@@ -20,12 +20,13 @@ const Navbar = () => {
     loop: true,
   });
 
-  // Combine refs
+  // Combine refs for focus trap and arrow navigation
   useEffect(() => {
-    if (menuRef.current && trapRef.current) {
+    if (menuRef.current) {
       (trapRef as React.MutableRefObject<HTMLElement | null>).current = menuRef.current;
       (arrowNavRef as React.MutableRefObject<HTMLElement | null>).current = menuRef.current;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   // Handle Escape key to close menu
@@ -54,15 +55,19 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+    <nav 
+      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          <a href="/" className="flex items-center gap-2" aria-label="JengaHacks Home">
-            <img src={logo} alt="JengaHacks - East Africa's Premier Hackathon" className="h-8 sm:h-10 w-auto" width="120" height="40" />
+          <a href="/" className="flex items-center gap-2" aria-label="JengaHacks Home - Navigate to homepage">
+            <img src={logo} alt="" className="h-8 sm:h-10 w-auto" width="120" height="40" aria-hidden="true" />
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-4">
+          <nav className="hidden md:flex items-center gap-4" aria-label="Desktop navigation">
             {navLinks.map((link, index) => (
               link.isRoute ? (
                 <Link
@@ -88,9 +93,9 @@ const Navbar = () => {
             ))}
             <LanguageSwitcher variant="compact" />
             <Button variant="hero" size="sm" asChild>
-              <a href="#register">{t("common.joinNow")}</a>
+              <a href="#register" aria-label={`${t("common.joinNow")} - Navigate to registration form`}>{t("common.joinNow")}</a>
             </Button>
-          </div>
+          </nav>
 
           {/* Mobile Menu Button */}
           <button

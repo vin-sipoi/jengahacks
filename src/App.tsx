@@ -10,11 +10,19 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import PageTransition from "./components/PageTransition";
+import { useKeyboardShortcuts, commonShortcuts } from "./hooks/useKeyboardShortcuts";
 
 const queryClient = new QueryClient();
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+
+  // Enable global keyboard shortcuts
+  useKeyboardShortcuts([
+    commonShortcuts.focusMainContent,
+    commonShortcuts.scrollToTop,
+    commonShortcuts.scrollToBottom,
+  ]);
 
   return (
     <PageTransition key={location.pathname}>

@@ -224,9 +224,9 @@ const Admin = () => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center" role="status" aria-live="polite">
         <div className="text-center">
-          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto" />
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto" aria-label="Loading admin dashboard" />
           <p className="text-muted-foreground">{t("admin.loading")}</p>
         </div>
       </div>
@@ -239,7 +239,7 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="border-b border-border bg-card">
+      <header className="border-b border-border bg-card" role="banner">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -248,9 +248,9 @@ const Admin = () => {
                 {t("admin.subtitle")}
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button onClick={exportToCSV} variant="outline">
-                <Download className="mr-2 h-4 w-4" />
+            <nav className="flex gap-2" aria-label="Admin actions">
+              <Button onClick={exportToCSV} variant="outline" aria-label="Export registrations to CSV">
+                <Download className="mr-2 h-4 w-4" aria-hidden="true" />
                 {t("admin.exportCSV")}
               </Button>
               <Button
@@ -259,48 +259,49 @@ const Admin = () => {
                   navigate("/");
                 }}
                 variant="outline"
+                aria-label="Log out of admin dashboard"
               >
                 {t("admin.logout")}
               </Button>
-            </div>
+            </nav>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8" role="main" aria-label="Admin dashboard">
         {/* Stats Cards */}
-        <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+        <section className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4" aria-label="Registration statistics">
+          <Card role="article" aria-label={`Total registrations: ${stats.total}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{t("admin.totalRegistrations")}</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <Users className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
+              <div className="text-2xl font-bold" aria-label={`${stats.total} total registrations`}>{stats.total}</div>
               <p className="text-xs text-muted-foreground">{t("admin.allTime")}</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card role="article" aria-label={`Today's registrations: ${stats.today}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{t("admin.today")}</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <Calendar className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.today}</div>
+              <div className="text-2xl font-bold" aria-label={`${stats.today} registrations today`}>{stats.today}</div>
               <p className="text-xs text-muted-foreground">
                 {stats.thisWeek > 0 && `+${stats.thisWeek} ${t("admin.thisWeek")}`}
               </p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card role="article" aria-label={`Registrations with resume: ${stats.withResume}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{t("admin.withResume")}</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
+              <FileText className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.withResume}</div>
+              <div className="text-2xl font-bold" aria-label={`${stats.withResume} registrations with resume`}>{stats.withResume}</div>
               <p className="text-xs text-muted-foreground">
                 {stats.total > 0
                   ? `${Math.round((stats.withResume / stats.total) * 100)}% ${t("admin.ofTotal")}`
@@ -309,13 +310,13 @@ const Admin = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card role="article" aria-label={`Registrations with WhatsApp: ${stats.withWhatsApp}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{t("admin.withWhatsApp")}</CardTitle>
-              <Phone className="h-4 w-4 text-muted-foreground" />
+              <Phone className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.withWhatsApp}</div>
+              <div className="text-2xl font-bold" aria-label={`${stats.withWhatsApp} registrations with WhatsApp`}>{stats.withWhatsApp}</div>
               <p className="text-xs text-muted-foreground">
                 {stats.total > 0
                   ? `${Math.round((stats.withWhatsApp / stats.total) * 100)}% ${t("admin.ofTotal")}`
@@ -323,24 +324,26 @@ const Admin = () => {
               </p>
             </CardContent>
           </Card>
-        </div>
+        </section>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="registrations" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="registrations">{t("admin.registrations")}</TabsTrigger>
-            <TabsTrigger value="analytics">{t("admin.analytics")}</TabsTrigger>
-          </TabsList>
+        <section aria-label="Admin dashboard content">
+          <Tabs defaultValue="registrations" className="space-y-4">
+            <TabsList role="tablist" aria-label="Dashboard sections">
+              <TabsTrigger value="registrations" role="tab" aria-controls="registrations-panel">{t("admin.registrations")}</TabsTrigger>
+              <TabsTrigger value="analytics" role="tab" aria-controls="analytics-panel">{t("admin.analytics")}</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="registrations" className="space-y-4">
-            <RegistrationsTable onRefresh={loadStats} />
-          </TabsContent>
+            <TabsContent value="registrations" className="space-y-4" id="registrations-panel" role="tabpanel" aria-labelledby="registrations-tab">
+              <RegistrationsTable onRefresh={loadStats} />
+            </TabsContent>
 
-          <TabsContent value="analytics" className="space-y-4">
-            <AnalyticsDashboard stats={stats} />
-          </TabsContent>
-        </Tabs>
-      </div>
+            <TabsContent value="analytics" className="space-y-4" id="analytics-panel" role="tabpanel" aria-labelledby="analytics-tab">
+              <AnalyticsDashboard stats={stats} />
+            </TabsContent>
+          </Tabs>
+        </section>
+      </main>
     </div>
   );
 };

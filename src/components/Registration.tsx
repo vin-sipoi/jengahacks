@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTranslation } from "@/hooks/useTranslation";
 import { trackRegistration } from "@/lib/analytics";
+import LiveRegion from "@/components/LiveRegion";
 
 const Registration = () => {
   const { t } = useTranslation();
@@ -50,6 +51,7 @@ const Registration = () => {
     whatsapp?: boolean;
     linkedIn?: boolean;
   }>({});
+  const [liveMessage, setLiveMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   
@@ -356,7 +358,9 @@ const Registration = () => {
       // Success - record submission and reset form
       recordSubmission();
       trackRegistration(true);
-      toast.success(t("registration.success"));
+      const successMessage = t("registration.success");
+      toast.success(successMessage);
+      setLiveMessage(successMessage);
       setFormData({ fullName: "", email: "", whatsapp: "", linkedIn: "", resume: null });
       setHasLinkedIn(false);
       setHasResume(false);
@@ -397,7 +401,17 @@ const Registration = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 bg-card p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-border">
+          <form 
+            onSubmit={handleSubmit} 
+            className="space-y-5 sm:space-y-6 bg-card p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-border"
+            onKeyDown={(e) => {
+              // Allow Ctrl/Cmd + Enter to submit form
+              if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e as unknown as React.FormEvent);
+              }
+            }}
+          >
             {/* Full Name */}
             <div className="space-y-2">
               <Label htmlFor="fullName" className={cn(errors.fullName && "text-destructive")}>
@@ -414,8 +428,8 @@ const Registration = () => {
                 onChange={handleInputChange}
                   onBlur={handleBlur}
                   className={cn(
-                    "bg-muted border-border focus:border-primary pr-10",
-                    errors.fullName && "border-destructive focus:border-destructive",
+                    "bg-muted border-border focus:border-primary pr-10 transition-all duration-300",
+                    errors.fullName && "border-destructive focus:border-destructive animate-error-flash",
                     touched.fullName && !errors.fullName && formData.fullName && "border-primary"
                   )}
                 required
@@ -427,14 +441,19 @@ const Registration = () => {
                     {errors.fullName ? (
                       <XCircle className="w-5 h-5 text-destructive animate-bounce-in" aria-hidden="true" />
                     ) : formData.fullName ? (
-                      <CheckCircle className="w-5 h-5 text-primary animate-success-pulse" aria-hidden="true" />
+                      <CheckCircle 
+                        className="w-5 h-5 text-primary animate-success-pulse" 
+                        aria-hidden="true"
+                        id="fullName-success"
+                        aria-label="Full name is valid"
+                      />
                     ) : null}
                   </div>
                 )}
               </div>
               {errors.fullName && (
-                <p id="fullName-error" className="text-sm text-destructive flex items-center gap-1.5 animate-slide-in-right" role="alert">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" />
+                <p id="fullName-error" className="text-sm text-destructive flex items-center gap-1.5 animate-slide-in-right" role="alert" aria-live="polite">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" aria-hidden="true" />
                   <span>{errors.fullName}</span>
                 </p>
               )}
@@ -443,7 +462,8 @@ const Registration = () => {
             {/* Email */}
             <div className="space-y-2">
               <Label htmlFor="email" className={cn(errors.email && "text-destructive")}>
-                {t("registration.email")} *
+                {t("registration.email")} <span className="sr-only">required</span>
+                <span aria-hidden="true">*</span>
               </Label>
               <div className="relative">
               <Input
@@ -462,21 +482,27 @@ const Registration = () => {
                   )}
                 required
                   aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? "email-error" : undefined}
+                  aria-describedby={errors.email ? "email-error" : touched.email && !errors.email && formData.email ? "email-success" : undefined}
+                  aria-required="true"
                 />
                 {touched.email && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
                     {errors.email ? (
                       <XCircle className="w-5 h-5 text-destructive animate-bounce-in" aria-hidden="true" />
                     ) : formData.email ? (
-                      <CheckCircle className="w-5 h-5 text-primary animate-success-pulse" aria-hidden="true" />
+                      <CheckCircle 
+                        className="w-5 h-5 text-primary animate-success-pulse" 
+                        aria-hidden="true"
+                        id="email-success"
+                        aria-label="Email is valid"
+                      />
                     ) : null}
                   </div>
                 )}
               </div>
               {errors.email && (
-                <p id="email-error" className="text-sm text-destructive flex items-center gap-1.5 animate-slide-in-right" role="alert">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" />
+                <p id="email-error" className="text-sm text-destructive flex items-center gap-1.5 animate-slide-in-right" role="alert" aria-live="polite">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" aria-hidden="true" />
                   <span>{errors.email}</span>
                 </p>
               )}
@@ -504,21 +530,26 @@ const Registration = () => {
                     touched.whatsapp && !errors.whatsapp && formData.whatsapp && "border-primary"
                   )}
                   aria-invalid={!!errors.whatsapp}
-                  aria-describedby={errors.whatsapp ? "whatsapp-error" : undefined}
+                  aria-describedby={errors.whatsapp ? "whatsapp-error" : touched.whatsapp && !errors.whatsapp && formData.whatsapp ? "whatsapp-success" : undefined}
                 />
                 {touched.whatsapp && formData.whatsapp && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
                     {errors.whatsapp ? (
                       <XCircle className="w-5 h-5 text-destructive animate-bounce-in" aria-hidden="true" />
                     ) : (
-                      <CheckCircle className="w-5 h-5 text-primary animate-success-pulse" aria-hidden="true" />
+                      <CheckCircle 
+                        className="w-5 h-5 text-primary animate-success-pulse" 
+                        aria-hidden="true"
+                        id="whatsapp-success"
+                        aria-label="WhatsApp number is valid"
+                      />
                     )}
                   </div>
                 )}
               </div>
               {errors.whatsapp && (
-                <p id="whatsapp-error" className="text-sm text-destructive flex items-center gap-1.5 animate-slide-in-right" role="alert">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" />
+                <p id="whatsapp-error" className="text-sm text-destructive flex items-center gap-1.5 animate-slide-in-right" role="alert" aria-live="polite">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" aria-hidden="true" />
                   <span>{errors.whatsapp}</span>
                 </p>
               )}
@@ -558,9 +589,15 @@ const Registration = () => {
             {/* LinkedIn */}
             <div className="space-y-2">
               <Label htmlFor="linkedIn" className={cn("flex items-center gap-2", errors.linkedIn && "text-destructive")}>
-                <Linkedin className="w-4 h-4" />
+                <Linkedin className="w-4 h-4" aria-hidden="true" />
                 {t("registration.linkedin")}
-                {hasLinkedIn && !errors.linkedIn && <CheckCircle className="w-4 h-4 text-primary animate-success-pulse" />}
+                {hasLinkedIn && !errors.linkedIn && (
+                  <CheckCircle 
+                    className="w-4 h-4 text-primary animate-success-pulse" 
+                    aria-label="LinkedIn URL is valid"
+                    aria-hidden="false"
+                  />
+                )}
               </Label>
               <div className="relative">
                 <Input
@@ -601,9 +638,15 @@ const Registration = () => {
             {/* Resume Upload */}
             <div className="space-y-2">
               <Label htmlFor="resume" className={cn("flex items-center gap-2", errors.resume && "text-destructive")}>
-                <Upload className="w-4 h-4" />
+                <Upload className="w-4 h-4" aria-hidden="true" />
                 {t("registration.resume")}
-                {hasResume && !errors.resume && <CheckCircle className="w-4 h-4 text-primary animate-success-pulse" />}
+                {hasResume && !errors.resume && (
+                  <CheckCircle 
+                    className="w-4 h-4 text-primary animate-success-pulse" 
+                    aria-label="Resume file is selected"
+                    aria-hidden="false"
+                  />
+                )}
               </Label>
               <div className="relative">
                 <Input
@@ -619,18 +662,22 @@ const Registration = () => {
                     hasResume && !errors.resume && "border-primary"
                   )}
                   aria-invalid={!!errors.resume}
-                  aria-describedby={errors.resume ? "resume-error" : undefined}
+                  aria-describedby={errors.resume ? "resume-error" : formData.resume && !errors.resume ? "resume-success" : undefined}
                 />
               </div>
               {formData.resume && !errors.resume && (
-                <p className="text-sm text-muted-foreground flex items-center gap-1.5 animate-slide-in-right">
-                  <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 animate-success-pulse" />
+                <p 
+                  id="resume-success"
+                  className="text-sm text-muted-foreground flex items-center gap-1.5 animate-slide-in-right"
+                  aria-live="polite"
+                >
+                  <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 animate-success-pulse" aria-hidden="true" />
                   <span>Selected: {sanitizeFileName(formData.resume.name)}</span>
                 </p>
               )}
               {errors.resume && (
-                <p id="resume-error" className="text-sm text-destructive flex items-center gap-1.5 animate-slide-in-right" role="alert">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" />
+                <p id="resume-error" className="text-sm text-destructive flex items-center gap-1.5 animate-slide-in-right" role="alert" aria-live="polite">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" aria-hidden="true" />
                   <span>{errors.resume}</span>
                 </p>
               )}
@@ -670,8 +717,13 @@ const Registration = () => {
                   </div>
                 </div>
                 {errors.captcha && (
-                  <p className="text-sm text-destructive flex items-center justify-center gap-1.5 animate-slide-in-right" role="alert">
-                    <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" />
+                  <p 
+                    id="captcha-error"
+                    className="text-sm text-destructive flex items-center justify-center gap-1.5 animate-slide-in-right" 
+                    role="alert" 
+                    aria-live="polite"
+                  >
+                    <AlertCircle className="w-4 h-4 flex-shrink-0 animate-bounce-in" aria-hidden="true" />
                     <span>{errors.captcha}</span>
                   </p>
                 )}
@@ -696,7 +748,7 @@ const Registration = () => {
               </span>
             </Button>
 
-            <p className="text-xs sm:text-sm text-muted-foreground text-center px-2">
+            <p className="text-xs sm:text-sm text-muted-foreground text-center px-2" role="note">
               {t("registration.terms")}
             </p>
           </form>

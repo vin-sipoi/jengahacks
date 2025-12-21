@@ -6,7 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 const Footer = () => {
   const { t } = useTranslation();
   return (
-    <footer className="py-8 sm:py-10 md:py-12 bg-card border-t border-border">
+    <footer className="py-8 sm:py-10 md:py-12 bg-card border-t border-border" role="contentinfo">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-center md:text-left">
@@ -16,51 +16,51 @@ const Footer = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-4">
+          <nav className="flex items-center gap-3 sm:gap-4" aria-label="Social media links">
             <a
               href="https://x.com/mimisiroboti"
               target="_blank"
               rel="noopener noreferrer"
               className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
-              aria-label="Twitter"
+              aria-label="Follow us on Twitter - Opens in new tab"
             >
-              <Twitter className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Twitter className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
             </a>
             <a
               href="https://www.linkedin.com/company/mimisiroboti"
               target="_blank"
               rel="noopener noreferrer"
               className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
-              aria-label="LinkedIn"
+              aria-label="Follow us on LinkedIn - Opens in new tab"
             >
-              <Linkedin className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Linkedin className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
             </a>
             <a
               href="https://github.com/jengahacks"
               target="_blank"
               rel="noopener noreferrer"
               className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
-              aria-label="GitHub"
+              aria-label="View our GitHub repository - Opens in new tab"
             >
-              <Github className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Github className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
             </a>
             <a
               href="mailto:hello@siliconsavannahsolutions.com"
               className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
-              aria-label="Email"
+              aria-label="Send us an email"
             >
-              <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Mail className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
             </a>
             <a
               href={import.meta.env.VITE_DISCORD_URL || "https://discord.gg/jengahacks"}
               target="_blank"
               rel="noopener noreferrer"
               className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-muted hover:bg-indigo-500 hover:text-white transition-colors"
-              aria-label="Join Discord Community"
+              aria-label="Join our Discord Community - Opens in new tab"
             >
-              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
             </a>
-          </div>
+          </nav>
         </div>
 
         <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-border">
