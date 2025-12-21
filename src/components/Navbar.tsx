@@ -68,13 +68,12 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-4" aria-label="Desktop navigation">
-            {navLinks.map((link, index) => (
+            {navLinks.map((link) => (
               link.isRoute ? (
                 <Link
                   key={link.href}
                   to={link.href}
                   className="text-primary hover:text-primary/80 transition-all duration-300 font-medium relative group"
-                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {link.label}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
@@ -84,7 +83,6 @@ const Navbar = () => {
                   key={link.href}
                   href={link.href}
                   className="text-muted-foreground hover:text-primary transition-all duration-300 font-medium relative group"
-                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {link.label}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
@@ -137,7 +135,7 @@ const Navbar = () => {
         >
           <div className="border-t border-border pt-4">
             <div className="flex flex-col gap-3 animate-slide-in-down">
-              {navLinks.map((link, index) => (
+              {navLinks.map((link) => (
                 link.isRoute ? (
                   <Link
                     key={link.href}
@@ -150,7 +148,6 @@ const Navbar = () => {
                         setIsOpen(false);
                       }
                     }}
-                    style={{ animationDelay: `${index * 50}ms` }}
                   >
                     {link.label}
                   </Link>
@@ -166,7 +163,6 @@ const Navbar = () => {
                         setIsOpen(false);
                       }
                     }}
-                    style={{ animationDelay: `${index * 50}ms` }}
                   >
                     {link.label}
                   </a>
