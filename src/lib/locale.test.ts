@@ -52,13 +52,13 @@ describe("locale utilities", () => {
 
     it("should return default locale when nothing stored", () => {
       const locale = getStoredLocale();
-      expect(locale).toBe("en-KE");
+      expect(locale).toBe("en-UK");
     });
 
     it("should return default locale for invalid stored value", () => {
       localStorageMock.setItem("jengahacks_locale", "invalid-locale");
       const locale = getStoredLocale();
-      expect(locale).toBe("en-KE");
+      expect(locale).toBe("en-UK");
     });
   });
 
@@ -71,9 +71,9 @@ describe("locale utilities", () => {
   });
 
   describe("getLocaleInfo", () => {
-    it("should return locale info for en-KE", () => {
-      const info = getLocaleInfo("en-KE");
-      expect(info.code).toBe("en-KE");
+    it("should return locale info for en-UK", () => {
+      const info = getLocaleInfo("en-UK");
+      expect(info.code).toBe("en-UK");
       expect(info.name).toBe("English");
       expect(info.nativeName).toBe("English");
     });
@@ -90,7 +90,7 @@ describe("locale utilities", () => {
     it("should return all supported locales", () => {
       const locales = getSupportedLocales();
       expect(locales.length).toBeGreaterThan(0);
-      expect(locales).toContainEqual(SUPPORTED_LOCALES["en-KE"]);
+      expect(locales).toContainEqual(SUPPORTED_LOCALES["en-UK"]);
       expect(locales).toContainEqual(SUPPORTED_LOCALES["sw-KE"]);
     });
   });
