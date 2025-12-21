@@ -24,7 +24,7 @@ describe("Hero", () => {
   it("should render event details", () => {
     render(<Hero />);
     expect(screen.getByText(/February 21-22, 2026/i)).toBeInTheDocument();
-    expect(screen.getByText(/iHub, Nairobi/i)).toBeInTheDocument();
+    expect(screen.getByText(/Nairobi, Kenya/i)).toBeInTheDocument();
   });
 
   it("should render call-to-action buttons", () => {

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, MapPin, MessageSquare } from "lucide-react";
+import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import icon from "@/assets/jengahacks-icon.svg";
 import SocialShare from "@/components/SocialShare";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -98,23 +98,6 @@ const Hero = () => {
                 {t("common.learnMore")}
               </a>
             </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="sm:size-xl w-full sm:w-auto border-indigo-500/50 hover:bg-indigo-500/10 hover:border-indigo-500 hover:text-indigo-400" 
-              asChild
-            >
-              <a 
-                href={import.meta.env.VITE_DISCORD_URL || "https://discord.gg/jengahacks"} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2"
-                aria-label="Join Discord Community - Opens in new tab"
-              >
-                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
-                Join Discord
-              </a>
-            </Button>
           </nav>
 
           {/* Stats */}
@@ -137,12 +120,33 @@ const Hero = () => {
           <div className="animate-slide-up delay-500 mt-8 sm:mt-12">
             <SocialShare variant="compact" />
           </div>
+
+          {/* Scroll Indicator - Desktop only, below socials */}
+          <div 
+            className="hidden md:flex animate-slide-up delay-600 mt-8 sm:mt-12 animate-bounce justify-center"
+            role="button"
+            aria-label="Scroll down to see more content"
+            tabIndex={0}
+            onClick={() => {
+              window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+              }
+            }}
+          >
+            <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center pt-2">
+              <div className="w-1 h-2 bg-primary rounded-full animate-pulse" aria-hidden="true" />
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - Mobile only, at bottom */}
       <div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
+        className="md:hidden absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
         role="button"
         aria-label="Scroll down to see more content"
         tabIndex={0}

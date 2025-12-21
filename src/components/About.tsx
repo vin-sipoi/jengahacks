@@ -95,7 +95,7 @@ const About = () => {
 
         {/* Community CTA */}
         <aside className="mt-12 sm:mt-16 md:mt-20 text-center px-4" aria-label="Community information">
-          <div className="inline-block p-6 sm:p-8 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-xl sm:rounded-2xl max-w-md mx-auto">
+          <div className="inline-block p-6 sm:p-8 bg-[#262626] border border-indigo-500/20 rounded-xl sm:rounded-2xl max-w-md mx-auto">
             <div className="flex items-center justify-center mb-3" aria-hidden="true">
               <MessageSquare className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-400" />
             </div>

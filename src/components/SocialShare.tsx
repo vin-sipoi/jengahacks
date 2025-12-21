@@ -23,7 +23,7 @@ const SocialShare = ({
   
   // Default values with translations
   const defaultTitle = title || "JengaHacks 2026 - East Africa's Premier Hackathon";
-  const defaultDescription = description || "Join us for 48 hours of innovation, collaboration, and building solutions that matter. February 21-22, 2026 at iHub, Nairobi.";
+  const defaultDescription = description || "Join us for 48 hours of innovation, collaboration, and building solutions that matter. February 21-22, 2026 in Nairobi, Kenya.";
   const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "https://jengahacks.com");
   
   const encodedUrl = encodeURIComponent(shareUrl);
@@ -209,7 +209,7 @@ const SocialShare = ({
   if (variant === "compact") {
     return (
       <div className={`flex flex-wrap items-center gap-2 ${className}`}>
-        <span className="text-sm text-muted-foreground">{t("socialShare.shareLabel")}</span>
+        <span className="text-base sm:text-lg text-muted-foreground font-medium">{t("socialShare.shareLabel")}</span>
         {navigator.share && (
           <Button
             variant="outline"
@@ -256,6 +256,33 @@ const SocialShare = ({
         >
           <MessageCircle className="h-3 w-3 mr-1.5" />
           {t("socialShare.whatsapp")}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleShare("reddit", shareLinks.reddit)}
+          className="h-8"
+        >
+          <Send className="h-3 w-3 mr-1.5" />
+          {t("socialShare.reddit")}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleShare("telegram", shareLinks.telegram)}
+          className="h-8"
+        >
+          <Send className="h-3 w-3 mr-1.5" />
+          {t("socialShare.telegram")}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleShare("email", shareLinks.email)}
+          className="h-8"
+        >
+          <Mail className="h-3 w-3 mr-1.5" />
+          {t("socialShare.email")}
         </Button>
         <Button
           variant="outline"

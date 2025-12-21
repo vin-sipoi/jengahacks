@@ -1,7 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
+// Test GA Measurement ID - use a consistent placeholder for all tests
+const TEST_GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+
 // Set environment variables before importing
-vi.stubEnv("VITE_GA_MEASUREMENT_ID", "G-XXXXXXXXXX");
+vi.stubEnv("VITE_GA_MEASUREMENT_ID", TEST_GA_MEASUREMENT_ID);
 vi.stubEnv("VITE_GA_ENABLED", "true");
 
 // Import after setting env vars
@@ -28,8 +31,8 @@ describe("analytics", () => {
       delete window.dataLayer;
     }
     vi.clearAllMocks();
-    // Ensure GA is enabled for tests
-    vi.stubEnv("VITE_GA_MEASUREMENT_ID", "G-XXXXXXXXXX");
+    // Ensure GA is enabled for tests with consistent measurement ID
+    vi.stubEnv("VITE_GA_MEASUREMENT_ID", TEST_GA_MEASUREMENT_ID);
     vi.stubEnv("VITE_GA_ENABLED", "true");
   });
 
@@ -54,7 +57,7 @@ describe("analytics", () => {
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackPageView("/test", "Test Page");
-      expect(mockGtag).toHaveBeenCalledWith("config", "G-XXXXXXXXXX", {
+      expect(mockGtag).toHaveBeenCalledWith("config", TEST_GA_MEASUREMENT_ID, {
         page_path: "/test",
         page_title: "Test Page",
       });

@@ -27,7 +27,7 @@ const BlogPreview = () => {
   return (
     <section 
       id="blog" 
-      className="py-16 sm:py-20 md:py-24 relative"
+      className="pb-16 sm:pb-20 md:pb-24 relative"
       aria-labelledby="blog-preview-heading"
     >
       <div className="absolute inset-0 circuit-pattern opacity-10" aria-hidden="true" />

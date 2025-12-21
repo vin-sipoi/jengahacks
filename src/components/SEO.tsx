@@ -10,7 +10,7 @@ interface SEOProps {
 
 const SEO = ({ 
   title = "JengaHacks 2026 | Nairobi's Premier Hackathon",
-  description = "Join JengaHacks 2026, East Africa's premier 48-hour hackathon in Nairobi. February 21-22, 2026 at iHub.",
+  description = "Join JengaHacks 2026, East Africa's premier 48-hour hackathon in Nairobi, Kenya. February 21-22, 2026.",
   image = "https://jengahacks.com/jengahacks-og-image.jpg",
   url = "https://jengahacks.com",
   type = "website"
