@@ -15,6 +15,12 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    target: ["es2015", "edge88", "firefox78", "chrome87", "safari14"],
+    cssTarget: ["chrome64", "firefox67", "safari12"],
+    minify: "esbuild",
+    polyfillModulePreload: true,
+  },
   test: {
     globals: true,
     environment: "jsdom",

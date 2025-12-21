@@ -1,0 +1,29 @@
+# Browser support configuration
+# Based on caniuse data and baseline-browser-mapping
+
+# Modern browsers (last 2 versions)
+last 2 versions
+
+# Specific browser versions
+> 0.5%
+not dead
+not op_mini all
+
+# Exclude IE11 and older
+not IE 11
+not op_mini all
+
+# Mobile browsers
+iOS >= 12
+Android >= 6
+
+# Safari
+Safari >= 12
+
+# Chrome/Edge
+Chrome >= 80
+Edge >= 80
+
+# Firefox
+Firefox >= 78
+

@@ -3,6 +3,8 @@
  * Note: This provides UX improvements but should be complemented with server-side rate limiting
  */
 
+import { safeLocalStorage } from "./polyfills";
+
 const RATE_LIMIT_KEY = 'jengahacks_rate_limit';
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
 const MAX_SUBMISSIONS_PER_WINDOW = 3; // Max 3 submissions per hour
@@ -18,7 +20,7 @@ interface RateLimitData {
  */
 export const checkRateLimit = (): { allowed: boolean; retryAfter?: number } => {
   try {
-    const stored = localStorage.getItem(RATE_LIMIT_KEY);
+    const stored = safeLocalStorage.getItem(RATE_LIMIT_KEY);
     const now = Date.now();
 
     if (!stored) {
@@ -27,7 +29,7 @@ export const checkRateLimit = (): { allowed: boolean; retryAfter?: number } => {
         attempts: 1,
         windowStart: now,
       };
-      localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+      safeLocalStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
       return { allowed: true };
     }
 
@@ -40,7 +42,7 @@ export const checkRateLimit = (): { allowed: boolean; retryAfter?: number } => {
         attempts: 1,
         windowStart: now,
       };
-      localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(newData));
+      safeLocalStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(newData));
       return { allowed: true };
     }
 
@@ -52,7 +54,7 @@ export const checkRateLimit = (): { allowed: boolean; retryAfter?: number } => {
 
     // Increment attempts
     data.attempts += 1;
-    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+    safeLocalStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
     return { allowed: true };
   } catch (error) {
     // If localStorage fails, allow submission (fail open)
@@ -67,12 +69,12 @@ export const checkRateLimit = (): { allowed: boolean; retryAfter?: number } => {
  */
 export const recordSubmission = (): void => {
   try {
-    const stored = localStorage.getItem(RATE_LIMIT_KEY);
+    const stored = safeLocalStorage.getItem(RATE_LIMIT_KEY);
     if (stored) {
       const data: RateLimitData = JSON.parse(stored);
       // Keep the window start but increment attempts
       data.attempts += 1;
-      localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+      safeLocalStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
     }
   } catch (error) {
     // Silently fail - not critical
@@ -100,7 +102,7 @@ export const formatRetryAfter = (seconds: number): string => {
  */
 export const clearRateLimit = (): void => {
   try {
-    localStorage.removeItem(RATE_LIMIT_KEY);
+    safeLocalStorage.removeItem(RATE_LIMIT_KEY);
   } catch (error) {
     console.warn('Failed to clear rate limit:', error);
   }
