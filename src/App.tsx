@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Sponsorship from "./pages/Sponsorship";
 import Blog from "./pages/Blog";
 import Admin from "./pages/Admin";
+import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import PageTransition from "./components/PageTransition";
@@ -32,6 +33,7 @@ const AnimatedRoutes = () => {
         <Route path="/sponsorship" element={<Sponsorship />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/thank-you" element={<ThankYou />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

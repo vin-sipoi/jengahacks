@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,7 @@ import LiveRegion from "@/components/LiveRegion";
 
 const Registration = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -355,12 +357,14 @@ const Registration = () => {
         throw new Error(t("registration.errors.failed"));
       }
 
-      // Success - record submission and reset form
+      // Success - record submission and navigate to thank you page
       recordSubmission();
       trackRegistration(true);
       const successMessage = t("registration.success");
       toast.success(successMessage);
       setLiveMessage(successMessage);
+      
+      // Reset form state
       setFormData({ fullName: "", email: "", whatsapp: "", linkedIn: "", resume: null });
       setHasLinkedIn(false);
       setHasResume(false);
@@ -373,6 +377,12 @@ const Registration = () => {
         fileInputRef.current.value = '';
       }
       recaptchaRef.current?.reset();
+
+      // Navigate to thank you page with email parameter
+      const emailParam = email ? `?email=${encodeURIComponent(email)}` : '';
+      setTimeout(() => {
+        navigate(`/thank-you${emailParam}`);
+      }, 1000); // Small delay to show success toast
     } catch (error) {
       // Log error details only in development
       if (import.meta.env.DEV) {
