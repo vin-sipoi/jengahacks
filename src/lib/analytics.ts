@@ -3,14 +3,31 @@
  * Provides event tracking and page view analytics
  */
 
+// Google Analytics event parameters type
+type GAEventParams = Record<string, string | number | boolean | undefined>;
+
+// Google Analytics config type
+type GAConfig = {
+  page_path?: string;
+  page_title?: string;
+  send_page_view?: boolean;
+  [key: string]: string | number | boolean | undefined;
+};
+
+// Google Analytics dataLayer entry type
+type GADataLayerEntry = 
+  | [string, string | Date, GAConfig | GAEventParams | undefined]
+  | [string, string | Date]
+  | [string];
+
 declare global {
   interface Window {
     gtag?: (
       command: "config" | "event" | "set" | "js",
       targetId: string | Date,
-      config?: Record<string, any>
+      config?: GAConfig | GAEventParams
     ) => void;
-    dataLayer?: any[];
+    dataLayer?: GADataLayerEntry[];
   }
 }
 
@@ -29,8 +46,13 @@ export const initGA = (): void => {
   window.dataLayer = window.dataLayer || [];
 
   // Define gtag function
-  window.gtag = function gtag(...args: any[]) {
-    window.dataLayer.push(args);
+  window.gtag = function gtag(
+    command: "config" | "event" | "set" | "js",
+    targetId: string | Date,
+    config?: GAConfig | GAEventParams
+  ) {
+    const args: [string, string | Date, GAConfig | GAEventParams | undefined] = [command, targetId, config];
+    window.dataLayer?.push(args);
   };
 
   // Set initial timestamp
@@ -68,12 +90,7 @@ export const trackPageView = (path: string, title?: string): void => {
  */
 export const trackEvent = (
   eventName: string,
-  eventParams?: {
-    category?: string;
-    label?: string;
-    value?: number;
-    [key: string]: any;
-  }
+  eventParams?: GAEventParams
 ): void => {
   if (!GA_ENABLED || !window.gtag) {
     return;

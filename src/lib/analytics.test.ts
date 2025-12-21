@@ -19,9 +19,13 @@ import {
 
 describe("analytics", () => {
   beforeEach(() => {
-    // Clear window.gtag and dataLayer without using 'any'
-    delete (window as unknown as { gtag?: unknown }).gtag;
-    delete (window as unknown as { dataLayer?: unknown }).dataLayer;
+    // Clear window.gtag and dataLayer
+    if (window.gtag) {
+      delete window.gtag;
+    }
+    if (window.dataLayer) {
+      delete window.dataLayer;
+    }
     vi.clearAllMocks();
     // Ensure GA is enabled for tests
     vi.stubEnv("VITE_GA_MEASUREMENT_ID", "G-F92GY3J7W2");
