@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import icon from "@/assets/jengahacks-icon.svg";
-import SocialShare from "@/components/SocialShare";
 import { useTranslation } from "@/hooks/useTranslation";
 import { trackButtonClick } from "@/lib/analytics";
 
@@ -116,14 +115,9 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Social Sharing */}
-          <div className="animate-slide-up delay-500 mt-8 sm:mt-12">
-            <SocialShare variant="compact" />
-          </div>
-
-          {/* Scroll Indicator - Desktop only, below socials */}
+          {/* Scroll Indicator - Desktop only */}
           <div 
-            className="hidden md:flex animate-slide-up delay-600 mt-8 sm:mt-12 animate-bounce justify-center"
+            className="hidden md:flex animate-slide-up delay-600 mt-8 sm:mt-12 justify-center [animation-fill-mode:forwards]"
             role="button"
             aria-label={t("aria.scrollDown")}
             tabIndex={0}
@@ -137,7 +131,7 @@ const Hero = () => {
               }
             }}
           >
-            <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center pt-2">
+            <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center pt-2 animate-bounce">
               <div className="w-1 h-2 bg-primary rounded-full animate-pulse" aria-hidden="true" />
             </div>
           </div>
