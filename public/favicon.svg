@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Black background -->
+  <rect width="32" height="32" fill="#000000" rx="4"/>
+  
+  <!-- Four green blocks in staggered pattern -->
+  <!-- Bottom left block -->
+  <rect x="4" y="20" width="10" height="8" fill="#65bb3a" rx="1"/>
+  
+  <!-- Bottom right block -->
+  <rect x="18" y="20" width="10" height="8" fill="#65bb3a" rx="1"/>
+  
+  <!-- Top left block (shifted right) -->
+  <rect x="11" y="8" width="10" height="8" fill="#65bb3a" rx="1" transform="rotate(-2 16 12)"/>
+  
+  <!-- Top right block -->
+  <rect x="22" y="6" width="8" height="8" fill="#65bb3a" rx="1" transform="rotate(2 26 10)"/>
+</svg>
+
