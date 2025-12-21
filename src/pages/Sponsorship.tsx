@@ -28,8 +28,7 @@ const packages = [
       "Everything in Bronze",
       "Logo on event banners",
       "2 mentor passes",
-      "5-minute pitch during opening ceremony",
-      "Access to participant resumes",
+      "Short pitch during opening ceremony",
       "Branded swag in participant kits",
     ],
   },
@@ -47,6 +46,7 @@ const packages = [
       "10-minute keynote slot",
       "Logo on participant t-shirts",
       "Priority access to top projects",
+      "Access to participant resumes",
     ],
   },
   {
@@ -118,7 +118,7 @@ const Sponsorship = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Check className="w-5 h-5 text-primary" />
-                <span>Top University Talent</span>
+                <span>Top Local Tech Talent</span>
               </div>
             </div>
           </div>
