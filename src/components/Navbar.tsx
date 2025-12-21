@@ -9,6 +9,7 @@ const Navbar = () => {
 
   const navLinks = [
     { href: "#about", label: "About" },
+    { href: "/blog", label: "Blog", isRoute: true },
     { href: "/sponsorship", label: "Become a Sponsor", isRoute: true },
   ];
 

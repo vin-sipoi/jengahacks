@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Sponsors from "@/components/Sponsors";
+import BlogPreview from "@/components/BlogPreview";
 import Registration from "@/components/Registration";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -18,6 +19,7 @@ const Index = () => {
           <Hero />
           <About />
           <Sponsors />
+          <BlogPreview />
           <Registration />
         </main>
         <Footer />
