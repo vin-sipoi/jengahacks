@@ -4,7 +4,7 @@ import adamurLogo from "@/assets/adamur-logo.png";
 
 const Sponsors = () => {
   return (
-    <section id="sponsors" className="py-16 sm:py-20 md:py-24 bg-card/50">
+    <section id="sponsors" className="pb-16 sm:pb-20 md:pb-24 pt-8 sm:pt-10 md:pt-12 bg-card/50">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center mb-10 sm:mb-12 md:mb-16">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-4">
