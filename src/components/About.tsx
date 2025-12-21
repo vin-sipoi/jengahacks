@@ -58,7 +58,7 @@ const About = () => {
         <div className="mt-12 sm:mt-16 md:mt-20">
           <h3 className="text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-8 px-4">Hackathon Tracks</h3>
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 px-4" role="list">
-            {["FinTech", "HealthTech", "AgriTech", "EdTech", "Climate Tech", "Open Innovation"].map((track) => (
+            {["FinTech", "HealthTech", "AgriTech", "EdTech", "Climate Tech", "JobTech", "AI/ML", "Open Innovation"].map((track) => (
               <div
                 key={track}
                 role="listitem"
