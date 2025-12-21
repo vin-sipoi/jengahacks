@@ -1,4 +1,5 @@
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import mimisirobotiLogo from "@/assets/mimisiroboti-logo.png";
 
 const Footer = () => {
   return (
@@ -14,7 +15,7 @@ const Footer = () => {
 
           <div className="flex items-center gap-3 sm:gap-4">
             <a
-              href="https://x.com/jengahacks"
+              href="https://x.com/mimisiroboti"
               target="_blank"
               rel="noopener noreferrer"
               className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
@@ -23,7 +24,7 @@ const Footer = () => {
               <Twitter className="w-4 h-4 sm:w-5 sm:h-5" />
             </a>
             <a
-              href="https://linkedin.com/company/jengahacks"
+              href="https://www.linkedin.com/company/mimisiroboti"
               target="_blank"
               rel="noopener noreferrer"
               className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
@@ -51,9 +52,19 @@ const Footer = () => {
         </div>
 
         <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-border text-center">
-          <p className="text-xs sm:text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-3">
             © {new Date().getFullYear()} JengaHacks. All rights reserved.
           </p>
+          <a 
+            href="https://www.linkedin.com/company/mimisiroboti" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <span>Run by</span>
+            <img src={mimisirobotiLogo} alt="Mimi Si Roboti" className="h-6 w-auto" />
+            <span className="font-medium">Mimi Si Roboti</span>
+          </a>
         </div>
       </div>
     </footer>
