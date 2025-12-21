@@ -158,6 +158,124 @@ These variables enhance functionality but are not required for basic operation.
 
 ---
 
+#### `VITE_SENTRY_DSN`
+
+**Type:** `string`  
+**Required:** ❌ No  
+**Example:** `https://c97ecce9c0ad10a5af3b065e2559ab61@o4510575021719552.ingest.us.sentry.io/4510575024209920`  
+**Description:** Sentry Data Source Name (DSN) for error tracking and monitoring.
+
+**Where to find:**
+1. Go to [Sentry Dashboard](https://sentry.io)
+2. Select your project
+3. Navigate to **Settings → Projects → Client Keys (DSN)**
+4. Copy the DSN URL
+
+**Security:**
+- ✅ DSN is safe to expose in client code
+- ✅ Only used for sending error reports
+- ⚠️ Requires `VITE_SENTRY_ENABLED=true` to activate
+
+**Usage:**
+- Used for automatic error tracking
+- Captures unhandled exceptions and React errors
+- Provides error context and stack traces
+- Performance monitoring (optional)
+
+---
+
+#### `VITE_SENTRY_ENABLED`
+
+**Type:** `boolean` (string: `"true"` or `"false"`)  
+**Required:** ❌ No  
+**Default:** `false` (if not set)  
+**Example:** `true`  
+**Description:** Enable or disable Sentry error tracking.
+
+**Values:**
+- `"true"` - Enable Sentry (requires `VITE_SENTRY_DSN`)
+- `"false"` or unset - Disable Sentry
+
+**Privacy:**
+- Set to `false` to disable error tracking completely
+- Useful for development or privacy-conscious deployments
+- Defaults to `false` to respect user privacy
+
+**Usage:**
+- Controls whether Sentry initializes
+- Even with DSN set, Sentry won't run unless enabled
+- Recommended: Enable in production, disable in development
+
+---
+
+#### `VITE_SENTRY_SEND_PII`
+
+**Type:** `boolean` (string: `"true"` or `"false"`)  
+**Required:** ❌ No  
+**Default:** `false` (if not set)  
+**Example:** `true`  
+**Description:** Send Personally Identifiable Information (PII) to Sentry.
+
+**Values:**
+- `"true"` - Send PII (IP addresses, user data)
+- `"false"` or unset - Don't send PII (recommended)
+
+**Privacy:**
+- ⚠️ Only enable if you have user consent
+- ⚠️ Must comply with GDPR, CCPA, and other privacy regulations
+- ✅ Defaults to `false` for privacy protection
+
+**What is PII:**
+- IP addresses
+- User email addresses
+- User IDs
+- Browser fingerprinting data
+
+**Recommendation:**
+- Keep `false` unless you have explicit consent
+- Use `setUser()` manually if you need user context
+
+---
+
+#### `VITE_SENTRY_RELEASE`
+
+**Type:** `string`  
+**Required:** ❌ No  
+**Example:** `1.0.0`, `v1.2.3`, `2026-02-21`  
+**Description:** Release version identifier for tracking errors by version.
+
+**Usage:**
+- Helps identify which version introduced bugs
+- Useful for release management
+- Can be set to git commit hash, version number, or date
+
+**Example:**
+```env
+VITE_SENTRY_RELEASE=1.0.0
+# or
+VITE_SENTRY_RELEASE=abc123def456
+```
+
+---
+
+#### `VITE_SENTRY_ENABLE_IN_DEV`
+
+**Type:** `boolean` (string: `"true"` or `"false"`)  
+**Required:** ❌ No  
+**Default:** `false` (if not set)  
+**Example:** `true`  
+**Description:** Enable Sentry error tracking in development mode.
+
+**Values:**
+- `"true"` - Send errors to Sentry even in development
+- `"false"` or unset - Only send errors in production
+
+**Recommendation:**
+- Keep `false` to avoid cluttering Sentry with dev errors
+- Set to `true` only when debugging production-like issues locally
+
+---
+
 #### `VITE_ADMIN_PASSWORD`
 
 **Type:** `string`  
@@ -614,6 +732,11 @@ const isEnabled = import.meta.env.VITE_GA_ENABLED; // This is a string!
 - [ ] `VITE_USE_REGISTRATION_EDGE_FUNCTION`
 - [ ] `VITE_GA_MEASUREMENT_ID`
 - [ ] `VITE_GA_ENABLED`
+- [ ] `VITE_SENTRY_DSN`
+- [ ] `VITE_SENTRY_ENABLED`
+- [ ] `VITE_SENTRY_SEND_PII`
+- [ ] `VITE_SENTRY_RELEASE`
+- [ ] `VITE_SENTRY_ENABLE_IN_DEV`
 - [ ] `VITE_ADMIN_PASSWORD`
 - [ ] `VITE_DISCORD_URL`
 - [ ] `VITE_LOCALE`
@@ -648,6 +771,13 @@ VITE_USE_REGISTRATION_EDGE_FUNCTION=false
 # Google Analytics
 VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 VITE_GA_ENABLED=false
+
+# Sentry Error Tracking
+VITE_SENTRY_DSN=https://c97ecce9c0ad10a5af3b065e2559ab61@o4510575021719552.ingest.us.sentry.io/4510575024209920
+VITE_SENTRY_ENABLED=false
+VITE_SENTRY_SEND_PII=false
+VITE_SENTRY_RELEASE=
+VITE_SENTRY_ENABLE_IN_DEV=false
 
 # Admin
 VITE_ADMIN_PASSWORD=dev-password-123

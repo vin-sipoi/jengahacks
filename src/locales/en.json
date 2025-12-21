@@ -294,6 +294,12 @@
     "title": "404",
     "message": "Oops! Page not found",
     "returnHome": "Return to Home"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "message": "We're sorry, but something unexpected happened. Our team has been notified.",
+    "reload": "Reload Page",
+    "goHome": "Go Home"
   }
 }
 
