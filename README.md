@@ -65,6 +65,8 @@ JengaHacks is a 48-hour hackathon event taking place in Nairobi, Kenya, bringing
 - **[Environment Variables](./ENVIRONMENT_VARIABLES.md)** - Complete reference for all environment variables
 - **[Troubleshooting Guide](./TROUBLESHOOTING.md)** - Solutions for common issues and errors
 - **[Contributing Guidelines](./CONTRIBUTING.md)** - Guidelines for contributing to the project
+- **[Performance Testing Guide](./PERFORMANCE.md)** - Performance benchmarks and optimization guidelines
+- **[Visual Regression Testing Guide](./VISUAL_REGRESSION.md)** - Visual testing and baseline management
 - **[TODO](./TODO.md)** - Project roadmap and task tracking
 
 ## 📋 Prerequisites
@@ -150,6 +152,8 @@ The application will be available at `http://localhost:8080`
 | `npm run test:e2e:headed` | Run E2E tests with visible browser |
 | `npm run test:e2e:debug` | Debug E2E tests |
 | `npm run test:e2e:report` | View E2E test report |
+| `npm run test:visual` | Run visual regression tests |
+| `npm run test:e2e:visual:update` | Update visual regression baselines |
 
 ## 📁 Project Structure
 

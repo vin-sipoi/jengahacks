@@ -35,6 +35,21 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
   },
 
+  /* Configure visual comparison */
+  expect: {
+    /* Threshold for visual comparison (0-1, where 0 is exact match) */
+    toHaveScreenshot: {
+      threshold: 0.2,
+      /* Maximum number of pixels that can differ */
+      maxDiffPixels: 1000,
+    },
+    /* Threshold for snapshot comparison */
+    toMatchSnapshot: {
+      threshold: 0.2,
+      maxDiffPixels: 1000,
+    },
+  },
+
   /* Configure projects for major browsers */
   projects: [
     {

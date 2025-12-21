@@ -27,6 +27,7 @@ dist-ssr
 /test-results/
 /playwright-report/
 /playwright/.cache/
+/playwright/.screenshots/
 
 # Supabase
 supabase/.temp/

@@ -29,6 +29,24 @@ npm run test:e2e:debug
 npm run test:e2e:report
 ```
 
+### Run performance tests
+```bash
+npm run test:e2e:performance
+# or
+npm run test:performance
+```
+
+### Run visual regression tests
+```bash
+# Run visual regression tests
+npm run test:e2e:visual
+# or
+npm run test:visual
+
+# Update baseline screenshots (when UI changes are intentional)
+npm run test:e2e:visual:update
+```
+
 ## Test Files
 
 - `registration.spec.ts` - Tests for the registration form and flow
@@ -37,6 +55,8 @@ npm run test:e2e:report
 - `blog.spec.ts` - Tests for the blog page
 - `rate-limiting.spec.ts` - Tests for rate limiting functionality (client-side and server-side)
 - `captcha.spec.ts` - Tests for CAPTCHA integration and verification flow
+- `performance.spec.ts` - Performance tests for page load, rendering, and Core Web Vitals
+- `visual-regression.spec.ts` - Visual regression tests for UI consistency
 
 ## Configuration
 
@@ -63,4 +83,9 @@ In CI environments, tests will:
 - Rate limit tests verify both client-side (localStorage) and server-side rate limiting behavior
 - CAPTCHA tests verify the complete CAPTCHA verification flow including expiration and error handling
 - CAPTCHA tests may skip if CAPTCHA is not configured in the test environment
+- Performance tests measure page load times, Core Web Vitals, network performance, and rendering metrics
+- Performance tests help ensure the application meets performance benchmarks and provides a good user experience
+- Visual regression tests capture screenshots and compare them to baselines to detect unintended UI changes
+- Visual regression tests cover homepage, forms, navigation, responsive designs, and interactive states
+- Use `--update-snapshots` to update baseline images when UI changes are intentional
 

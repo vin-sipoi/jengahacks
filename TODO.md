@@ -75,9 +75,9 @@
 - [x] Add E2E tests (Playwright) - Registration, Navigation, Homepage, Blog tests
 - [x] Test rate limiting in production-like environment (`e2e/rate-limiting.spec.ts` - 10 tests)
 - [x] Test CAPTCHA integration end-to-end (`e2e/captcha.spec.ts` - 11 tests)
-- [ ] Add performance tests
+- [x] Add performance tests (`e2e/performance.spec.ts` - 22 tests covering page load, network, rendering, Core Web Vitals)
+- [x] Add visual regression tests (`e2e/visual-regression.spec.ts` - 25+ tests for UI consistency)
 - [ ] Test on multiple browsers and devices (Firefox, Safari)
-- [ ] Add visual regression tests
 
 ### Documentation
 - [ ] Add API documentation
