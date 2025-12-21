@@ -23,7 +23,7 @@ const Blog = () => {
         setPosts(data);
       } catch (err) {
         console.error("Error loading blog posts:", err);
-        setError("Failed to load blog posts. Please try again later.");
+        setError(t("blog.error"));
       } finally {
         setIsLoading(false);
       }

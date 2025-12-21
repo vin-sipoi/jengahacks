@@ -124,6 +124,7 @@
     "noPosts": "No blog posts available yet.",
     "checkBack": "Check back soon for updates!",
     "loading": "Loading posts...",
+    "error": "Failed to load blog posts. Please try again later.",
     "viewAll": "View All Posts",
     "readTime": "{minutes} min read",
     "by": "By"
