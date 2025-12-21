@@ -129,7 +129,7 @@ export const getMockPosts = (limit?: number): BlogPost[] => {
       title: "Registration Now Open: Secure Your Spot",
       excerpt: "Registration for JengaHacks 2026 is now open! Limited to 200 participants. Don't miss out on this incredible opportunity.",
       author: "JengaHacks Team",
-      publishedAt: "2025-12-01T08:00:00Z",
+      publishedAt: "2025-12-21T08:00:00Z",
       readTime: 2,
       tags: ["registration", "announcement"],
     },
