@@ -33,7 +33,15 @@ vi.mock("sonner", () => ({
 
 // Mock reCAPTCHA
 vi.mock("react-google-recaptcha", () => ({
-  default: ({ onChange, onExpired, onError }: any) => (
+  default: ({ 
+    onChange, 
+    onExpired, 
+    onError 
+  }: { 
+    onChange?: (token: string | null) => void;
+    onExpired?: () => void;
+    onError?: (error: unknown) => void;
+  }) => (
     <div data-testid="recaptcha">
       <button
         onClick={() => onChange && onChange("mock-captcha-token")}
@@ -168,11 +176,11 @@ describe("Registration", () => {
 
     vi.mocked(supabase.storage.from).mockReturnValue({
       upload: mockUpload,
-    } as any);
+    } as unknown as ReturnType<typeof supabase.storage.from>);
 
     vi.mocked(supabase.from).mockReturnValue({
       insert: mockInsert,
-    } as any);
+    } as unknown as ReturnType<typeof supabase.from>);
 
     const nameInput = screen.getByLabelText(/Full Name/i);
     const emailInput = screen.getByLabelText(/Email Address/i);
@@ -455,7 +463,7 @@ describe("Registration", () => {
       });
       vi.mocked(supabase.from).mockReturnValue({
         insert: mockInsert,
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       render(<Registration />);
 
