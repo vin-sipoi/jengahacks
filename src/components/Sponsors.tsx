@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import siliconSavannahLogo from "@/assets/silicon-savannah-logo.png";
 import adamurLogo from "@/assets/adamur-logo.png";
+import promptbiLogo from "@/assets/promptbi-logo.svg";
 
 const Sponsors = () => {
   return (
@@ -45,6 +46,20 @@ const Sponsors = () => {
                 <img
                   src={adamurLogo}
                   alt="Adamur - #BeyondCode"
+                  className="h-12 sm:h-16 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform max-w-[200px] sm:max-w-none"
+                />
+              </div>
+            </a>
+            <a 
+              href="https://promptbix.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <div className="bg-foreground/95 p-4 sm:p-6 rounded-lg sm:rounded-xl hover:bg-foreground transition-colors">
+                <img
+                  src={promptbiLogo}
+                  alt="PromptBI"
                   className="h-12 sm:h-16 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform max-w-[200px] sm:max-w-none"
                 />
               </div>

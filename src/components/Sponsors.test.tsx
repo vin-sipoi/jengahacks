@@ -11,6 +11,10 @@ vi.mock("@/assets/adamur-logo.png", () => ({
   default: "mock-adamur.png",
 }));
 
+vi.mock("@/assets/promptbi-logo.svg", () => ({
+  default: "mock-promptbi.svg",
+}));
+
 describe("Sponsors", () => {
   it("should render the main heading", () => {
     render(<Sponsors />);
@@ -36,6 +40,7 @@ describe("Sponsors", () => {
       screen.getByAltText("Silicon Savannah Solutions")
     ).toBeInTheDocument();
     expect(screen.getByAltText("Adamur - #BeyondCode")).toBeInTheDocument();
+    expect(screen.getByAltText("PromptBI")).toBeInTheDocument();
   });
 
   it("should have correct links for sponsors", () => {
@@ -54,6 +59,11 @@ describe("Sponsors", () => {
     expect(adamurLink).toHaveAttribute("href", "https://adamur.io");
     expect(adamurLink).toHaveAttribute("target", "_blank");
     expect(adamurLink).toHaveAttribute("rel", "noopener noreferrer");
+
+    const promptbiLink = screen.getByAltText("PromptBI").closest("a");
+    expect(promptbiLink).toHaveAttribute("href", "https://promptbix.com");
+    expect(promptbiLink).toHaveAttribute("target", "_blank");
+    expect(promptbiLink).toHaveAttribute("rel", "noopener noreferrer");
   });
 
   it("should render Become a Sponsor section", () => {
