@@ -174,7 +174,6 @@
 
 ## 📱 Mobile App (Future)
 
-- [ ] Consider creating a mobile app
 - [ ] Add push notifications
 - [ ] Mobile-specific features
 
@@ -183,7 +182,6 @@
 - [ ] Set up social media integration
 - [ ] Add social sharing buttons
 - [ ] Create blog/news section
-- [ ] Add newsletter signup
 - [ ] Add community forum or Discord integration
 
 ## 🐛 Known Issues
