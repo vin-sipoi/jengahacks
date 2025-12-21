@@ -75,7 +75,7 @@ const LanguageSwitcher = ({ variant = "default", className }: LanguageSwitcherPr
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className={cn("gap-2", className)}>
             <Globe className="h-4 w-4" />
-            <span className="hidden sm:inline">{currentLocaleInfo.code.split("-")[0].toUpperCase()}</span>
+            <span>{currentLocaleInfo.nativeName}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
