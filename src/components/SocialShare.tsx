@@ -43,6 +43,7 @@ const SocialShare = ({
 
   const handleShare = async (platform: string, link: string) => {
     // Try native Web Share API first (mobile)
+    let nativeShareFailed = false;
     if (navigator.share && platform === "native") {
       try {
         await navigator.share({
@@ -50,15 +51,20 @@ const SocialShare = ({
           text: defaultDescription,
           url: shareUrl,
         });
+        // Track successful native share BEFORE returning
         trackSocialShare("native_share", "event");
         return;
       } catch (error) {
         // User cancelled or error, fall through to copy link
         if ((error as Error).name !== "AbortError") {
           console.error("Share error:", error);
-          // Fall through to copy link
+          // Track failed share attempt
+          trackSocialShare("native_share_failed", "event");
+          // Mark that native share failed so we can fall back to copy
+          nativeShareFailed = true;
         } else {
-          return; // User cancelled, don't do anything
+          // User cancelled - don't track as it's intentional
+          return;
         }
       }
     }
@@ -71,7 +77,10 @@ const SocialShare = ({
     }
 
     // Copy to clipboard for native share fallback or link copy
-    if (platform === "copy" || (platform === "native" && !navigator.share)) {
+    // Include nativeShareFailed to handle fallback when navigator.share exists but failed
+    const shouldCopyLink = platform === "copy" || 
+      (platform === "native" && (!navigator.share || nativeShareFailed));
+    if (shouldCopyLink) {
       try {
         await navigator.clipboard.writeText(shareUrl);
         trackSocialShare(platform === "copy" ? "copy_link" : "native_share", "event");

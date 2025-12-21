@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
-// Mock environment before importing
+// Set environment variables before importing
 vi.stubEnv("VITE_GA_MEASUREMENT_ID", "G-XXXXXXXXXX");
-vi.stubEnv("VITE_GA_ENABLED=true", undefined);
+vi.stubEnv("VITE_GA_ENABLED", "true");
 
-import {
+// Import after setting env vars
+const {
   initGA,
   trackPageView,
   trackEvent,
@@ -15,7 +16,7 @@ import {
   trackSearch,
   trackSocialShare,
   isGAEnabled,
-} from "./analytics";
+} = await import("./analytics");
 
 describe("analytics", () => {
   beforeEach(() => {
@@ -28,8 +29,8 @@ describe("analytics", () => {
     }
     vi.clearAllMocks();
     // Ensure GA is enabled for tests
-    vi.stubEnv("VITE_GA_MEASUREMENT_ID", "G-F92GY3J7W2");
-    vi.stubEnv("VITE_GA_ENABLED", undefined);
+    vi.stubEnv("VITE_GA_MEASUREMENT_ID", "G-XXXXXXXXXX");
+    vi.stubEnv("VITE_GA_ENABLED", "true");
   });
 
   describe("isGAEnabled", () => {
@@ -48,6 +49,8 @@ describe("analytics", () => {
 
   describe("trackPageView", () => {
     it("should track page view when GA is enabled", () => {
+      // Initialize GA first
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackPageView("/test", "Test Page");
@@ -60,6 +63,7 @@ describe("analytics", () => {
 
   describe("trackEvent", () => {
     it("should track custom events", () => {
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackEvent("custom_event", { category: "test", value: 1 });
@@ -72,6 +76,7 @@ describe("analytics", () => {
 
   describe("trackRegistration", () => {
     it("should track successful registration", () => {
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackRegistration(true);
@@ -82,6 +87,7 @@ describe("analytics", () => {
     });
 
     it("should track failed registration with error", () => {
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackRegistration(false, "Test error");
@@ -95,6 +101,7 @@ describe("analytics", () => {
 
   describe("trackButtonClick", () => {
     it("should track button clicks", () => {
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackButtonClick("Test Button", "/test");
@@ -107,6 +114,7 @@ describe("analytics", () => {
 
   describe("trackExternalLink", () => {
     it("should track external link clicks", () => {
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackExternalLink("https://example.com", "Example Link");
@@ -119,6 +127,7 @@ describe("analytics", () => {
 
   describe("trackDownload", () => {
     it("should track file downloads", () => {
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackDownload("test.pdf", "pdf");
@@ -131,6 +140,7 @@ describe("analytics", () => {
 
   describe("trackSearch", () => {
     it("should track searches", () => {
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackSearch("test query", 5);
@@ -143,6 +153,7 @@ describe("analytics", () => {
 
   describe("trackSocialShare", () => {
     it("should track social shares", () => {
+      initGA();
       const mockGtag = vi.fn();
       window.gtag = mockGtag;
       trackSocialShare("twitter", "event", "event-123");

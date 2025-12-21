@@ -44,8 +44,7 @@ describe("BlogPreview", () => {
     vi.mocked(blogLib.fetchBlogPosts).mockResolvedValue([]);
     render(<BlogPreview />);
     await waitFor(() => {
-      expect(screen.getByText(/Latest/i)).toBeInTheDocument();
-      expect(screen.getByText(/News/i)).toBeInTheDocument();
+      expect(screen.getByText("Latest News")).toBeInTheDocument();
     });
   });
 

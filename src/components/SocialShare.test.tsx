@@ -28,6 +28,12 @@ describe("SocialShare", () => {
     mockOpen.mockClear();
     mockShare.mockClear();
     mockClipboard.writeText.mockClear();
+    // Delete navigator.share first to ensure it's configurable
+    try {
+      delete (navigator as { share?: unknown }).share;
+    } catch {
+      // Ignore if delete fails
+    }
     // Set navigator.share to undefined by default
     Object.defineProperty(navigator, "share", {
       writable: true,
@@ -55,7 +61,12 @@ describe("SocialShare", () => {
   });
 
   it("should render icon-only variant", () => {
-    // Set navigator.share for this test
+    // Delete and set navigator.share for this test
+    try {
+      delete (navigator as { share?: unknown }).share;
+    } catch {
+      // Ignore if delete fails
+    }
     Object.defineProperty(navigator, "share", {
       writable: true,
       configurable: true,
@@ -72,6 +83,11 @@ describe("SocialShare", () => {
   });
 
   it("should show native share button when navigator.share is available", () => {
+    try {
+      delete (navigator as { share?: unknown }).share;
+    } catch {
+      // Ignore if delete fails
+    }
     Object.defineProperty(navigator, "share", {
       writable: true,
       configurable: true,
@@ -144,6 +160,11 @@ describe("SocialShare", () => {
   });
 
   it("should use native share API when available", async () => {
+    try {
+      delete (navigator as { share?: unknown }).share;
+    } catch {
+      // Ignore if delete fails
+    }
     const mockShareFn = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, "share", {
       writable: true,

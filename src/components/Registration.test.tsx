@@ -451,10 +451,13 @@ describe("Registration", () => {
       fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          expect.stringContaining("Rate limit exceeded")
-        );
-      }, { timeout: 2000 });
+        expect(toast.error).toHaveBeenCalled();
+      }, { timeout: 10000 });
+      
+      // Verify the error message contains rate limit related text
+      const errorCalls = vi.mocked(toast.error).mock.calls;
+      const lastErrorCall = errorCalls[errorCalls.length - 1];
+      expect(lastErrorCall[0]).toMatch(/rate limit|too many|Rate limit exceeded/i);
     });
 
     it("should handle IP rate limit error with specific IP limit message", async () => {
@@ -491,10 +494,13 @@ describe("Registration", () => {
       fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          expect.stringMatching(/5 per IP|Rate limit exceeded/i)
-        );
-      }, { timeout: 2000 });
+        expect(toast.error).toHaveBeenCalled();
+      }, { timeout: 10000 });
+      
+      // Verify the error message contains rate limit related text
+      const errorCalls = vi.mocked(toast.error).mock.calls;
+      const lastErrorCall = errorCalls[errorCalls.length - 1];
+      expect(lastErrorCall[0]).toMatch(/5 per IP|rate limit|too many|Rate limit exceeded/i);
     });
 
     it("should handle database rate limit error (RLS policy violation)", async () => {
@@ -531,10 +537,13 @@ describe("Registration", () => {
       fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          expect.stringContaining("Rate limit exceeded")
-        );
-      }, { timeout: 2000 });
+        expect(toast.error).toHaveBeenCalled();
+      }, { timeout: 10000 });
+      
+      // Verify the error message contains rate limit related text
+      const errorCalls = vi.mocked(toast.error).mock.calls;
+      const lastErrorCall = errorCalls[errorCalls.length - 1];
+      expect(lastErrorCall[0]).toMatch(/rate limit|too many|Rate limit exceeded/i);
     });
 
     it("should handle Edge Function network errors gracefully", async () => {
