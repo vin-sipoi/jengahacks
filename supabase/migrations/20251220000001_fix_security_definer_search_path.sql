@@ -174,3 +174,4 @@ COMMENT ON FUNCTION get_rate_limit_info IS 'Returns rate limit status and retry 
 COMMENT ON FUNCTION check_ip_rate_limit IS 'Checks if IP address has exceeded rate limit of 5 registrations per hour. Uses SECURITY DEFINER with SET search_path = '' to prevent search_path manipulation attacks.';
 COMMENT ON FUNCTION get_ip_rate_limit_info IS 'Returns IP-based rate limit status and retry information. Uses SECURITY DEFINER with SET search_path = '' to prevent search_path manipulation attacks.';
 
+

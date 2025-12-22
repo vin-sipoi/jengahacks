@@ -58,7 +58,70 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      should_add_to_waitlist: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      get_waitlist_position: {
+        Args: {
+          p_email: string
+        }
+        Returns: number
+      }
+      generate_access_token: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_registration_by_token: {
+        Args: {
+          p_token: string
+        }
+        Returns: Array<{
+          id: string
+          full_name: string
+          email: string
+          whatsapp_number: string | null
+          linkedin_url: string | null
+          resume_path: string | null
+          is_waitlist: boolean
+          status: string
+          created_at: string
+        }>
+      }
+      update_registration_by_token: {
+        Args: {
+          p_token: string
+          p_full_name?: string | null
+          p_whatsapp_number?: string | null
+          p_linkedin_url?: string | null
+          p_resume_path?: string | null
+        }
+        Returns: boolean
+      }
+      cancel_registration_by_token: {
+        Args: {
+          p_token: string
+        }
+        Returns: boolean
+      }
+      log_incomplete_registration: {
+        Args: {
+          p_email?: string | null
+          p_whatsapp_number?: string | null
+          p_full_name?: string | null
+          p_ip_address?: string | null
+          p_user_agent?: string | null
+          p_form_data?: string | null
+        }
+        Returns: string
+      }
+      mark_incomplete_registration_completed: {
+        Args: {
+          p_email?: string | null
+          p_whatsapp_number?: string | null
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

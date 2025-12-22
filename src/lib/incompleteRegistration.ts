@@ -3,8 +3,8 @@
  * Logs emails and WhatsApp numbers that are entered but registration is never completed
  */
 
-import { supabase } from '@/integrations/supabase/client';
 import { logger } from './logger';
+import { callRpc } from './supabaseRpc';
 
 interface IncompleteRegistrationData {
   email?: string;
@@ -34,8 +34,7 @@ export const logIncompleteRegistration = async (
     const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : undefined;
 
     // Call RPC function to log incomplete registration
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase.rpc as any)('log_incomplete_registration', {
+    const { error } = await callRpc('log_incomplete_registration', {
       p_email: data.email?.toLowerCase().trim() || null,
       p_whatsapp_number: data.whatsappNumber?.trim() || null,
       p_full_name: data.fullName?.trim() || null,
@@ -79,8 +78,7 @@ export const markIncompleteRegistrationCompleted = async (
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase.rpc as any)('mark_incomplete_registration_completed', {
+    const { error } = await callRpc('mark_incomplete_registration_completed', {
       p_email: email?.toLowerCase().trim() || null,
       p_whatsapp_number: whatsappNumber?.trim() || null,
     });

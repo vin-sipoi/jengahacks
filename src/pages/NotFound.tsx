@@ -2,17 +2,15 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Link } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 const NotFound = () => {
   const location = useLocation();
   const { t } = useTranslation();
 
   useEffect(() => {
-    // Only log in development mode to prevent information leakage in production
-    // This prevents exposing internal routing structure or sensitive URL parameters
-    if (import.meta.env.DEV) {
-      console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-    }
+    // Log 404 errors for monitoring (logger respects log level configuration)
+    logger.warn("404 Error: User attempted to access non-existent route", { pathname: location.pathname });
   }, [location.pathname]);
 
   return (

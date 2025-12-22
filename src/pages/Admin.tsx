@@ -11,6 +11,7 @@ import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 import { toast } from "sonner";
 import { useTranslation } from "@/hooks/useTranslation";
 import { formatDateTimeShort } from "@/lib/i18n";
+import { logger } from "@/lib/logger";
 
 interface RegistrationStats {
   total: number;
@@ -66,7 +67,7 @@ const Admin = () => {
         }
       }
     } catch (error) {
-      console.error("Auth error:", error);
+      logger.error("Auth error", error instanceof Error ? error : new Error(String(error)));
       navigate("/");
     } finally {
       setIsLoading(false);
@@ -156,7 +157,7 @@ const Admin = () => {
         setStats(stats);
       }
     } catch (error) {
-      console.error("Error loading stats:", error);
+      logger.error("Error loading stats", error instanceof Error ? error : new Error(String(error)));
       toast.error(t("admin.failedLoadStats"));
     }
   };
@@ -217,7 +218,7 @@ const Admin = () => {
 
       toast.success(t("admin.csvExported"));
     } catch (error) {
-      console.error("Export error:", error);
+      logger.error("Export error", error instanceof Error ? error : new Error(String(error)));
       toast.error(t("admin.failedExportCSV"));
     }
   };

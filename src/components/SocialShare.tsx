@@ -3,6 +3,7 @@ import { Share2, Twitter, Facebook, Linkedin, MessageCircle, Link as LinkIcon, M
 import { toast } from "sonner";
 import { trackSocialShare } from "@/lib/analytics";
 import { useTranslation } from "@/hooks/useTranslation";
+import { logger } from "@/lib/logger";
 
 interface SocialShareProps {
   title?: string;
@@ -57,7 +58,7 @@ const SocialShare = ({
       } catch (error) {
         // User cancelled or error, fall through to copy link
         if ((error as Error).name !== "AbortError") {
-          console.error("Share error:", error);
+          logger.error("Share error", error instanceof Error ? error : new Error(String(error)), { shareUrl, defaultTitle });
           // Track failed share attempt
           trackSocialShare("native_share_failed", "event");
           // Mark that native share failed so we can fall back to copy
@@ -87,7 +88,7 @@ const SocialShare = ({
         toast.success(t("socialShare.linkCopied"));
         return;
       } catch (error) {
-        console.error("Copy error:", error);
+        logger.error("Copy error", error instanceof Error ? error : new Error(String(error)), { shareUrl });
         // Fallback for older browsers
         try {
           const textArea = document.createElement("textarea");
@@ -102,7 +103,7 @@ const SocialShare = ({
           toast.success(t("socialShare.linkCopied"));
           return;
         } catch (fallbackError) {
-          console.error("Fallback copy error:", fallbackError);
+          logger.error("Fallback copy error", fallbackError instanceof Error ? fallbackError : new Error(String(fallbackError)), { shareUrl });
           toast.error(t("socialShare.copyFailed"));
           return;
         }

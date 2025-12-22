@@ -22,6 +22,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import RegistrationQRCode from "@/components/RegistrationQRCode";
+import { logger } from "@/lib/logger";
+import { callRpc } from "@/lib/supabaseRpc";
 
 interface RegistrationData {
   id: string;
@@ -71,11 +73,10 @@ const ManageRegistration = () => {
       }
 
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data, error } = await (supabase.rpc as any)('get_registration_by_token', { p_token: token } as any);
+        const { data, error } = await callRpc('get_registration_by_token', { p_token: token });
 
         if (error) {
-          console.error('Error loading registration:', error);
+          logger.error('Error loading registration', error, { token });
           toast.error(t("manageRegistration.errors.loadFailed"));
           setIsLoading(false);
           return;
@@ -87,7 +88,7 @@ const ManageRegistration = () => {
           return;
         }
 
-        const reg = data[0] as RegistrationData;
+        const reg = data[0];
         setRegistration(reg);
         setFormData({
           fullName: reg.full_name,
@@ -96,7 +97,7 @@ const ManageRegistration = () => {
           resume: null,
         });
       } catch (error) {
-        console.error('Error loading registration:', error);
+        logger.error('Error loading registration', error instanceof Error ? error : new Error(String(error)), { token });
         toast.error(t("manageRegistration.errors.loadFailed"));
       } finally {
         setIsLoading(false);
@@ -215,7 +216,7 @@ const ManageRegistration = () => {
 
           resumePath = fileName;
         } catch (uploadErr) {
-          console.error('Resume upload error:', uploadErr);
+          logger.error('Resume upload error', uploadErr instanceof Error ? uploadErr : new Error(String(uploadErr)), { token });
           toast.error(t("manageRegistration.errors.resumeUploadFailed"));
           setIsUpdating(false);
           return;
@@ -234,21 +235,16 @@ const ManageRegistration = () => {
       }
 
       // Update registration
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: updateError } = await (supabase.rpc as any)(
-        'update_registration_by_token',
-        {
-          p_token: token,
-          p_full_name: formData.fullName.trim(),
-          p_whatsapp_number: whatsappNumber,
-          p_linkedin_url: linkedInUrl,
-          p_resume_path: resumePath,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any
-      );
+      const { error: updateError } = await callRpc('update_registration_by_token', {
+        p_token: token,
+        p_full_name: formData.fullName.trim(),
+        p_whatsapp_number: whatsappNumber,
+        p_linkedin_url: linkedInUrl,
+        p_resume_path: resumePath,
+      });
 
       if (updateError) {
-        console.error('Update error:', updateError);
+        logger.error('Update error', updateError instanceof Error ? updateError : new Error(String(updateError)), { token });
         toast.error(t("manageRegistration.errors.updateFailed"));
         setIsUpdating(false);
         return;
@@ -257,10 +253,9 @@ const ManageRegistration = () => {
       toast.success(t("manageRegistration.success.updated"));
       
       // Reload registration data
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data } = await (supabase.rpc as any)('get_registration_by_token', { p_token: token });
+      const { data } = await callRpc('get_registration_by_token', { p_token: token });
       if (data && data.length > 0) {
-        const reg = data[0] as RegistrationData;
+        const reg = data[0];
         setRegistration(reg);
         setFormData((prev) => ({ ...prev, resume: null }));
         if (fileInputRef.current) {
@@ -268,7 +263,7 @@ const ManageRegistration = () => {
         }
       }
     } catch (error) {
-      console.error('Update error:', error);
+      logger.error('Update error', error instanceof Error ? error : new Error(String(error)), { token });
       toast.error(t("manageRegistration.errors.updateFailed"));
     } finally {
       setIsUpdating(false);
@@ -284,11 +279,10 @@ const ManageRegistration = () => {
     setIsCancelling(true);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: cancelError } = await (supabase.rpc as any)('cancel_registration_by_token', { p_token: token });
+      const { error: cancelError } = await callRpc('cancel_registration_by_token', { p_token: token });
 
       if (cancelError) {
-        console.error('Cancel error:', cancelError);
+        logger.error('Cancel error', cancelError instanceof Error ? cancelError : new Error(String(cancelError)), { token });
         toast.error(t("manageRegistration.errors.cancelFailed"));
         setIsCancelling(false);
         return;
@@ -299,7 +293,7 @@ const ManageRegistration = () => {
         navigate("/");
       }, 2000);
     } catch (error) {
-      console.error('Cancel error:', error);
+      logger.error('Cancel error', error instanceof Error ? error : new Error(String(error)), { token });
       toast.error(t("manageRegistration.errors.cancelFailed"));
     } finally {
       setIsCancelling(false);

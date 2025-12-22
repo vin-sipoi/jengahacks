@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { fetchBlogPosts, formatBlogDate, type BlogPost } from "@/lib/blog";
 import { useTranslation } from "@/hooks/useTranslation";
+import { logger } from "@/lib/logger";
 
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -23,7 +24,7 @@ const Blog = () => {
         const data = await fetchBlogPosts();
         setPosts(data);
       } catch (err) {
-        console.error("Error loading blog posts:", err);
+        logger.error("Error loading blog posts", err instanceof Error ? err : new Error(String(err)));
         setError(t("blog.error"));
       } finally {
         setIsLoading(false);

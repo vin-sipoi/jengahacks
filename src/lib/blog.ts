@@ -3,6 +3,8 @@
  * Supports multiple data sources: API, RSS feed, CMS, or static content
  */
 
+import { logger } from "./logger";
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -41,7 +43,7 @@ export const fetchBlogPosts = async (limit?: number): Promise<BlogPost[]> => {
       return limit ? posts.slice(0, limit) : posts;
     }
   } catch (error) {
-    console.error("Error fetching blog posts:", error);
+    logger.error("Error fetching blog posts", error instanceof Error ? error : new Error(String(error)), { apiUrl, rssUrl });
   }
 
   // Fallback to empty array or mock data in development
@@ -87,7 +89,7 @@ const fetchRSSFeed = async (rssUrl: string): Promise<BlogPost[]> => {
       };
     });
   } catch (error) {
-    console.error("Error parsing RSS feed:", error);
+    logger.error("Error parsing RSS feed", error instanceof Error ? error : new Error(String(error)), { rssUrl });
     return [];
   }
 };
@@ -189,7 +191,7 @@ export const fetchBlogPost = async (id: string): Promise<BlogPost | null> => {
       return posts.find((post) => post.id === id) || null;
     }
   } catch (error) {
-    console.error("Error fetching blog post:", error);
+    logger.error("Error fetching blog post", error instanceof Error ? error : new Error(String(error)), { id, apiUrl, rssUrl });
   }
 
   // Fallback to mock data in development

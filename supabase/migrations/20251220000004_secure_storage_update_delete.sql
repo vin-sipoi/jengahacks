@@ -27,3 +27,4 @@ COMMENT ON POLICY "Deny all resume updates" ON storage.objects IS
 COMMENT ON POLICY "Deny all resume deletes" ON storage.objects IS 
   'Explicitly denies all DELETE operations on resume files. Resume files cannot be deleted by users.';
 
+

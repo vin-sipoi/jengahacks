@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import SocialShare from "@/components/SocialShare";
 import { trackPageView } from "@/lib/analytics";
+import { logger } from "@/lib/logger";
 
 const BlogPost = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,7 +40,7 @@ const BlogPost = () => {
           setError(t("blogPost.notFound"));
         }
       } catch (err) {
-        console.error("Error loading blog post:", err);
+        logger.error("Error loading blog post", err instanceof Error ? err : new Error(String(err)), { id });
         setError(t("blogPost.error"));
       } finally {
         setIsLoading(false);

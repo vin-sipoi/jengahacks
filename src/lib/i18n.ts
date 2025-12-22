@@ -4,6 +4,7 @@
  */
 
 import { getStoredLocale } from "./locale";
+import { logger } from "./logger";
 
 // Default locale for JengaHacks (Kenya/East Africa)
 const DEFAULT_LOCALE = "en-UK";
@@ -93,7 +94,7 @@ export const formatDate = (dateString: string | Date): string => {
     });
   } catch (error) {
     // Fallback to default locale if user's locale is invalid
-    console.warn("Invalid locale, falling back to default:", error);
+    logger.warn("Invalid locale, falling back to default", { error: error instanceof Error ? error.message : String(error), locale });
     return date.toLocaleDateString(DEFAULT_LOCALE, {
       year: "numeric",
       month: "long",
@@ -117,7 +118,7 @@ export const formatDateShort = (dateString: string | Date): string => {
       day: "numeric",
     });
   } catch (error) {
-    console.warn("Invalid locale, falling back to default:", error);
+    logger.warn("Invalid locale, falling back to default", { error: error instanceof Error ? error.message : String(error), locale });
     return date.toLocaleDateString(DEFAULT_LOCALE, {
       year: "numeric",
       month: "short",
@@ -216,7 +217,7 @@ export const formatRelativeTime = (dateString: string | Date): string => {
         return rtf.format(Math.floor(diffInSeconds / 31536000), "year");
       }
     } catch (error) {
-      console.warn("Error formatting relative time:", error);
+      logger.warn("Error formatting relative time", { error: error instanceof Error ? error.message : String(error), date: date.toISOString() });
     }
   }
 
@@ -245,7 +246,7 @@ export const formatNumber = (value: number): string => {
   try {
     return new Intl.NumberFormat(locale).format(value);
   } catch (error) {
-    console.warn("Error formatting number:", error);
+    logger.warn("Error formatting number", { error: error instanceof Error ? error.message : String(error), value, locale });
     return value.toString();
   }
 };
@@ -262,7 +263,7 @@ export const formatCurrency = (value: number, currency: string = "KES"): string 
       currency,
     }).format(value);
   } catch (error) {
-    console.warn("Error formatting currency:", error);
+    logger.warn("Error formatting currency", { error: error instanceof Error ? error.message : String(error), value, currency, locale });
     return `${currency} ${value.toFixed(2)}`;
   }
 };

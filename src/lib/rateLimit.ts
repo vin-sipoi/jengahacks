@@ -4,6 +4,7 @@
  */
 
 import { safeLocalStorage } from "./polyfills";
+import { logger } from "./logger";
 
 const RATE_LIMIT_KEY = 'jengahacks_rate_limit';
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -59,7 +60,7 @@ export const checkRateLimit = (): { allowed: boolean; retryAfter?: number } => {
   } catch (error) {
     // If localStorage fails, allow submission (fail open)
     // Server-side rate limiting will catch abuse
-    console.warn('Rate limit check failed:', error);
+    logger.warn('Rate limit check failed', { error: error instanceof Error ? error.message : String(error) });
     return { allowed: true };
   }
 };
@@ -78,7 +79,7 @@ export const recordSubmission = (): void => {
     }
   } catch (error) {
     // Silently fail - not critical
-    console.warn('Failed to record submission:', error);
+    logger.warn('Failed to record submission', { error: error instanceof Error ? error.message : String(error) });
   }
 };
 
@@ -104,7 +105,7 @@ export const clearRateLimit = (): void => {
   try {
     safeLocalStorage.removeItem(RATE_LIMIT_KEY);
   } catch (error) {
-    console.warn('Failed to clear rate limit:', error);
+    logger.warn('Failed to clear rate limit', { error: error instanceof Error ? error.message : String(error) });
   }
 };
 

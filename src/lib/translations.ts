@@ -3,6 +3,7 @@
  */
 
 import { getStoredLocale, type SupportedLocale } from "./locale";
+import { logger } from "./logger";
 
 type TranslationKey = string;
 type TranslationParams = Record<string, string | number>;
@@ -45,13 +46,13 @@ export const t = (
       if (currentLocale !== "en-UK") {
         return t(key, params, "en-UK");
       }
-      console.warn(`Translation key not found: ${key}`);
+      logger.warn(`Translation key not found: ${key}`, { key, locale: currentLocale });
       return key;
     }
   }
 
   if (typeof value !== "string") {
-    console.warn(`Translation value is not a string for key: ${key}`);
+    logger.warn(`Translation value is not a string for key: ${key}`, { key, locale: currentLocale, valueType: typeof value });
     return key;
   }
 
