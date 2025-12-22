@@ -84,7 +84,7 @@ const About = () => {
               <div
                 key={track}
                 role="listitem"
-                className="px-4 sm:px-6 py-2 sm:py-3 bg-muted rounded-full text-sm sm:text-base text-foreground font-medium hover:bg-primary hover:text-primary-foreground transition-colors cursor-default"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-muted rounded-full text-sm sm:text-base text-foreground font-medium cursor-default"
                 aria-label={`Hackathon track: ${track}`}
               >
                 {track}
@@ -97,7 +97,7 @@ const About = () => {
         <aside className="mt-12 sm:mt-16 md:mt-20 text-center px-4" aria-label="Community information">
           <div className="inline-block p-6 sm:p-8 bg-[#262626] border border-indigo-500/20 rounded-xl sm:rounded-2xl max-w-md mx-auto">
             <div className="flex items-center justify-center mb-3" aria-hidden="true">
-              <MessageSquare className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-400" />
+              <MessageSquare className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
             </div>
             <h3 className="text-lg sm:text-xl font-semibold mb-2">{t("about.community.title")}</h3>
             <p className="text-sm sm:text-base text-muted-foreground mb-4">

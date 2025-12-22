@@ -390,7 +390,15 @@ const Registration = () => {
 
       // Generate access token for registration management
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: accessToken } = await (supabase.rpc as any)('generate_access_token');
+      const { data: accessToken, error: tokenError } = await (supabase.rpc as any)('generate_access_token');
+
+      if (tokenError) {
+        // Log error but continue with registration attempt
+        // The database trigger will generate a token automatically, but user won't have immediate access
+        if (import.meta.env.DEV) {
+          console.error('Access token generation error:', tokenError);
+        }
+      }
 
       // Insert registration into database (always attempt, even if resume upload failed)
       const registrationData = {
