@@ -45,11 +45,12 @@ const Navbar = () => {
     }
   }, [isOpen]);
 
-  const navLinks = [
-    { href: "#about", label: t("nav.about") },
-    { href: "/blog", label: t("nav.blog"), isRoute: true },
-    { href: "/sponsorship", label: t("nav.sponsorship"), isRoute: true },
-  ];
+    const navLinks = [
+      { href: "#about", label: t("nav.about") },
+      { href: "#faq", label: t("nav.faq") },
+      { href: "/blog", label: t("nav.blog"), isRoute: true },
+      { href: "/sponsorship", label: t("nav.sponsorship"), isRoute: true },
+    ];
 
   return (
     <nav 

@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Sponsors from "@/components/Sponsors";
+import FAQ from "@/components/FAQ";
 import Registration from "@/components/Registration";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -26,6 +27,9 @@ const Index = () => {
             <Sponsors />
           </ScrollReveal>
           <ScrollReveal direction="up" delay={300}>
+            <FAQ />
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={400}>
             <Registration />
           </ScrollReveal>
         </main>

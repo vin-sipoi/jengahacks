@@ -32,6 +32,7 @@
   },
   "nav": {
     "about": "Kuhusu",
+    "faq": "Maswali",
     "blog": "Blogu",
     "sponsorship": "Kuwa Mfadhili",
     "admin": "Msimamizi"
@@ -442,6 +443,50 @@
     "description": "Hifadhi au chapa msimbo huu wa QR kwa ajili ya kujiandikisha kwa urahisi kwenye tukio",
     "download": "Pakua Msimbo wa QR",
     "instructions": "Wasilisha msimbo huu wa QR kwenye mlango wa tukio kwa ajili ya kujiandikisha haraka"
+  },
+  "faq": {
+    "title": "Maswali Yanayoulizwa Mara kwa Mara",
+    "subtitle": "Kila kitu unachohitaji kujua kuhusu JengaHacks 2026",
+    "whatIsJengahacks": {
+      "question": "JengaHacks ni nini?",
+      "answer": "JengaHacks ni tukio kuu la hackathon la masaa 36 la Afrika Mashariki linalofanyika Nairobi, Kenya. Linaunganisha watengenezaji, wabunifu, na wajasiriamali kujenga suluhisho za ubunifu katika njia nyingi ikiwemo FinTech, HealthTech, AgriTech, EdTech, Climate Tech, JobTech, AI/ML, na Ubunifu wa Wazi."
+    },
+    "whenWhere": {
+      "question": "JengaHacks 2026 itafanyika lini na wapi?",
+      "answer": "JengaHacks 2026 itafanyika Februari 21-22, 2026 huko Nairobi, Kenya. Tukio linaendelea kwa masaa 36, kuanzia saa 9:00 asubuhi mnamo Februari 21 na kumalizika saa 9:00 jioni mnamo Februari 22."
+    },
+    "whoCanParticipate": {
+      "question": "Nani anaweza kushiriki?",
+      "answer": "JengaHacks ni wazi kwa watengenezaji, wabunifu, wajasiriamali, na wanafunzi kutoka Afrika Mashariki. Iwe wewe ni mwanzo au mtaalamu mwenye uzoefu, ikiwa una shauku ya kujenga suluhisho za ubunifu, unakaribishwa kujiunga!"
+    },
+    "teamSize": {
+      "question": "Ukubwa wa timu ni nini?",
+      "answer": "Timu zinaweza kuwa na wanachama 1-4. Unaweza kujiandikisha kama mtu binafsi na kuunda timu kwenye tukio, au kujiandikisha na timu yako tayari imeundwa. Vikao vya kuunda timu vitafanyika mwanzoni mwa hackathon."
+    },
+    "whatToBring": {
+      "question": "Ninapaswa kuleta nini?",
+      "answer": "Lete laptop yako, charger, na zana zozote za maendeleo unazohitaji. Tutatoa chakula, vinywaji, Wi-Fi, nafasi ya kazi, na uongozi wakati wote wa tukio. Vitu vya hiari ni pamoja na begi la kulala (ikiwa unapanga kupumzika), vichwa vya sikio, na sehemu zozote za hardware za mradi wako."
+    },
+    "cost": {
+      "question": "Gharama ya kushiriki ni kiasi gani?",
+      "answer": "JengaHacks 2026 ni bure kabisa kushiriki! Tunatoa chakula, vitafunio, vinywaji, nafasi ya kazi, Wi-Fi, na nyenzo zote za tukio bila malipo. Leta tu shauku na ubunifu wako!"
+    },
+    "prizes": {
+      "question": "Zawadi ni zipi?",
+      "answer": "Washindi watapokea zawadi za pesa, fursa za uongozi, na uwezekano wa ushirikiano na wafadhili. Kiasi maalum cha zawadi na kategoria zitatangazwa karibu na tarehe ya tukio. Washiriki wote pia watapokea mifuko ya zawadi na vyeti vya ushiriki."
+    },
+    "registrationDeadline": {
+      "question": "Mwisho wa usajili ni lini?",
+      "answer": "Usajili ni wazi hadi tufikie uwezo wetu wa washiriki 200. Tunapendekeza kujiandikisha mapema ili kuhifadhi nafasi yako. Ikiwa usajili umejaa, unaweza kujiunga na orodha yetu ya kusubiri na tutakujulisha ikiwa nafasi itapatikana."
+    },
+    "waitlist": {
+      "question": "Nini kinatokea ikiwa niko kwenye orodha ya kusubiri?",
+      "answer": "Ikiwa uko kwenye orodha ya kusubiri, tutakujulisha kupitia barua pepe ikiwa nafasi itapatikana. Nafasi za orodha ya kusubiri hujazwa kwa msingi wa kwanza-kuja-kwanza-kupata. Hakikisha kuangalia barua pepe yako mara kwa mara na kujibu haraka ikiwa utapokea nafasi."
+    },
+    "moreQuestions": {
+      "question": "Nina maswali zaidi. Ninaweza kuwasiliana vipi?",
+      "answer": "Unaweza kutufikia kupitia jumuiya yetu ya Discord, kututumia barua pepe kwa hello@siliconsavannahsolutions.com, au kuungana nasi kwenye mitandao ya kijamii. Tunafurahi kusaidia kujibu maswali yoyote unaweza kuwa nayo!"
+    }
   }
 }
 
