@@ -10,6 +10,7 @@ import {
   isValidPdfMimeType,
 } from "@/lib/security";
 import { logger } from "@/lib/logger";
+import { MAX_FILE_SIZE, MAX_FILE_SIZE_MB } from "@/lib/constants";
 
 export interface FileUploadResult {
   success: boolean;
@@ -27,8 +28,8 @@ export const useFileUpload = () => {
     if (!isValidPdfMimeType(file.type)) {
       return "Invalid file type. Please upload a PDF file.";
     }
-    if (file.size > 5 * 1024 * 1024) {
-      return "File size must be less than 5MB";
+    if (file.size > MAX_FILE_SIZE) {
+      return `File size must be less than ${MAX_FILE_SIZE_MB}MB`;
     }
     return undefined;
   }, []);

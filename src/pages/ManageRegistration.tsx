@@ -23,6 +23,7 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import RegistrationQRCode from "@/components/RegistrationQRCode";
 import { logger } from "@/lib/logger";
+import { MAX_FILE_SIZE, DEBOUNCE_DELAY_MS } from "@/lib/constants";
 import { callRpc } from "@/lib/supabaseRpc";
 
 interface RegistrationData {
@@ -150,7 +151,7 @@ const ManageRegistration = () => {
     }
 
     // Validate file size (5MB limit)
-    if (file.size > 5 * 1024 * 1024) {
+    if (file.size > MAX_FILE_SIZE) {
       setErrors((prev) => ({ ...prev, resume: t("registration.errors.resumeSize") }));
       setFormData((prev) => ({ ...prev, resume: null }));
       return;
@@ -291,7 +292,7 @@ const ManageRegistration = () => {
       toast.success(t("manageRegistration.success.cancelled"));
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, DEBOUNCE_DELAY_MS);
     } catch (error) {
       logger.error('Cancel error', error instanceof Error ? error : new Error(String(error)), { token });
       toast.error(t("manageRegistration.errors.cancelFailed"));

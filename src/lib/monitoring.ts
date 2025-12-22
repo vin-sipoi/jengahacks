@@ -18,6 +18,12 @@
 
 import { logger } from './logger';
 import * as Sentry from '@sentry/react';
+import {
+  DEFAULT_MONITORING_RESPONSE_TIME_THRESHOLD_MS,
+  DEFAULT_MONITORING_ERROR_RATE_THRESHOLD,
+  DEFAULT_MONITORING_MEMORY_THRESHOLD_MB,
+  DEFAULT_MONITORING_API_ERROR_RATE_THRESHOLD,
+} from './constants';
 
 export type MetricType = 'counter' | 'gauge' | 'histogram' | 'timer';
 export type AlertSeverity = 'low' | 'medium' | 'high' | 'critical';
@@ -99,10 +105,10 @@ class Monitoring {
       enableWebhooks: import.meta.env.VITE_MONITORING_WEBHOOK_URL !== undefined,
       webhookUrl: import.meta.env.VITE_MONITORING_WEBHOOK_URL,
       alertThresholds: {
-        errorRate: parseFloat(import.meta.env.VITE_MONITORING_ERROR_RATE_THRESHOLD || '0.1'), // 10%
-        responseTime: parseInt(import.meta.env.VITE_MONITORING_RESPONSE_TIME_THRESHOLD || '2000', 10), // 2s
-        memoryUsage: parseInt(import.meta.env.VITE_MONITORING_MEMORY_THRESHOLD || '100', 10), // 100MB
-        apiErrorRate: parseFloat(import.meta.env.VITE_MONITORING_API_ERROR_RATE_THRESHOLD || '0.05'), // 5%
+        errorRate: parseFloat(import.meta.env.VITE_MONITORING_ERROR_RATE_THRESHOLD || String(DEFAULT_MONITORING_ERROR_RATE_THRESHOLD)),
+        responseTime: parseInt(import.meta.env.VITE_MONITORING_RESPONSE_TIME_THRESHOLD || String(DEFAULT_MONITORING_RESPONSE_TIME_THRESHOLD_MS), 10),
+        memoryUsage: parseInt(import.meta.env.VITE_MONITORING_MEMORY_THRESHOLD || String(DEFAULT_MONITORING_MEMORY_THRESHOLD_MB), 10),
+        apiErrorRate: parseFloat(import.meta.env.VITE_MONITORING_API_ERROR_RATE_THRESHOLD || String(DEFAULT_MONITORING_API_ERROR_RATE_THRESHOLD)),
       },
       healthCheckInterval: parseInt(import.meta.env.VITE_MONITORING_HEALTH_CHECK_INTERVAL || '60000', 10), // 60s
       metricsRetention: parseInt(import.meta.env.VITE_MONITORING_METRICS_RETENTION || '1000', 10),

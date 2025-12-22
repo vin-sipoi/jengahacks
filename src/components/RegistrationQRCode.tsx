@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { cn } from "@/lib/utils";
+import { DEFAULT_QR_CODE_SIZE } from "@/lib/constants";
 
 interface RegistrationQRCodeProps {
   registrationId: string;
@@ -21,7 +22,7 @@ const RegistrationQRCode = ({
   fullName,
   token,
   className,
-  size = 200,
+  size = DEFAULT_QR_CODE_SIZE,
 }: RegistrationQRCodeProps) => {
   const { t } = useTranslation();
 

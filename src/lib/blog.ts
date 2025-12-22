@@ -4,6 +4,7 @@
  */
 
 import { logger } from "./logger";
+import { EXCERPT_MAX_LENGTH } from "./constants";
 
 export interface BlogPost {
   id: string;
@@ -80,7 +81,7 @@ const fetchRSSFeed = async (rssUrl: string): Promise<BlogPost[]> => {
       return {
         id: `rss-${index}`,
         title,
-        excerpt: description.substring(0, 200) + (description.length > 200 ? "..." : ""),
+        excerpt: description.substring(0, EXCERPT_MAX_LENGTH) + (description.length > EXCERPT_MAX_LENGTH ? "..." : ""),
         content: description,
         author,
         publishedAt: pubDate,

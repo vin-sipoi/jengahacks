@@ -18,6 +18,7 @@ import { FileUploadField } from "@/components/FileUploadField";
 import { CaptchaField } from "@/components/CaptchaField";
 import ReCAPTCHA from "react-google-recaptcha";
 import { normalizeWhatsAppNumber } from "@/lib/security";
+import { DEBOUNCE_DELAY_MS } from "@/lib/constants";
 
 const Registration = () => {
   const { t } = useTranslation();
@@ -102,7 +103,7 @@ const Registration = () => {
         }).catch(() => {
           // Silently fail
         });
-      }, 2000);
+      }, DEBOUNCE_DELAY_MS);
     }
 
     return () => {
@@ -130,7 +131,7 @@ const Registration = () => {
         }).catch(() => {
           // Silently fail
         });
-      }, 2000);
+      }, DEBOUNCE_DELAY_MS);
     }
 
     return () => {

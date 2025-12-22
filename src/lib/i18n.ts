@@ -5,6 +5,7 @@
 
 import { getStoredLocale } from "./locale";
 import { logger } from "./logger";
+import { SECONDS_PER_MINUTE, SECONDS_PER_HOUR, SECONDS_PER_DAY, SECONDS_PER_MONTH, SECONDS_PER_YEAR } from "./constants";
 
 // Default locale for JengaHacks (Kenya/East Africa)
 const DEFAULT_LOCALE = "en-UK";
@@ -203,10 +204,10 @@ export const formatRelativeTime = (dateString: string | Date): string => {
 
       const absDiff = Math.abs(diffInSeconds);
 
-      if (absDiff < 60) {
+      if (absDiff < SECONDS_PER_MINUTE) {
         return rtf.format(diffInSeconds, "second");
-      } else if (absDiff < 3600) {
-        return rtf.format(Math.floor(diffInSeconds / 60), "minute");
+      } else if (absDiff < SECONDS_PER_HOUR) {
+        return rtf.format(Math.floor(diffInSeconds / SECONDS_PER_MINUTE), "minute");
       } else if (absDiff < 86400) {
         return rtf.format(Math.floor(diffInSeconds / 3600), "hour");
       } else if (absDiff < 2592000) {
