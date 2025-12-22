@@ -136,6 +136,17 @@
     "readTime": "Soma kwa dakika {minutes}",
     "by": "Na"
   },
+  "blogPost": {
+    "loading": "Inapakia chapisho...",
+    "error": "Imeshindwa kupakia chapisho la blogu. Tafadhali jaribu tena baadaye.",
+    "notFound": "Chapisho Halipatikani",
+    "notFoundMessage": "Chapisho la blogu unalotafuta halipo au limeondolewa.",
+    "backToBlog": "Rudi kwenye Blogu",
+    "share": "Shiriki chapisho hili",
+    "shareDescription": "Shiriki makala hii na mtandao wako",
+    "externalContent": "Chapisho hili linawekwa nje. Bofya hapa chini ili kusoma makala kamili.",
+    "readFullArticle": "Soma Makala Kamili"
+  },
   "footer": {
     "tagline": "Imejengwa Nairobi. Tayari kwa Ulimwengu.",
     "copyright": "© {year} JengaHacks. Haki zote zimehifadhiwa.",

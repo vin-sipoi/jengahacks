@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight, ExternalLink } from "lucide-react";
@@ -136,9 +137,14 @@ const Blog = () => {
                             </a>
                           </Button>
                         ) : (
-                          <Button variant="outline" size="sm" className="w-full sm:w-auto group-hover:bg-primary group-hover:text-primary-foreground" aria-label={`Read more about ${post.title}`}>
-                            {t("common.readMore")}
-                            <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                          <Button variant="outline" size="sm" asChild className="w-full sm:w-auto group-hover:bg-primary group-hover:text-primary-foreground">
+                            <Link
+                              to={`/blog/${post.id}`}
+                              aria-label={`Read more about ${post.title}`}
+                            >
+                              {t("common.readMore")}
+                              <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                            </Link>
                           </Button>
                         )}
                       </CardContent>

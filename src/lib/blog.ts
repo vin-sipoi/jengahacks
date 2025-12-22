@@ -156,3 +156,58 @@ export const formatBlogDateShort = (dateString: string): string => {
   return i18nFormatDateShort(dateString);
 };
 
+/**
+ * Fetch a single blog post by ID
+ */
+export const fetchBlogPost = async (id: string): Promise<BlogPost | null> => {
+  const apiUrl = import.meta.env.VITE_BLOG_API_URL;
+  const rssUrl = import.meta.env.VITE_BLOG_RSS_URL;
+
+  try {
+    // Try API endpoint first
+    if (apiUrl) {
+      // If API supports individual post fetching
+      const postUrl = `${apiUrl}/${id}`;
+      const response = await fetch(postUrl);
+      if (response.ok) {
+        const post = await response.json();
+        return post;
+      }
+      
+      // Fallback: fetch all posts and find by ID
+      const responseAll = await fetch(apiUrl);
+      if (responseAll.ok) {
+        const data = await responseAll.json();
+        const posts = Array.isArray(data) ? data : data.posts || [];
+        return posts.find((post: BlogPost) => post.id === id) || null;
+      }
+    }
+
+    // Try RSS feed
+    if (rssUrl) {
+      const posts = await fetchRSSFeed(rssUrl);
+      return posts.find((post) => post.id === id) || null;
+    }
+  } catch (error) {
+    console.error("Error fetching blog post:", error);
+  }
+
+  // Fallback to mock data in development
+  if (import.meta.env.DEV) {
+    const mockPosts = getMockPosts();
+    return mockPosts.find((post) => post.id === id) || null;
+  }
+
+  return null;
+};
+
+/**
+ * Generate a slug from a blog post title or ID
+ */
+export const generateSlug = (titleOrId: string): string => {
+  return titleOrId
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+};
+

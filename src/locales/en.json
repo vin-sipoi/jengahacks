@@ -135,6 +135,17 @@
     "readTime": "{minutes} min read",
     "by": "By"
   },
+  "blogPost": {
+    "loading": "Loading post...",
+    "error": "Failed to load blog post. Please try again later.",
+    "notFound": "Post Not Found",
+    "notFoundMessage": "The blog post you're looking for doesn't exist or has been removed.",
+    "backToBlog": "Back to Blog",
+    "share": "Share this post",
+    "shareDescription": "Share this article with your network",
+    "externalContent": "This post is hosted externally. Click below to read the full article.",
+    "readFullArticle": "Read Full Article"
+  },
   "footer": {
     "tagline": "Built in Nairobi. Ready for the World.",
     "copyright": "© {year} JengaHacks. All rights reserved.",

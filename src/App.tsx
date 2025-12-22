@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import Sponsorship from "./pages/Sponsorship";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Admin from "./pages/Admin";
 import ThankYou from "./pages/ThankYou";
 import ManageRegistration from "./pages/ManageRegistration";
@@ -33,6 +34,7 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<Index />} />
         <Route path="/sponsorship" element={<Sponsorship />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/thank-you" element={<ThankYou />} />
         <Route path="/manage-registration" element={<ManageRegistration />} />
