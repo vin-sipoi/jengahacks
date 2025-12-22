@@ -507,17 +507,17 @@
       "first": {
         "title": "1st Place",
         "description": "Grand Prize Winner",
-        "amount": "KES 100,000"
+        "amount": "KES 50,000"
       },
       "second": {
         "title": "2nd Place",
         "description": "Runner-Up",
-        "amount": "KES 50,000"
+        "amount": "KES 25,000"
       },
       "third": {
         "title": "3rd Place",
         "description": "Second Runner-Up",
-        "amount": "KES 25,000"
+        "amount": "KES 10,000"
       }
     },
     "specialAwardsTitle": "Special Awards",

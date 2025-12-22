@@ -509,17 +509,17 @@
       "first": {
         "title": "Nafasi ya 1",
         "description": "Mshindi wa Zawadi Kuu",
-        "amount": "KES 100,000"
+        "amount": "KES 50,000"
       },
       "second": {
         "title": "Nafasi ya 2",
         "description": "Mshindi wa Pili",
-        "amount": "KES 50,000"
+        "amount": "KES 25,000"
       },
       "third": {
         "title": "Nafasi ya 3",
         "description": "Mshindi wa Tatu",
-        "amount": "KES 25,000"
+        "amount": "KES 10,000"
       }
     },
     "specialAwardsTitle": "Tuzo Maalum",
