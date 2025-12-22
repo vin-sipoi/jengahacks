@@ -676,7 +676,7 @@ const Registration = () => {
                   name="whatsapp"
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+254712345678 or 0712345678"
+                  placeholder="+254 712345678 or 0712345678"
                   value={formData.whatsapp}
                   onChange={handleInputChange}
                   onBlur={handleBlur}

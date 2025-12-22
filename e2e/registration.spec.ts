@@ -96,7 +96,7 @@ test.describe('Registration Flow', () => {
 
   test('should accept valid WhatsApp number', async ({ page }) => {
     const whatsappInput = page.getByLabel(/WhatsApp Number/i);
-    await whatsappInput.fill('+254712345678');
+    await whatsappInput.fill('+254 712345678');
     
     // Trigger validation
     await whatsappInput.blur();

@@ -113,7 +113,7 @@ export const isValidFullName = (name: string): boolean => {
 /**
  * Validate WhatsApp number
  * Accepts international format with or without +, with or without country code
- * Examples: +254712345678, 254712345678, 0712345678, 712345678
+ * Examples: +254 712345678, 254712345678, 0712345678, 712345678
  */
 export const isValidWhatsAppNumber = (phone: string): boolean => {
   if (!phone || phone.trim().length === 0) {

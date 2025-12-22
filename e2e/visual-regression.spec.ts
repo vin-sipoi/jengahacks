@@ -75,7 +75,7 @@ test.describe('Visual Regression Tests', () => {
       // Fill form fields
       await page.getByLabel(/Full Name/i).fill('John Doe');
       await page.getByLabel(/Email Address/i).fill('john@example.com');
-      await page.getByLabel(/WhatsApp Number/i).fill('+254712345678');
+      await page.getByLabel(/WhatsApp Number/i).fill('+254 712345678');
       await page.getByLabel(/LinkedIn Profile/i).fill('linkedin.com/in/johndoe');
       
       const form = page.locator('form');

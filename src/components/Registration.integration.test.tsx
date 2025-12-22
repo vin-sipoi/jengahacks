@@ -287,7 +287,7 @@ describe("Registration Integration Tests", () => {
 
       await user.type(nameInput, "Alice Johnson");
       await user.type(emailInput, "alice@example.com");
-      await user.type(whatsappInput, "+254712345678");
+      await user.type(whatsappInput, "+254 712345678");
       await user.type(linkedInInput, "linkedin.com/in/alice");
 
       // Complete CAPTCHA
