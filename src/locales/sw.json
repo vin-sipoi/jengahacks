@@ -32,6 +32,8 @@
   },
   "nav": {
     "about": "Kuhusu",
+    "prizes": "Zawadi",
+    "judgesMentors": "Wahakiki na Waongozi",
     "faq": "Maswali",
     "blog": "Blogu",
     "sponsorship": "Kuwa Mfadhili",
@@ -487,6 +489,65 @@
       "question": "Nina maswali zaidi. Ninaweza kuwasiliana vipi?",
       "answer": "Unaweza kutufikia kupitia jumuiya yetu ya Discord, kututumia barua pepe kwa hello@siliconsavannahsolutions.com, au kuungana nasi kwenye mitandao ya kijamii. Tunafurahi kusaidia kujibu maswali yoyote unaweza kuwa nayo!"
     }
+  },
+  "prizes": {
+    "title": "Zawadi na Tuzo",
+    "subtitle": "Shindana kwa zawadi za ajabu na kutambuliwa",
+    "plusBenefits": "Pamoja na fursa za uongozi na kuungana",
+    "categories": {
+      "first": {
+        "title": "Nafasi ya 1",
+        "description": "Mshindi wa Zawadi Kuu",
+        "amount": "KES 100,000"
+      },
+      "second": {
+        "title": "Nafasi ya 2",
+        "description": "Mshindi wa Pili",
+        "amount": "KES 50,000"
+      },
+      "third": {
+        "title": "Nafasi ya 3",
+        "description": "Mshindi wa Tatu",
+        "amount": "KES 25,000"
+      }
+    },
+    "specialAwardsTitle": "Tuzo Maalum",
+    "specialAwards": {
+      "bestDesign": {
+        "title": "Ubunifu Bora",
+        "description": "Inatolewa kwa mradi ulio na muundo bora zaidi wa kiolesura cha mtumiaji na uzoefu wa mtumiaji"
+      },
+      "mostInnovative": {
+        "title": "Zaidi ya Ubunifu",
+        "description": "Kutambua suluhisho lenye ubunifu zaidi na la kuvunja mifumo"
+      },
+      "bestPitch": {
+        "title": "Hotuba Bora",
+        "description": "Inatolewa kwa timu iliyo na mwasilisho wa kulazimisha zaidi"
+      }
+    },
+    "additionalBenefits": {
+      "title": "Washiriki Wote Wanapokea",
+      "subtitle": "Kila mtu anayeshiriki anapata faida muhimu",
+      "mentorship": "Fursa za uongozi na wataalamu wa tasnia",
+      "networking": "Vikao vya kuungana na wafadhili na washiriki wengine",
+      "certificates": "Cheti cha ushiriki",
+      "swag": "Mfuko wa zawadi wa tukio na bidhaa zilizowekwa chapa",
+      "partnerships": "Fursa za uwezekano wa ushirikiano na wafadhili"
+    }
+  },
+  "judgesMentors": {
+    "title": "Wahakiki na Waongozi",
+    "subtitle": "Kutana na wataalamu wa tasnia ambao wataathmini miradi na kuongoza washiriki",
+    "judgesTitle": "Wahakiki",
+    "mentorsTitle": "Waongozi",
+    "comingSoon": {
+      "title": "Wahakiki na Waongozi Watakuja Hivi Karibuni",
+      "description": "Tunaunda timu ya ajabu ya wataalamu wa tasnia",
+      "message": "Rudi hivi karibuni kukutana na wahakiki na waongozi wetu!"
+    },
+    "judges": {},
+    "mentors": {}
   }
 }
 

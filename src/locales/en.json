@@ -32,6 +32,8 @@
   },
   "nav": {
     "about": "About",
+    "prizes": "Prizes",
+    "judgesMentors": "Judges & Mentors",
     "faq": "FAQ",
     "blog": "Blog",
     "sponsorship": "Become a Sponsor",
@@ -484,6 +486,65 @@
       "question": "I have more questions. How can I get in touch?",
       "answer": "You can reach out to us through our Discord community, email us at hello@siliconsavannahsolutions.com, or connect with us on social media. We're happy to help answer any questions you may have!"
     }
+  },
+  "prizes": {
+    "title": "Prizes & Awards",
+    "subtitle": "Compete for amazing prizes and recognition",
+    "plusBenefits": "Plus mentorship and networking opportunities",
+    "categories": {
+      "first": {
+        "title": "1st Place",
+        "description": "Grand Prize Winner",
+        "amount": "KES 100,000"
+      },
+      "second": {
+        "title": "2nd Place",
+        "description": "Runner-Up",
+        "amount": "KES 50,000"
+      },
+      "third": {
+        "title": "3rd Place",
+        "description": "Second Runner-Up",
+        "amount": "KES 25,000"
+      }
+    },
+    "specialAwardsTitle": "Special Awards",
+    "specialAwards": {
+      "bestDesign": {
+        "title": "Best Design",
+        "description": "Awarded to the project with the most outstanding user interface and user experience design"
+      },
+      "mostInnovative": {
+        "title": "Most Innovative",
+        "description": "Recognizing the most creative and groundbreaking solution"
+      },
+      "bestPitch": {
+        "title": "Best Pitch",
+        "description": "Awarded to the team with the most compelling presentation"
+      }
+    },
+    "additionalBenefits": {
+      "title": "All Participants Receive",
+      "subtitle": "Everyone who participates gets valuable benefits",
+      "mentorship": "Mentorship opportunities with industry experts",
+      "networking": "Networking sessions with sponsors and fellow participants",
+      "certificates": "Certificate of participation",
+      "swag": "Event swag bag with branded merchandise",
+      "partnerships": "Potential partnership opportunities with sponsors"
+    }
+  },
+  "judgesMentors": {
+    "title": "Judges & Mentors",
+    "subtitle": "Meet the industry experts who will evaluate projects and guide participants",
+    "judgesTitle": "Judges",
+    "mentorsTitle": "Mentors",
+    "comingSoon": {
+      "title": "Judges & Mentors Coming Soon",
+      "description": "We're assembling an amazing team of industry experts",
+      "message": "Check back soon to meet our judges and mentors!"
+    },
+    "judges": {},
+    "mentors": {}
   }
 }
 

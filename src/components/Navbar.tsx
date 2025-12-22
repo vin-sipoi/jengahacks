@@ -47,6 +47,8 @@ const Navbar = () => {
 
     const navLinks = [
       { href: "#about", label: t("nav.about") },
+      { href: "#prizes", label: t("nav.prizes") },
+      { href: "#judges-mentors", label: t("nav.judgesMentors") },
       { href: "#faq", label: t("nav.faq") },
       { href: "/blog", label: t("nav.blog"), isRoute: true },
       { href: "/sponsorship", label: t("nav.sponsorship"), isRoute: true },

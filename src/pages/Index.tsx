@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Sponsors from "@/components/Sponsors";
+import Prizes from "@/components/Prizes";
+import JudgesMentors from "@/components/JudgesMentors";
 import FAQ from "@/components/FAQ";
 import Registration from "@/components/Registration";
 import Footer from "@/components/Footer";
@@ -27,9 +29,15 @@ const Index = () => {
             <Sponsors />
           </ScrollReveal>
           <ScrollReveal direction="up" delay={300}>
-            <FAQ />
+            <Prizes />
           </ScrollReveal>
           <ScrollReveal direction="up" delay={400}>
+            <JudgesMentors />
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={500}>
+            <FAQ />
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={600}>
             <Registration />
           </ScrollReveal>
         </main>
