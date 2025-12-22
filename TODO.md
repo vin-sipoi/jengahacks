@@ -112,6 +112,19 @@
 - [x] Implement proper logging system
 - [x] Add monitoring and alerting
 - [x] Set up error tracking (Sentry integration with ErrorBoundary, performance monitoring, session replay)
+- [x] Extract magic numbers to constants file (`src/lib/constants.ts`)
+- [ ] Extract common error handling patterns into utility functions
+- [ ] Consolidate file validation logic (currently duplicated in multiple places)
+- [ ] Review and simplify complex conditional logic in Registration component
+- [ ] Standardize error handling patterns across codebase
+- [ ] Replace silent failures (`.catch(() => {})`) with proper error handling
+- [x] Fix TypeScript type assertion error in `src/integrations/supabase/client.ts` (rpc method)
+- [ ] Add proper type definitions for Deno globals in Edge Functions
+- [ ] Refactor functions with long parameter lists to use parameter objects
+- [ ] Remove commented-out code or add TODO comments
+- [ ] Document naming conventions
+- [ ] Move all user-facing strings to translation files
+- [ ] Run ESLint with `--fix` to remove unused imports/variables
 
 ### Performance
 - [ ] Optimize bundle size
@@ -273,4 +286,5 @@
 - ✅ Updated logo to JengaHack logo on left side of navbar
 - ✅ Fixed navigation links to navigate to homepage first when clicked from other pages
 - ✅ Created individual blog post page with full content display, social sharing, and SEO support
+- ✅ Fixed TypeScript type assertion error in Supabase client rpc wrapper (PostgrestFilterBuilder casting)
 
