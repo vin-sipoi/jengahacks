@@ -54,7 +54,7 @@ const supabase = isDevelopment ? {
   
   // Wrap from() for database queries
   // Use a proxy to intercept all query builder methods
-  from: <T extends keyof Database['public']['Tables']>(table: T) => {
+  from: ((table: keyof Database['public']['Tables']) => {
     const queryBuilder = baseClient.from(table);
     
     // Create a proxy that wraps promise-returning methods
@@ -104,8 +104,8 @@ const supabase = isDevelopment ? {
         }
         return original;
       },
-    }) as typeof queryBuilder;
-  },
+    });
+  }) as typeof baseClient.from,
   
   // Wrap functions.invoke() for Edge Functions
   functions: {
