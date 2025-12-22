@@ -76,7 +76,7 @@ apikey: <your-supabase-anon-key>
 {
   "full_name": "John Doe",
   "email": "john.doe@example.com",
-  "whatsapp_number": "+254712345678",  // Optional
+  "whatsapp_number": "+254 712345678",  // Optional
   "linkedin_url": "https://linkedin.com/in/johndoe",  // Optional
   "resume_path": "1234567890-abc123.pdf"  // Optional
 }
@@ -88,7 +88,7 @@ apikey: <your-supabase-anon-key>
   "id": "550e8400-e29b-41d4-a716-446655440000",
   "full_name": "John Doe",
   "email": "john.doe@example.com",
-  "whatsapp_number": "+254712345678",
+  "whatsapp_number": "+254 712345678",
   "linkedin_url": "https://linkedin.com/in/johndoe",
   "resume_path": "1234567890-abc123.pdf",
   "ip_address": "192.168.1.1",
@@ -428,7 +428,7 @@ const { data, error } = await supabase
   .insert({
     full_name: 'John Doe',
     email: 'john.doe@example.com',
-    whatsapp_number: '+254712345678',
+    whatsapp_number: '+254 712345678',
     linkedin_url: 'https://linkedin.com/in/johndoe',
     resume_path: '1234567890-abc123.pdf'
   });
@@ -489,7 +489,7 @@ const { data, error } = await supabase.functions.invoke('register-with-ip', {
   body: {
     full_name: 'John Doe',
     email: 'john.doe@example.com',
-    whatsapp_number: '+254712345678',
+    whatsapp_number: '+254 712345678',
     linkedin_url: 'https://linkedin.com/in/johndoe',
     resume_path: resumePath
   }
