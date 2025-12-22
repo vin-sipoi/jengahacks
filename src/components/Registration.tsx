@@ -496,12 +496,21 @@ const Registration = () => {
         });
       }
       
-      // Get waitlist position if on waitlist
+      // Get waitlist position if on waitlist (don't let errors prevent navigation)
       let waitlistPosition: number | null = null;
       if (isWaitlist) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: position } = await (supabase.rpc as any)('get_waitlist_position', { p_email: email } as any);
-        waitlistPosition = position || null;
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { data: position, error: positionError } = await (supabase.rpc as any)('get_waitlist_position', { p_email: email } as any);
+          if (!positionError && position !== null && position !== undefined) {
+            waitlistPosition = position;
+          }
+        } catch (error) {
+          // Log but don't prevent navigation
+          if (import.meta.env.DEV) {
+            console.warn('Failed to get waitlist position:', error);
+          }
+        }
       }
       
       const successMessage = isWaitlist 
@@ -534,9 +543,9 @@ const Registration = () => {
       if (registrationId) params.set('id', registrationId);
       const queryString = params.toString();
       const emailParam = queryString ? `?${queryString}` : '';
-      setTimeout(() => {
-        navigate(`/thank-you${emailParam}`);
-      }, 1000); // Small delay to show success toast
+      
+      // Navigate immediately - toast will still be visible during navigation
+      navigate(`/thank-you${emailParam}`);
     } catch (error) {
       // Log error details only in development
       if (import.meta.env.DEV) {
