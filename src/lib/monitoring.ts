@@ -392,9 +392,25 @@ class Monitoring {
 
     this.alerts.push(alert);
 
-    // Log alert
-    const logLevel = severity === 'critical' ? 'error' : severity === 'high' ? 'warn' : 'info';
-    logger[logLevel](`Alert: ${message}`, new Error(message), context);
+    // Log alert with correct method signatures
+    if (severity === 'critical') {
+      // error() accepts (message, error?, context?)
+      logger.error(`Alert: ${message}`, new Error(message), context);
+    } else if (severity === 'high') {
+      // warn() only accepts (message, context?)
+      logger.warn(`Alert: ${message}`, {
+        ...context,
+        alertId: id,
+        severity,
+      });
+    } else {
+      // info() only accepts (message, context?)
+      logger.info(`Alert: ${message}`, {
+        ...context,
+        alertId: id,
+        severity,
+      });
+    }
 
     // Send to Sentry
     if (this.config.enableSentry && (severity === 'critical' || severity === 'high')) {
