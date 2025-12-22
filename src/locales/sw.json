@@ -436,6 +436,12 @@
     "cancel": {
       "confirm": "Je, una uhakika unataka kughairi usajili wako? Kitendo hiki hakiwezi kufutwa."
     }
+  },
+  "qrCode": {
+    "title": "Msimbo wa QR wa Usajili",
+    "description": "Hifadhi au chapa msimbo huu wa QR kwa ajili ya kujiandikisha kwa urahisi kwenye tukio",
+    "download": "Pakua Msimbo wa QR",
+    "instructions": "Wasilisha msimbo huu wa QR kwenye mlango wa tukio kwa ajili ya kujiandikisha haraka"
   }
 }
 
