@@ -106,7 +106,7 @@ const About = () => {
             <Button 
               variant="outline" 
               size="lg"
-              className="border-indigo-500/50 hover:bg-indigo-500/10 hover:border-indigo-500 hover:text-indigo-400"
+              className="border-primary text-primary hover:bg-primary/10 hover:border-primary hover:text-primary"
               asChild
             >
               <a 
