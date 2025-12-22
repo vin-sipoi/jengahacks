@@ -404,6 +404,72 @@ VITE_SENTRY_RELEASE=abc123def456
 
 ---
 
+#### `VITE_LOG_LEVEL`
+
+**Type:** `string`  
+**Required:** ❌ No  
+**Default:** `debug` (development), `warn` (production)  
+**Example:** `debug`, `info`, `warn`, `error`  
+**Description:** Minimum log level to output. Logs below this level are ignored.
+
+**Levels (from lowest to highest):**
+- `debug` - Detailed debugging information
+- `info` - General informational messages
+- `warn` - Warning messages
+- `error` - Error messages only
+
+**Usage:**
+- Set to `error` in production to minimize logging
+- Set to `debug` in development for detailed logs
+- Affects both console and Sentry logging
+
+---
+
+#### `VITE_LOG_CONSOLE`
+
+**Type:** `boolean`  
+**Required:** ❌ No  
+**Default:** `true` (development), `false` (production)  
+**Example:** `true`, `false`  
+**Description:** Enable or disable console logging.
+
+**Usage:**
+- Automatically enabled in development mode
+- Set to `true` in production to enable console logs
+- Useful for debugging production issues
+
+---
+
+#### `VITE_LOG_PERSIST`
+
+**Type:** `boolean`  
+**Required:** ❌ No  
+**Default:** `true` (development), `false` (production)  
+**Example:** `true`, `false`  
+**Description:** Enable or disable log persistence in memory.
+
+**Usage:**
+- Logs are stored in memory and can be accessed via `window.logger.getLogs()`
+- Useful for debugging and log export
+- Automatically enabled in development mode
+
+---
+
+#### `VITE_LOG_MAX_PERSISTED`
+
+**Type:** `number`  
+**Required:** ❌ No  
+**Default:** `100`  
+**Example:** `200`  
+**Description:** Maximum number of logs to keep in memory.
+
+**Usage:**
+- Older logs are automatically removed when limit is reached
+- Increase for longer debugging sessions
+- Higher values use more memory
+
+---
+
 ## Server-Side Variables (Edge Functions)
 
 These variables are set in Supabase Edge Function secrets and are **never exposed** to the client.

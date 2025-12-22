@@ -17,6 +17,9 @@
  * - RPC function calls
  * 
  * Sensitive data (passwords, tokens, API keys) is automatically redacted.
+ * 
+ * Note: This is separate from the main logger system. For general application logging,
+ * use the logger from '@/lib/logger'.
  */
 
 const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';

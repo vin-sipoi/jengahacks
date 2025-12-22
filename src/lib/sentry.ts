@@ -103,4 +103,3 @@ export const setTag = Sentry.setTag;
  * Set additional context
  */
 export const setContext = Sentry.setContext;
-

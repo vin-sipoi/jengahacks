@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/react";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, RefreshCw, Home } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { logger } from "@/lib/logger";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -29,7 +30,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log error to Sentry
+    // Log error using logger
+    logger.error('ErrorBoundary caught an error', error, {
+      componentStack: errorInfo.componentStack,
+      errorBoundary: true,
+    });
+
+    // Also send to Sentry (logger handles this, but we do it explicitly here for React context)
     Sentry.captureException(error, {
       contexts: {
         react: {
@@ -37,11 +44,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         },
       },
     });
-
-    // Log to console in development
-    if (import.meta.env.DEV) {
-      console.error("ErrorBoundary caught an error:", error, errorInfo);
-    }
   }
 
   handleReset = () => {
@@ -125,7 +127,13 @@ const ErrorFallback = ({ error, onReset, onGoHome }: ErrorFallbackProps) => {
 
 // Export Sentry's ErrorBoundary wrapper for convenience
 export const SentryErrorBoundary = Sentry.withErrorBoundary(ErrorBoundary, {
-  fallback: ({ error }) => <ErrorFallback error={error} onReset={() => window.location.reload()} onGoHome={() => window.location.href = "/"} />,
+  fallback: ({ error, resetError }) => (
+    <ErrorFallback 
+      error={error instanceof Error ? error : null} 
+      onReset={resetError} 
+      onGoHome={() => window.location.href = "/"} 
+    />
+  ),
   showDialog: false, // We handle UI ourselves
 });
 
