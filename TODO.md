@@ -256,10 +256,10 @@
 ## Recent Accomplishments
 
 ### December 2024
-- ✅ Fixed TypeScript errors in registration tests
-- ✅ Resolved submission crash when resume is not provided
-- ✅ Fixed input sanitization bug that dropped spaces while typing
-- ✅ Moved WhatsApp normalization to submission time for better UX
+- ✅ Restored `sonner.tsx` to fix `Toaster` export SyntaxError
+- ✅ Fixed space-dropping bug in "Full Name" field by deferring trim
+- ✅ Standardized headers across site (updated Sponsorship page to use Navbar)
+- ✅ Resolved regressions in `Navbar.test.tsx` and `Index.test.tsx`
 - ✅ Cleaned up outdated tests (Edge Functions, IP rate limiting)
 - ✅ Added data-testids for more reliable UI testing
 - ✅ Added WhatsApp number field to registration form
