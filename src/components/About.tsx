@@ -110,7 +110,7 @@ const About = () => {
               asChild
             >
               <a 
-                href={import.meta.env.VITE_DISCORD_URL || "https://discord.gg/jengahacks"} 
+                href={import.meta.env.VITE_DISCORD_URL || "https://discord.gg/dU5g936a"} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2"
