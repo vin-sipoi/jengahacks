@@ -6,10 +6,8 @@ import { useState, useCallback } from "react";
 import {
   sanitizeInput,
   isValidEmail,
-  isValidFullName,
-  isValidWhatsAppNumber,
-  validateAndSanitizeUrl,
 } from "@/lib/security";
+import { validateField } from "@/lib/validation";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export interface RegistrationFormData {
@@ -50,45 +48,9 @@ export const useRegistrationForm = () => {
   const [hasLinkedIn, setHasLinkedIn] = useState(false);
   const [hasResume, setHasResume] = useState(false);
 
-  const validateField = useCallback(
+  const validateFieldRef = useCallback(
     (name: string, value: string): string | undefined => {
-      switch (name) {
-        case "fullName":
-          if (!value.trim()) {
-            return t("registration.errors.fullNameRequired");
-          }
-          if (!isValidFullName(value.trim())) {
-            return t("registration.errors.fullNameInvalid");
-          }
-          return undefined;
-
-        case "email":
-          if (!value.trim()) {
-            return t("registration.errors.emailRequired");
-          }
-          if (!isValidEmail(value.trim())) {
-            return t("registration.errors.emailInvalid");
-          }
-          return undefined;
-
-        case "whatsapp":
-          if (value.trim() && !isValidWhatsAppNumber(value.trim())) {
-            return t("registration.errors.whatsappInvalid");
-          }
-          return undefined;
-
-        case "linkedIn":
-          if (value.trim()) {
-            const sanitized = validateAndSanitizeUrl(value.trim());
-            if (!sanitized) {
-              return t("registration.errors.linkedInInvalid");
-            }
-          }
-          return undefined;
-
-        default:
-          return undefined;
-      }
+      return validateField(name, value, t);
     },
     [t]
   );
@@ -118,7 +80,7 @@ export const useRegistrationForm = () => {
       const { name, value } = e.target;
       setTouched((prev) => ({ ...prev, [name]: true }));
 
-      const error = validateField(name, value);
+      const error = validateField(name, value, t);
       if (error) {
         setErrors((prev) => ({ ...prev, [name]: error }));
       } else {
@@ -136,10 +98,10 @@ export const useRegistrationForm = () => {
       const linkedIn = formData.linkedIn.trim();
 
       const newErrors: FormErrors = {
-        fullName: validateField("fullName", fullName),
-        email: validateField("email", email),
-        whatsapp: whatsapp ? validateField("whatsapp", whatsapp) : undefined,
-        linkedIn: linkedIn ? validateField("linkedIn", linkedIn) : undefined,
+        fullName: validateFieldRef("fullName", fullName),
+        email: validateFieldRef("email", email),
+        whatsapp: whatsapp ? validateFieldRef("whatsapp", whatsapp) : undefined,
+        linkedIn: linkedIn ? validateFieldRef("linkedIn", linkedIn) : undefined,
       };
 
       // Check if LinkedIn or Resume is provided

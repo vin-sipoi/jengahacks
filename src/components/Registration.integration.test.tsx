@@ -171,7 +171,7 @@ describe("Registration Integration Tests", () => {
     mockFunctionsInvoke = vi.fn().mockResolvedValue({ data: null, error: null });
 
     // Set up mocked functions for supabase.storage.from to fully match StorageFileApi 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(supabase.storage.from).mockImplementation(((bucket: string) => ({
       upload: uploadMock,
       download: vi.fn(),
@@ -190,7 +190,7 @@ describe("Registration Integration Tests", () => {
     } as any)) as any);
 
     // Set up mocked functions for supabase.from to return required table methods
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(supabase.from).mockImplementation(() =>
       ({
         insert: insertMock,

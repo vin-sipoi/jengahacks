@@ -10,7 +10,7 @@ import {
   isValidPdfMimeType,
 } from "@/lib/security";
 import { logger } from "@/lib/logger";
-import { MAX_FILE_SIZE, MAX_FILE_SIZE_MB } from "@/lib/constants";
+import { validateFile } from "@/lib/validation";
 
 export interface FileUploadResult {
   success: boolean;
@@ -21,24 +21,15 @@ export interface FileUploadResult {
 export const useFileUpload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const validateFile = useCallback((file: File): string | undefined => {
-    if (!isValidPdfExtension(file.name)) {
-      return "Please upload a PDF file";
-    }
-    if (!isValidPdfMimeType(file.type)) {
-      return "Invalid file type. Please upload a PDF file.";
-    }
-    if (file.size > MAX_FILE_SIZE) {
-      return `File size must be less than ${MAX_FILE_SIZE_MB}MB`;
-    }
-    return undefined;
+  const validateFileRef = useCallback((file: File): string | undefined => {
+    return validateFile(file);
   }, []);
 
   const uploadFile = useCallback(
     async (file: File): Promise<FileUploadResult> => {
       try {
         // Validate file
-        const validationError = validateFile(file);
+        const validationError = validateFileRef(file);
         if (validationError) {
           return {
             success: false,
@@ -107,7 +98,7 @@ export const useFileUpload = () => {
 
   return {
     fileInputRef,
-    validateFile,
+    validateFile: validateFileRef,
     uploadFile,
     resetFileInput,
   };

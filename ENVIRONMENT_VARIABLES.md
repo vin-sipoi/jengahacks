@@ -790,7 +790,25 @@ Or via Supabase Dashboard:
 
 ---
 
-#### `LOG_AGGREGATION_PROVIDER`
+#### `RESEND_API_KEY`
++
++**Type:** `string`  
++**Required:** ✅ Yes (for email confirmation)  
++**Example:** `re_123456789...`  
++**Description:** API key for Resend email service.
++
++**Where to find:**
++1. Sign up/Log in to [Resend](https://resend.com)
++2. Go to **API Keys**
++3. Create a new API Key
++
++**Security:**
++- ⚠️ **NEVER expose this to the client**
++- ⚠️ Only used in Edge Functions
++
++---
++
++#### `LOG_AGGREGATION_PROVIDER`
 
 **Type:** `string`  
 **Required:** ❌ No  

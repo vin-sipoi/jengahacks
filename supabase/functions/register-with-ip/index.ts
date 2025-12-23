@@ -1,16 +1,9 @@
 // Supabase Edge Function to handle registration with IP capture
 // This function captures the client IP and inserts the registration
 
-// @ts-expect-error - Deno types are available in Supabase Edge Functions runtime
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-// @ts-expect-error - Deno ESM imports are available in Supabase Edge Functions runtime
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+import { handleCORS, createResponse, createErrorResponse } from "../_shared/utils.ts";
 
 interface RegistrationData {
   full_name: string;
@@ -21,11 +14,9 @@ interface RegistrationData {
   is_waitlist?: boolean;
 }
 
-serve(async (req) => {
-  // Handle CORS preflight
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+serve(async (req: Request) => {
+  const corsResponse = handleCORS(req);
+  if (corsResponse) return corsResponse;
 
   try {
     // Get client IP from request headers
@@ -51,19 +42,11 @@ serve(async (req) => {
 
     // Validate required fields
     if (!full_name || !email) {
-      return new Response(
-        JSON.stringify({ error: "full_name and email are required" }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+      return createErrorResponse("full_name and email are required", 400);
     }
 
     // Create Supabase client
-    // @ts-expect-error - Deno global is available in Supabase Edge Functions runtime
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    // @ts-expect-error - Deno global is available in Supabase Edge Functions runtime
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -96,62 +79,30 @@ serve(async (req) => {
         error.message?.includes("rate limit") ||
         error.code === "42501"
       ) {
-        return new Response(
-          JSON.stringify({
-            error: "Rate limit exceeded. Maximum 3 registrations per email or 5 per IP per hour.",
-            code: "RATE_LIMIT_EXCEEDED",
-          }),
-          {
-            status: 429,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
+        return createErrorResponse(
+          "Rate limit exceeded. Maximum 3 registrations per email or 5 per IP per hour.",
+          429,
+          "RATE_LIMIT_EXCEEDED"
         );
       }
 
       // Check for duplicate email
       if (error.code === "23505") {
-        return new Response(
-          JSON.stringify({
-            error: "This email is already registered",
-            code: "DUPLICATE_EMAIL",
-          }),
-          {
-            status: 409,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
-        );
+        return createErrorResponse("This email is already registered", 409, "DUPLICATE_EMAIL");
       }
 
-      return new Response(
-        JSON.stringify({ error: error.message, code: error.code }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+      return createErrorResponse(error.message, 500, error.code);
     }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        data: {
-          id: data.id,
-          email: data.email,
-          // Don't expose IP address in response
-        },
-      }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
-    );
+    return createResponse({
+      success: true,
+      data: {
+        id: data.id,
+        email: data.email,
+      },
+    });
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
-    );
+    return createErrorResponse(error instanceof Error ? error.message : "Unknown error", 500);
   }
 });
 

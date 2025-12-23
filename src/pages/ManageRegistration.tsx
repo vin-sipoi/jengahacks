@@ -9,13 +9,10 @@ import { Upload, Linkedin, Save, X, AlertCircle, Loader2, ArrowLeft } from "luci
 import { supabase } from "@/integrations/supabase/client";
 import {
   sanitizeFileName,
-  isValidPdfExtension,
-  isValidPdfMimeType,
   validateAndSanitizeUrl,
-  isValidFullName,
-  isValidWhatsAppNumber,
   normalizeWhatsAppNumber,
 } from "@/lib/security";
+import { validateFile, validateField } from "@/lib/validation";
 import { useTranslation } from "@/hooks/useTranslation";
 import SEO from "@/components/SEO";
 import Navbar from "@/components/Navbar";
@@ -23,7 +20,7 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import RegistrationQRCode from "@/components/RegistrationQRCode";
 import { logger } from "@/lib/logger";
-import { MAX_FILE_SIZE, DEBOUNCE_DELAY_MS } from "@/lib/constants";
+import { DEBOUNCE_DELAY_MS } from "@/lib/constants";
 import { callRpc } from "@/lib/supabaseRpc";
 
 interface RegistrationData {
@@ -108,29 +105,8 @@ const ManageRegistration = () => {
     loadRegistration();
   }, [token, t]);
 
-  const validateField = (name: string, value: string): string | undefined => {
-    switch (name) {
-      case "fullName":
-        if (!value.trim()) {
-          return t("registration.errors.fullNameRequired");
-        }
-        if (!isValidFullName(value.trim())) {
-          return t("registration.errors.fullNameInvalid");
-        }
-        return undefined;
-      case "whatsapp":
-        if (value.trim() && !isValidWhatsAppNumber(value.trim())) {
-          return t("registration.errors.whatsappInvalid");
-        }
-        return undefined;
-      case "linkedIn":
-        if (value.trim() && !validateAndSanitizeUrl(value.trim())) {
-          return t("registration.errors.linkedinInvalid");
-        }
-        return undefined;
-      default:
-        return undefined;
-    }
+  const validateFieldRef = (name: string, value: string): string | undefined => {
+    return validateField(name, value, t);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,27 +121,18 @@ const ManageRegistration = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) {
+    // Validate file
+    const validationError = validateFile(file);
+    if (validationError) {
+      // If we have translations for these specific errors, use them
+      const errorMsg = validationError.includes("PDF") 
+        ? t("registration.errors.resumeType") 
+        : t("registration.errors.resumeSize");
+      
+      setErrors((prev) => ({ ...prev, resume: errorMsg }));
       setFormData((prev) => ({ ...prev, resume: null }));
       return;
     }
-
-    // Validate file size (5MB limit)
-    if (file.size > MAX_FILE_SIZE) {
-      setErrors((prev) => ({ ...prev, resume: t("registration.errors.resumeSize") }));
-      setFormData((prev) => ({ ...prev, resume: null }));
-      return;
-    }
-
-    // Validate file type
-    if (!isValidPdfExtension(file.name) || !isValidPdfMimeType(file.type)) {
-      setErrors((prev) => ({ ...prev, resume: t("registration.errors.resumeType") }));
-      setFormData((prev) => ({ ...prev, resume: null }));
-      return;
-    }
-
-    setErrors((prev) => ({ ...prev, resume: undefined }));
-    setFormData((prev) => ({ ...prev, resume: file }));
   };
 
   const handleUpdate = async () => {
@@ -173,9 +140,9 @@ const ManageRegistration = () => {
 
     // Validate form
     const newErrors: typeof errors = {};
-    newErrors.fullName = validateField("fullName", formData.fullName);
-    newErrors.whatsapp = validateField("whatsapp", formData.whatsapp);
-    newErrors.linkedIn = validateField("linkedIn", formData.linkedIn);
+    newErrors.fullName = validateFieldRef("fullName", formData.fullName);
+    newErrors.whatsapp = validateFieldRef("whatsapp", formData.whatsapp);
+    newErrors.linkedIn = validateFieldRef("linkedIn", formData.linkedIn);
 
     setErrors(newErrors);
 
@@ -196,7 +163,7 @@ const ManageRegistration = () => {
           const fileExt = sanitizedOriginalName.split('.').pop() || 'pdf';
           const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
-          if (!isValidPdfExtension(fileName) || !isValidPdfMimeType(formData.resume.type)) {
+          if (validateFile(formData.resume)) {
             throw new Error('Invalid file type');
           }
 

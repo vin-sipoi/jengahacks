@@ -78,69 +78,37 @@ const Registration = () => {
             hasLinkedIn: !!formData.linkedIn.trim(),
             hasResume: !!formData.resume,
           },
-        }).catch(() => {
-          // Silently fail - non-critical logging
+        }).catch((err) => {
+          logger.error("Failed to log incomplete registration", err);
         });
       }
     };
   }, [formData.email, formData.fullName, formData.whatsapp, formData.linkedIn, formData.resume]);
 
-  // Debounced logging for incomplete registrations
+  // Consolidated debounced logging for incomplete registrations
   useEffect(() => {
-    if (emailDebounceTimerRef.current) {
-      window.clearTimeout(emailDebounceTimerRef.current);
-    }
+    const timer = window.setTimeout(() => {
+      const hasEmail = formData.email.trim().includes("@");
+      const hasWhatsApp = !!formData.whatsapp.trim();
 
-    if (formData.email.trim() && formData.email.trim().includes("@")) {
-      emailDebounceTimerRef.current = window.setTimeout(() => {
+      if (!hasCompletedRef.current && (hasEmail || hasWhatsApp)) {
         logIncompleteRegistration({
-          email: formData.email.trim(),
+          email: hasEmail ? formData.email.trim() : undefined,
+          whatsappNumber: hasWhatsApp ? formData.whatsapp.trim() : undefined,
           fullName: formData.fullName.trim() || undefined,
           formData: {
-            hasWhatsApp: !!formData.whatsapp.trim(),
+            hasWhatsApp,
             hasLinkedIn: !!formData.linkedIn.trim(),
             hasResume: !!formData.resume,
           },
-        }).catch(() => {
-          // Silently fail
+        }).catch((err) => {
+          logger.error("Failed to log incomplete registration", err);
         });
-      }, DEBOUNCE_DELAY_MS);
-    }
-
-    return () => {
-      if (emailDebounceTimerRef.current) {
-        window.clearTimeout(emailDebounceTimerRef.current);
       }
-    };
+    }, DEBOUNCE_DELAY_MS);
+
+    return () => window.clearTimeout(timer);
   }, [formData.email, formData.fullName, formData.whatsapp, formData.linkedIn, formData.resume]);
-
-  useEffect(() => {
-    if (whatsappDebounceTimerRef.current) {
-      window.clearTimeout(whatsappDebounceTimerRef.current);
-    }
-
-    if (formData.whatsapp.trim()) {
-      whatsappDebounceTimerRef.current = window.setTimeout(() => {
-        logIncompleteRegistration({
-          whatsappNumber: formData.whatsapp.trim(),
-          fullName: formData.fullName.trim() || undefined,
-          formData: {
-            hasWhatsApp: true,
-            hasLinkedIn: !!formData.linkedIn.trim(),
-            hasResume: !!formData.resume,
-          },
-        }).catch(() => {
-          // Silently fail
-        });
-      }, DEBOUNCE_DELAY_MS);
-    }
-
-    return () => {
-      if (whatsappDebounceTimerRef.current) {
-        window.clearTimeout(whatsappDebounceTimerRef.current);
-      }
-    };
-  }, [formData.whatsapp, formData.fullName, formData.linkedIn, formData.resume]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

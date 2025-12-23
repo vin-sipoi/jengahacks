@@ -85,11 +85,15 @@ export const registrationService = {
   /**
    * Submit registration to database
    */
-  async submitRegistration(
-    data: RegistrationSubmissionData,
-    isWaitlist: boolean,
-    accessToken: string | null
-  ): Promise<{ registrationId: string | null; error?: Error }> {
+  async submitRegistration({
+    data,
+    isWaitlist,
+    accessToken,
+  }: {
+    data: RegistrationSubmissionData;
+    isWaitlist: boolean;
+    accessToken: string | null;
+  }): Promise<{ registrationId: string | null; error?: Error }> {
     try {
       const { data: registrationData, error: insertError } = await supabase
         .from("registrations")
@@ -181,11 +185,11 @@ export const registrationService = {
         resumePath,
       };
 
-      const { registrationId, error: insertError } = await this.submitRegistration(
-        submissionData,
+      const { registrationId, error: insertError } = await this.submitRegistration({
+        data: submissionData,
         isWaitlist,
-        accessToken || null
-      );
+        accessToken: accessToken || null,
+      });
 
       if (insertError) {
         // Check for rate limit violation
@@ -217,8 +221,8 @@ export const registrationService = {
 
       // Mark incomplete registration as completed
       if (email) {
-        markIncompleteRegistrationCompleted(email).catch(() => {
-          // Silently fail - non-critical
+        markIncompleteRegistrationCompleted(email).catch((err) => {
+          logger.error("Failed to mark incomplete registration as completed", err);
         });
       }
 
