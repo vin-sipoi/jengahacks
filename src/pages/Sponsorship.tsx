@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, ArrowLeft, Sparkles, Zap, Crown, Gem } from "lucide-react";
-import { Link } from "react-router-dom";
-import icon from "@/assets/jengahacks-icon.svg";
+import { Check, Sparkles, Zap, Crown, Gem } from "lucide-react";
 import SEO from "@/components/SEO";
+import Navbar from "@/components/Navbar";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const Sponsorship = () => {
@@ -68,6 +67,7 @@ const Sponsorship = () => {
       ],
     },
   ];
+
   return (
     <>
       <SEO 
@@ -76,26 +76,11 @@ const Sponsorship = () => {
         url="https://jengahacks.com/sponsorship"
       />
       <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-background/80 backdrop-blur-lg sticky top-0 z-50" role="banner">
-        <nav className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between" aria-label="Page navigation">
-          <Link to="/" className="flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-foreground transition-colors text-sm sm:text-base" aria-label="Back to homepage">
-            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
-            <span className="hidden sm:inline">{t("sponsorship.backToHome")}</span>
-            <span className="sm:hidden">{t("sponsorship.back")}</span>
-          </Link>
-          <Link to="/" className="flex items-center gap-2" aria-label="JengaHacks Home">
-            <img src={icon} alt="" className="h-8 sm:h-10 w-auto" width="40" height="40" aria-hidden="true" />
-            <span className="font-londrina text-xl sm:text-2xl">
-              <span className="text-white" aria-label="JENGA">JENGA</span>
-              <span style={{ color: '#65bb3a' }} aria-label="HACKS">HACKS</span>
-            </span>
-          </Link>
-        </nav>
-      </header>
-
-      {/* Hero Section */}
-      <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden" aria-labelledby="sponsorship-heading">
+        <Navbar />
+        
+        <main className="pt-16 sm:pt-20">
+          {/* Hero Section */}
+          <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden" aria-labelledby="sponsorship-heading">
         <div className="absolute inset-0 circuit-pattern opacity-20" aria-hidden="true" />
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" aria-hidden="true" />
         
@@ -235,13 +220,14 @@ const Sponsorship = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-6 sm:py-8" role="contentinfo">
-        <div className="container mx-auto px-4 sm:px-6 text-center text-muted-foreground">
-          <p className="text-xs sm:text-sm">{t("sponsorship.copyright")}</p>
-        </div>
-      </footer>
-    </div>
+        </main>
+        
+        <footer className="border-t border-border py-6 sm:py-8" role="contentinfo">
+          <div className="container mx-auto px-4 sm:px-6 text-center text-muted-foreground">
+            <p className="text-xs sm:text-sm">{t("sponsorship.copyright")}</p>
+          </div>
+        </footer>
+      </div>
     </>
   );
 };
