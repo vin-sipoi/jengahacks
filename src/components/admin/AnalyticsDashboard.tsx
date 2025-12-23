@@ -27,6 +27,7 @@ interface RegistrationStats {
   thisMonth: number;
   dailyTrends?: Array<{ date: string; count: number }>;
   hourlyDistribution?: Array<{ hour: number; count: number }>;
+  incompleteCount: number;
 }
 
 interface AnalyticsDashboardProps {
@@ -62,6 +63,15 @@ const AnalyticsDashboard = ({ stats }: AnalyticsDashboardProps) => {
   
   // Prepare hourly distribution data
   const hourlyData = stats.hourlyDistribution || Array.from({ length: 24 }, (_, i) => ({ hour: i, count: 0 }));
+
+  // Funnel Data
+  const totalStarts = (stats.total || 0) + (stats.incompleteCount || 0);
+  const conversionRate = totalStarts > 0 ? Math.round((stats.total / totalStarts) * 100) : 0;
+
+  const funnelData = [
+    { name: "Total Starts", value: totalStarts },
+    { name: "Completions", value: stats.total },
+  ];
 
   return (
     <div className="space-y-4">
@@ -130,6 +140,40 @@ const AnalyticsDashboard = ({ stats }: AnalyticsDashboardProps) => {
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Conversion Funnel</CardTitle>
+            <CardDescription>From start to completion</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center justify-center pt-4">
+            <div className="text-4xl font-bold text-primary mb-2">{conversionRate}%</div>
+            <p className="text-sm text-muted-foreground mb-6">Overall Conversion Rate</p>
+            <div className="w-full space-y-4">
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Starts</span>
+                  <span>{totalStarts}</span>
+                </div>
+                <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                  <div className="h-full bg-muted-foreground/30 w-full" />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Completions</span>
+                  <span>{stats.total}</span>
+                </div>
+                <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-primary" 
+                    style={{ width: `${conversionRate}%` }} 
+                  />
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

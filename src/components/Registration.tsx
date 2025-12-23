@@ -22,6 +22,8 @@ import { normalizeWhatsAppNumber } from "@/lib/security";
 import { DEBOUNCE_DELAY_MS } from "@/lib/constants";
 
 import { RegistrationField } from "@/components/RegistrationField";
+import { useInView } from "react-intersection-observer";
+import { trackRegistrationView, trackRegistrationStart } from "@/lib/analytics";
 
 const Registration = () => {
   const { t } = useTranslation();
@@ -30,6 +32,25 @@ const Registration = () => {
   const hasCompletedRef = useRef(false);
 
   const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "";
+  const [hasStartedTracking, setHasStartedTracking] = useState(false);
+
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      trackRegistrationView();
+    }
+  }, [inView]);
+
+  const handleFormFocus = () => {
+    if (!hasStartedTracking) {
+      trackRegistrationStart();
+      setHasStartedTracking(true);
+    }
+  };
 
   const {
     formData,
@@ -210,7 +231,7 @@ const Registration = () => {
   };
 
   return (
-    <section id="register" className="pt-12 sm:pt-16 pb-16 sm:pb-24 relative">
+    <section id="register" ref={ref} className="pt-12 sm:pt-16 pb-16 sm:pb-24 relative">
       <div className="absolute inset-0 circuit-pattern opacity-10" />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -226,6 +247,7 @@ const Registration = () => {
 
           <form
             onSubmit={handleSubmit}
+            onFocus={handleFormFocus}
             className="space-y-5 sm:space-y-6 bg-card p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-border"
             onKeyDown={(e) => {
               // Allow Ctrl/Cmd + Enter to submit form

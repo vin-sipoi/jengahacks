@@ -15,7 +15,7 @@ type GAConfig = {
 };
 
 // Google Analytics dataLayer entry type
-type GADataLayerEntry = 
+type GADataLayerEntry =
   | [string, string | Date, GAConfig | GAEventParams | undefined]
   | [string, string | Date]
   | [string];
@@ -119,6 +119,24 @@ export const trackRegistration = (success: boolean, error?: string): void => {
     event_category: "engagement",
     success,
     ...(error && { error_message: error }),
+  });
+};
+
+/**
+ * Track when the registration section is viewed
+ */
+export const trackRegistrationView = (): void => {
+  trackEvent("registration_view", {
+    event_category: "engagement",
+  });
+};
+
+/**
+ * Track when a user starts filling out the registration form
+ */
+export const trackRegistrationStart = (): void => {
+  trackEvent("registration_start", {
+    event_category: "engagement",
   });
 };
 
