@@ -11,6 +11,7 @@ interface SocialShareProps {
   url?: string;
   className?: string;
   variant?: "default" | "compact" | "icon-only";
+  hideHeader?: boolean;
 }
 
 const SocialShare = ({ 
@@ -18,7 +19,8 @@ const SocialShare = ({
   description,
   url,
   className = "",
-  variant = "default"
+  variant = "default",
+  hideHeader = false,
 }: SocialShareProps) => {
   const { t } = useTranslation();
   
@@ -300,10 +302,12 @@ const SocialShare = ({
 
   return (
     <div className={`space-y-3 ${className}`}>
-      <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-        <Share2 className="h-4 w-4" />
-        <span>{t("socialShare.shareThis")}</span>
-      </div>
+      {!hideHeader && (
+        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+          <Share2 className="h-4 w-4" />
+          <span>{t("socialShare.shareThis")}</span>
+        </div>
+      )}
       <div className="flex flex-wrap items-center justify-center gap-2">
         {navigator.share && (
           <Button

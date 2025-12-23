@@ -227,6 +227,7 @@ const BlogPost = () => {
                     url={window.location.href}
                     title={post.title}
                     description={post.excerpt}
+                    hideHeader={true}
                   />
                 </div>
               </div>
