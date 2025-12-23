@@ -1,34 +1,31 @@
 /**
  * Typed wrapper for Supabase RPC calls
- * Provides type-safe RPC function calls without using `as any`
+ * Provides type-safe RPC function calls
+ * 
+ * Note: This module is designed for future RPC functions.
+ * Currently no RPC functions are defined in the database.
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
-
-type RpcFunctionName = keyof Database["public"]["Functions"];
-
-type RpcArgs<T extends RpcFunctionName> = Database["public"]["Functions"][T]["Args"];
-type RpcReturns<T extends RpcFunctionName> = Database["public"]["Functions"][T]["Returns"];
 
 /**
- * Type-safe RPC call wrapper
+ * Generic RPC call wrapper for future use
  * 
  * @example
  * ```typescript
- * const { data, error } = await callRpc('should_add_to_waitlist', {});
- * const { data: position } = await callRpc('get_waitlist_position', { p_email: 'user@example.com' });
+ * const { data, error } = await callRpc('my_function', { param: 'value' });
  * ```
  */
-export async function callRpc<T extends RpcFunctionName>(
-  functionName: T,
-  args: RpcArgs<T>
+export async function callRpc<T = unknown>(
+  functionName: string,
+  args: Record<string, unknown> = {}
 ): Promise<{
-  data: RpcReturns<T> | null;
+  data: T | null;
   error: Error | null;
 }> {
   try {
-    const { data, error } = await supabase.rpc(functionName, args as never);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase.rpc as any)(functionName, args);
 
     if (error) {
       return {
@@ -38,7 +35,7 @@ export async function callRpc<T extends RpcFunctionName>(
     }
 
     return {
-      data: data as RpcReturns<T>,
+      data: data as T,
       error: null,
     };
   } catch (error) {
@@ -50,18 +47,18 @@ export async function callRpc<T extends RpcFunctionName>(
 }
 
 /**
- * Type-safe RPC call wrapper that throws on error
+ * Generic RPC call wrapper that throws on error
  * 
  * @example
  * ```typescript
- * const shouldWaitlist = await callRpcOrThrow('should_add_to_waitlist', {});
+ * const result = await callRpcOrThrow('my_function', { param: 'value' });
  * ```
  */
-export async function callRpcOrThrow<T extends RpcFunctionName>(
-  functionName: T,
-  args: RpcArgs<T>
-): Promise<RpcReturns<T>> {
-  const { data, error } = await callRpc(functionName, args);
+export async function callRpcOrThrow<T = unknown>(
+  functionName: string,
+  args: Record<string, unknown> = {}
+): Promise<T> {
+  const { data, error } = await callRpc<T>(functionName, args);
 
   if (error) {
     throw error;
@@ -73,5 +70,3 @@ export async function callRpcOrThrow<T extends RpcFunctionName>(
 
   return data;
 }
-
-

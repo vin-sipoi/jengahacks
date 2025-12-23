@@ -25,39 +25,37 @@ export const sanitizeHtml = (
     return "";
   }
 
-  const defaultConfig: DOMPurify.Config = {
-    ALLOWED_TAGS: options?.allowedTags || [
-      "p",
-      "br",
-      "strong",
-      "em",
-      "u",
-      "a",
-      "ul",
-      "ol",
-      "li",
-      "h1",
-      "h2",
-      "h3",
-      "h4",
-      "h5",
-      "h6",
-      "blockquote",
-      "code",
-      "pre",
-    ],
-    ALLOWED_ATTR: options?.allowedAttributes
-      ? Object.values(options.allowedAttributes).flat()
-      : ["href", "title", "target", "rel"],
+  const allowedTags = options?.allowedTags || [
+    "p",
+    "br",
+    "strong",
+    "em",
+    "u",
+    "a",
+    "ul",
+    "ol",
+    "li",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "blockquote",
+    "code",
+    "pre",
+  ];
+
+  const allowedAttr = options?.allowedAttributes
+    ? Object.values(options.allowedAttributes).flat()
+    : ["href", "title", "target", "rel"];
+
+  const config = {
+    ALLOWED_TAGS: allowedTags,
+    ALLOWED_ATTR: allowedAttr,
     ALLOW_DATA_ATTR: false,
     KEEP_CONTENT: true,
-  };
-
-  // Add rel="noopener noreferrer" to external links for security
-  const config: DOMPurify.Config = {
-    ...defaultConfig,
     ADD_ATTR: ["target"],
-    ADD_TAGS: [],
   };
 
   return DOMPurify.sanitize(html, config);

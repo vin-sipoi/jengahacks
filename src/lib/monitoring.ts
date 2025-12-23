@@ -272,7 +272,7 @@ class Monitoring {
 
     // Send to Sentry if enabled
     if (this.config.enableSentry) {
-      Sentry.metrics.increment(name, value, { tags });
+      Sentry.setMeasurement(name, value, 'none');
     }
 
     logger.debug('Metric tracked', { name, value, tags });
