@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { fetchBlogPost, formatBlogDate, type BlogPost } from "@/lib/blog";
+import { sanitizeForRender } from "@/lib/sanitize";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -181,7 +182,7 @@ const BlogPost = () => {
                 {post.content ? (
                   <div 
                     className="text-foreground"
-                    dangerouslySetInnerHTML={{ __html: post.content }}
+                    dangerouslySetInnerHTML={sanitizeForRender(post.content)}
                   />
                 ) : (
                   <div className="text-foreground space-y-4">
