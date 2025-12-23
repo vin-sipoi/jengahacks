@@ -560,6 +560,7 @@
   },
   "schedule": {
     "title": "Event Schedule",
+    "timeline": "Timeline",
     "subtitle": "36 hours of non-stop building, learning, and fun. Plan your weekend accordingly.",
     "days": {
       "day1": "Saturday, Feb 21",

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@/hooks/useTranslation";
 import { 
   Calendar, 
   Clock, 
@@ -76,7 +76,7 @@ const Schedule = () => {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4"
           >
             <Calendar className="w-4 h-4" />
-            {t("nav.faq").includes("FAQ") ? "Timeline" : "Ratiba"}
+            {t("schedule.timeline")}
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
