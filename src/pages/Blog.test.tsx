@@ -34,7 +34,7 @@ describe("Blog", () => {
   });
 
   it("should render blog posts when loaded", async () => {
-    const mockPosts = [
+    const Posts = [
       {
         id: "1",
         title: "Test Post 1",
@@ -54,7 +54,7 @@ describe("Blog", () => {
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(blogLib.fetchBlogPosts).mockResolvedValue(mockPosts as any);
+    vi.mocked(blogLib.fetchBlogPosts).mockResolvedValue(Posts as any);
 
     render(<Blog />);
 
@@ -75,7 +75,7 @@ describe("Blog", () => {
   });
 
   it("should render external link for posts with externalUrl", async () => {
-    const mockPosts = [
+    const Posts = [
       {
         id: "1",
         title: "External Post",
@@ -86,7 +86,7 @@ describe("Blog", () => {
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(blogLib.fetchBlogPosts).mockResolvedValue(mockPosts as any);
+    vi.mocked(blogLib.fetchBlogPosts).mockResolvedValue(Posts as any);
 
     render(<Blog />);
 

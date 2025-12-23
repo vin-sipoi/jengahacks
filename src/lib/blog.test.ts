@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
   fetchBlogPosts,
-  getMockPosts,
+  getPosts,
   formatBlogDate,
   formatBlogDateShort,
 } from "./blog";
@@ -11,9 +11,9 @@ describe("blog utilities", () => {
     vi.clearAllMocks();
   });
 
-  describe("getMockPosts", () => {
-    it("should return mock posts", () => {
-      const posts = getMockPosts();
+  describe("getPosts", () => {
+    it("should return posts", () => {
+      const posts = getPosts();
       expect(posts.length).toBeGreaterThan(0);
       expect(posts[0]).toHaveProperty("id");
       expect(posts[0]).toHaveProperty("title");
@@ -22,12 +22,12 @@ describe("blog utilities", () => {
     });
 
     it("should limit posts when limit is provided", () => {
-      const posts = getMockPosts(2);
+      const posts = getPosts(2);
       expect(posts.length).toBe(2);
     });
 
     it("should return all posts when limit is not provided", () => {
-      const posts = getMockPosts();
+      const posts = getPosts();
       expect(posts.length).toBeGreaterThanOrEqual(4);
     });
   });

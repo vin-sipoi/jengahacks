@@ -49,7 +49,7 @@ export const fetchBlogPosts = async (limit?: number): Promise<BlogPost[]> => {
 
   // Fallback to empty array or mock data in development
   if (import.meta.env.DEV) {
-    return getMockPosts(limit);
+    return getPosts(limit);
   }
 
   return [];
@@ -65,19 +65,19 @@ const fetchRSSFeed = async (rssUrl: string): Promise<BlogPost[]> => {
     const proxyUrl = import.meta.env.VITE_RSS_PROXY_URL || rssUrl;
     const response = await fetch(proxyUrl);
     const text = await response.text();
-    
+
     // Parse RSS XML (simplified - use a proper RSS parser library in production)
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, "text/xml");
     const items = xml.querySelectorAll("item");
-    
+
     return Array.from(items).map((item, index) => {
       const title = item.querySelector("title")?.textContent || "";
       const description = item.querySelector("description")?.textContent || "";
       const link = item.querySelector("link")?.textContent || "";
       const pubDate = item.querySelector("pubDate")?.textContent || "";
       const author = item.querySelector("author")?.textContent || item.querySelector("dc:creator")?.textContent || "";
-      
+
       return {
         id: `rss-${index}`,
         title,
@@ -98,8 +98,8 @@ const fetchRSSFeed = async (rssUrl: string): Promise<BlogPost[]> => {
 /**
  * Get mock blog posts for development/testing
  */
-export const getMockPosts = (limit?: number): BlogPost[] => {
-  const mockPosts: BlogPost[] = [
+export const getPosts = (limit?: number): BlogPost[] => {
+  const Posts: BlogPost[] = [
     {
       id: "1",
       title: "JengaHacks 2026: What to Expect",
@@ -138,7 +138,7 @@ export const getMockPosts = (limit?: number): BlogPost[] => {
     },
   ];
 
-  return limit ? mockPosts.slice(0, limit) : mockPosts;
+  return limit ? Posts.slice(0, limit) : Posts;
 };
 
 import { formatDate as i18nFormatDate, formatDateShort as i18nFormatDateShort } from "./i18n";
@@ -176,7 +176,7 @@ export const fetchBlogPost = async (id: string): Promise<BlogPost | null> => {
         const post = await response.json();
         return post;
       }
-      
+
       // Fallback: fetch all posts and find by ID
       const responseAll = await fetch(apiUrl);
       if (responseAll.ok) {
@@ -197,8 +197,8 @@ export const fetchBlogPost = async (id: string): Promise<BlogPost | null> => {
 
   // Fallback to mock data in development
   if (import.meta.env.DEV) {
-    const mockPosts = getMockPosts();
-    return mockPosts.find((post) => post.id === id) || null;
+    const Posts = getPosts();
+    return Posts.find((post) => post.id === id) || null;
   }
 
   return null;
