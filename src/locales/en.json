@@ -430,7 +430,7 @@
     "currentResume": "Current resume",
     "update": "Update Registration",
     "updating": "Updating...",
-    "cancel": "Cancel Registration",
+    "cancelButton": "Cancel Registration",
     "cancelling": "Cancelling...",
     "success": {
       "updated": "Registration updated successfully!",
@@ -557,6 +557,28 @@
     },
     "judges": {},
     "mentors": {}
+  },
+  "schedule": {
+    "title": "Event Schedule",
+    "subtitle": "36 hours of non-stop building, learning, and fun. Plan your weekend accordingly.",
+    "days": {
+      "day1": "Saturday, Feb 21",
+      "day2": "Sunday, Feb 22"
+    },
+    "events": {
+      "checkin": "Check-in & Breakfast",
+      "opening": "Opening Ceremony",
+      "hackingStarts": "Hacking Starts",
+      "lunch": "Lunch",
+      "workshopSupabase": "Workshop: Building with Supabase",
+      "dinner": "Dinner",
+      "lateNightSnacks": "Late Night Snacks",
+      "breakfast": "Breakfast",
+      "workshopPitch": "Workshop: Pitching Your Project",
+      "hackingEnds": "Hacking Ends & Submission",
+      "judging": "Judging & Presentations",
+      "awards": "Awards & Closing Ceremony"
+    }
   }
 }
 

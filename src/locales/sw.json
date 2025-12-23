@@ -432,7 +432,7 @@
     "currentResume": "Resume ya sasa",
     "update": "Sasisha Usajili",
     "updating": "Inasasisha...",
-    "cancel": "Ghairi Usajili",
+    "cancelButton": "Ghairi Usajili",
     "cancelling": "Inaghairi...",
     "success": {
       "updated": "Usajili umesasishwa kwa mafanikio!",
@@ -559,6 +559,28 @@
     },
     "judges": {},
     "mentors": {}
+  },
+  "schedule": {
+    "title": "Ratiba ya Tukio",
+    "subtitle": "Masaa 36 ya kujenga bila kusimama, kujifunza, na kufurahi. Panga wikendi yako ipasavyo.",
+    "days": {
+      "day1": "Jumamosi, Feb 21",
+      "day2": "Jumapili, Feb 22"
+    },
+    "events": {
+      "checkin": "Uandikishaji na Kiamsha kinywa",
+      "opening": "Sherehe ya Kufungua",
+      "hackingStarts": "Hacking Inaanza",
+      "lunch": "Chakula cha Mchana",
+      "workshopSupabase": "Warsha: Kujenga na Supabase",
+      "dinner": "Chakula cha Jioni",
+      "lateNightSnacks": "Vitafunio vya Usiku wa Manane",
+      "breakfast": "Kiamsha kinywa",
+      "workshopPitch": "Warsha: Kuwasilisha Mradi Wako",
+      "hackingEnds": "Hacking Inakamilika na Wasilisho",
+      "judging": "Uhakiki na Wasilisho",
+      "awards": "Zawadi na Sherehe ya Kufunga"
+    }
   }
 }
 

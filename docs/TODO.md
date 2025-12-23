@@ -148,7 +148,7 @@
 - [ ] Finalize event date and details
 - [ ] Update event description and details
 - [x] Add FAQ section
-- [ ] Add schedule/timeline section
+- [x] Add schedule/timeline section
 - [x] Add prizes and awards information
 - [x] Add judges/mentors section
 

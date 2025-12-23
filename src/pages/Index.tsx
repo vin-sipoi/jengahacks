@@ -13,6 +13,7 @@ const Sponsors = lazy(() => import("@/components/Sponsors"));
 const Prizes = lazy(() => import("@/components/Prizes"));
 
 
+const Schedule = lazy(() => import("@/components/Schedule"));
 const Registration = lazy(() => import("@/components/Registration"));
 const Footer = lazy(() => import("@/components/Footer"));
 
@@ -53,6 +54,10 @@ const Index = () => {
               <Prizes />
             </ScrollReveal> 
             */}
+
+            <ScrollReveal direction="up" delay={400}>
+              <Schedule />
+            </ScrollReveal>
 
             <ScrollReveal direction="up" delay={600}>
               <Registration />
