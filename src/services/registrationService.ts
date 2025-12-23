@@ -55,7 +55,7 @@ export const registrationService = {
         return { token: null, error: tokenError };
       }
 
-      return { token: accessToken || null };
+      return { token: (accessToken as string) || null };
     } catch (error) {
       logger.error(
         "Access token generation error",
@@ -129,7 +129,7 @@ export const registrationService = {
       });
 
       if (!positionError && position !== null && position !== undefined) {
-        return position;
+        return position as number;
       }
 
       return null;

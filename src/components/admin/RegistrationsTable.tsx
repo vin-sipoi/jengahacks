@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { createObjectURL, revokeObjectURL, safeSessionStorage } from "@/lib/polyfills";
+import { createObjectURL, revokeObjectURL } from "@/lib/polyfills";
 import { formatDateTimeShort } from "@/lib/i18n";
 import { logger } from "@/lib/logger";
 import {
@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Search, ExternalLink, FileText, Mail, Phone } from "lucide-react";
+import { Search, ExternalLink, FileText, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -22,7 +21,6 @@ interface Registration {
   id: string;
   full_name: string;
   email: string;
-  whatsapp_number: string | null;
   linkedin_url: string | null;
   resume_path: string | null;
   created_at: string;
@@ -71,7 +69,6 @@ const RegistrationsTable = ({ onRefresh }: RegistrationsTableProps) => {
         (r) =>
           r.full_name.toLowerCase().includes(query) ||
           r.email.toLowerCase().includes(query) ||
-          r.whatsapp_number?.toLowerCase().includes(query) ||
           r.linkedin_url?.toLowerCase().includes(query)
       );
     }
@@ -126,73 +123,41 @@ const RegistrationsTable = ({ onRefresh }: RegistrationsTableProps) => {
 
   const downloadResume = async (resumePath: string, fileName: string) => {
     try {
-      // Get signed URL from Edge Function for secure access
-      // Pass admin password for authentication (in production, use proper Supabase Auth)
-      const adminPassword = safeSessionStorage.getItem("admin_authenticated") === "authenticated" 
-        ? import.meta.env.VITE_ADMIN_PASSWORD || "admin123"
-        : null;
+      // Get current session for JWT authentication
+      const { data: { session } } = await supabase.auth.getSession();
       
+      if (!session) {
+        toast.error("Authentication required");
+        return;
+      }
+
+      // Get signed URL from Edge Function using JWT authentication
       const { data: functionData, error: functionError } = await supabase.functions.invoke(
         "get-resume-url",
         {
-          body: { 
-            resume_path: resumePath,
-            admin_password: adminPassword,
-          },
+          body: { resume_path: resumePath },
         }
       );
 
       if (functionError) {
-        // Fallback: Try direct signed URL generation (requires proper permissions)
-        const { data: signedUrlData, error: urlError } = await supabase.storage
-          .from("resumes")
-          .createSignedUrl(resumePath, 3600); // 1 hour expiration
-
-        if (urlError || !signedUrlData) {
-          throw new Error("Failed to generate secure download URL");
-        }
-
-        // Download using signed URL
-        const response = await fetch(signedUrlData.signedUrl);
-        if (!response.ok) throw new Error("Failed to download file");
-        const blob = await response.blob();
-
-        const url = createObjectURL(blob);
-        if (!url) {
-          throw new Error("Failed to create object URL");
-        }
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName || "resume.pdf";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        revokeObjectURL(url);
-        return;
+        throw new Error(functionError.message || "Failed to get download URL");
       }
 
-      // Use signed URL from Edge Function
       const functionResponse = functionData as { url?: string } | null;
       if (!functionResponse?.url) {
         throw new Error("No download URL received");
       }
 
       // Download using signed URL
-      const urlString = functionResponse.url;
-
-      if (!urlString) {
-        throw new Error("Failed to retrieve resume download URL");
-      }
-
-      const response = await fetch(urlString);
+      const response = await fetch(functionResponse.url);
       if (!response.ok) throw new Error("Failed to download file");
       const blob = await response.blob();
 
       const url = createObjectURL(blob);
-
       if (!url) {
         throw new Error("Failed to create object URL");
       }
+      
       const link = document.createElement("a");
       link.href = url;
       link.download = fileName || "resume.pdf";
@@ -257,7 +222,6 @@ const RegistrationsTable = ({ onRefresh }: RegistrationsTableProps) => {
               >
                 {t("adminTable.email")} {sortBy === "email" && (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
-              <TableHead>{t("adminTable.whatsapp")}</TableHead>
               <TableHead>{t("adminTable.linkedin")}</TableHead>
               <TableHead>{t("adminTable.resume")}</TableHead>
               <TableHead
@@ -271,7 +235,7 @@ const RegistrationsTable = ({ onRefresh }: RegistrationsTableProps) => {
           <TableBody>
             {filteredRegistrations.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                   {t("adminTable.noRegistrations")}
                 </TableCell>
               </TableRow>
@@ -286,16 +250,6 @@ const RegistrationsTable = ({ onRefresh }: RegistrationsTableProps) => {
                       <Mail className="h-4 w-4 text-muted-foreground" />
                       {registration.email}
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    {registration.whatsapp_number ? (
-                      <div className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        <span>{registration.whatsapp_number}</span>
-                      </div>
-                    ) : (
-                      <span className="text-muted-foreground">—</span>
-                    )}
                   </TableCell>
                   <TableCell>
                     {registration.linkedin_url ? (
@@ -346,4 +300,3 @@ const RegistrationsTable = ({ onRefresh }: RegistrationsTableProps) => {
 };
 
 export default RegistrationsTable;
-

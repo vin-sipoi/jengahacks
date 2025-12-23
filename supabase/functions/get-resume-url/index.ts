@@ -4,7 +4,6 @@ import { handleCORS, createResponse, createErrorResponse } from "../_shared/util
 
 interface GetResumeUrlRequest {
   resume_path: string;
-  admin_password?: string;
 }
 
 serve(async (req: Request) => {
@@ -27,28 +26,42 @@ serve(async (req: Request) => {
       },
     });
 
-    // Get authorization header (optional - for future Supabase Auth integration)
+    // Get authorization header - REQUIRED for authenticated access
     const authHeader = req.headers.get("Authorization");
-
-    // For now, allow access if admin password is provided in request body
-    const { admin_password, resume_path }: GetResumeUrlRequest = await req.json();
-
-    // Basic admin password check
-    const expectedPassword = Deno.env.get("ADMIN_PASSWORD") || "admin123";
-
-    if (admin_password !== expectedPassword && !authHeader) {
-      return createErrorResponse("Unauthorized - Admin access required", 401);
+    
+    if (!authHeader) {
+      console.error("No authorization header provided");
+      return createErrorResponse("Unauthorized - Authentication required", 401);
     }
 
-    // If auth header is provided, verify Supabase Auth token
-    if (authHeader) {
-      const token = authHeader.replace("Bearer ", "");
-      const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    // Verify Supabase Auth token
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
 
-      if (authError || !user) {
-        return createErrorResponse("Unauthorized - Invalid token", 401);
-      }
+    if (authError || !user) {
+      console.error("Auth error:", authError?.message || "No user found");
+      return createErrorResponse("Unauthorized - Invalid token", 401);
     }
+
+    // Check if user has admin role
+    const { data: roles, error: rolesError } = await supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("role", "admin");
+
+    if (rolesError) {
+      console.error("Error checking admin role:", rolesError.message);
+      return createErrorResponse("Error verifying permissions", 500);
+    }
+
+    if (!roles || roles.length === 0) {
+      console.error("User does not have admin role:", user.id);
+      return createErrorResponse("Forbidden - Admin access required", 403);
+    }
+
+    // Parse request body
+    const { resume_path }: GetResumeUrlRequest = await req.json();
 
     if (!resume_path || typeof resume_path !== "string") {
       return createErrorResponse("Invalid request - resume_path required", 400);
@@ -62,6 +75,7 @@ serve(async (req: Request) => {
       .single();
 
     if (regError || !registration) {
+      console.error("Resume not found:", resume_path);
       return createErrorResponse("Resume not found", 404);
     }
 
@@ -74,6 +88,8 @@ serve(async (req: Request) => {
       console.error("Error creating signed URL:", urlError);
       return createErrorResponse("Failed to generate download URL", 500);
     }
+
+    console.log("Resume URL generated for admin:", user.email);
 
     return createResponse({
       success: true,
@@ -88,4 +104,3 @@ serve(async (req: Request) => {
     );
   }
 });
-

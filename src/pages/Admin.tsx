@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { safeSessionStorage, createObjectURL, revokeObjectURL } from "@/lib/polyfills";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { createObjectURL, revokeObjectURL } from "@/lib/polyfills";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Download, Users, Mail, Phone, FileText, Calendar, TrendingUp } from "lucide-react";
+import { Download, Users, Phone, FileText, Calendar } from "lucide-react";
 import RegistrationsTable from "@/components/admin/RegistrationsTable";
 import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 import { toast } from "sonner";
 import { useTranslation } from "@/hooks/useTranslation";
 import { formatDateTimeShort } from "@/lib/i18n";
 import { logger } from "@/lib/logger";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
 
 interface RegistrationStats {
   total: number;
@@ -29,8 +30,7 @@ interface RegistrationStats {
 const Admin = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, isAdmin, isLoading: authLoading, signOut } = useAdminAuth();
   const [stats, setStats] = useState<RegistrationStats>({
     total: 0,
     withLinkedIn: 0,
@@ -45,36 +45,16 @@ const Admin = () => {
   });
 
   useEffect(() => {
-    checkAuth();
-    loadStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const checkAuth = async () => {
-    try {
-      // For now, using a simple password check
-      // In production, implement proper Supabase Auth
-      const adminPassword = safeSessionStorage.getItem("admin_authenticated");
-      if (adminPassword === "authenticated") {
-        setIsAuthenticated(true);
-      } else {
-        // Prompt for password
-        const password = prompt(t("admin.enterPassword"));
-        if (password === import.meta.env.VITE_ADMIN_PASSWORD || password === "admin123") {
-          safeSessionStorage.setItem("admin_authenticated", "authenticated");
-          setIsAuthenticated(true);
-        } else {
-          toast.error(t("admin.unauthorized"));
-          navigate("/");
-        }
-      }
-    } catch (error) {
-      logger.error("Auth error", error instanceof Error ? error : new Error(String(error)));
-      navigate("/");
-    } finally {
-      setIsLoading(false);
+    if (!authLoading && !isAdmin) {
+      navigate("/admin/login");
     }
-  };
+  }, [authLoading, isAdmin, navigate]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      loadStats();
+    }
+  }, [isAdmin]);
 
   const loadStats = async () => {
     try {
@@ -138,10 +118,10 @@ const Admin = () => {
           .map(([hour, count]) => ({ hour, count }))
           .sort((a, b) => a.hour - b.hour);
 
-        const stats: RegistrationStats = {
+        const calculatedStats: RegistrationStats = {
           total: registrations.length,
           withLinkedIn: registrations.filter((r) => r.linkedin_url).length,
-          withWhatsApp: registrations.filter((r) => r.whatsapp_number).length,
+          withWhatsApp: 0, // whatsapp_number column doesn't exist in current schema
           withResume: registrations.filter((r) => r.resume_path).length,
           today: registrations.filter(
             (r) => new Date(r.created_at) >= today
@@ -154,19 +134,10 @@ const Admin = () => {
           ).length,
           dailyTrends,
           hourlyDistribution,
-          incompleteCount: 0, // Will be updated below
+          incompleteCount: 0,
         };
 
-        // Fetch incomplete registrations count for conversion tracking
-        const { count: incompleteCount, error: incompleteError } = await supabase
-          .from("incomplete_registrations")
-          .select("*", { count: 'exact', head: true });
-        
-        if (!incompleteError && incompleteCount !== null) {
-          stats.incompleteCount = incompleteCount;
-        }
-
-        setStats(stats);
+        setStats(calculatedStats);
       }
     } catch (error) {
       logger.error("Error loading stats", error instanceof Error ? error : new Error(String(error)));
@@ -193,7 +164,6 @@ const Admin = () => {
         "ID",
         t("registration.fullName"),
         t("registration.email"),
-        t("registration.whatsapp"),
         t("registration.linkedin"),
         t("adminTable.resume"),
         t("adminTable.date"),
@@ -202,7 +172,6 @@ const Admin = () => {
         r.id,
         r.full_name,
         r.email,
-        r.whatsapp_number || "",
         r.linkedin_url || "",
         r.resume_path ? t("common.yes") : t("common.no"),
         formatDateTimeShort(r.created_at),
@@ -235,7 +204,7 @@ const Admin = () => {
     }
   };
 
-  if (isLoading) {
+  if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center" role="status" aria-live="polite">
         <div className="text-center">
@@ -246,7 +215,7 @@ const Admin = () => {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAdmin) {
     return null;
   }
 
@@ -258,7 +227,7 @@ const Admin = () => {
             <div>
               <h1 className="text-2xl font-bold">{t("admin.title")}</h1>
               <p className="text-sm text-muted-foreground">
-                {t("admin.subtitle")}
+                {user?.email && `Logged in as ${user.email}`}
               </p>
             </div>
             <nav className="flex gap-2" aria-label="Admin actions">
@@ -267,10 +236,7 @@ const Admin = () => {
                 {t("admin.exportCSV")}
               </Button>
               <Button
-                onClick={() => {
-                  safeSessionStorage.removeItem("admin_authenticated");
-                  navigate("/");
-                }}
+                onClick={signOut}
                 variant="outline"
                 aria-label="Log out of admin dashboard"
               >
@@ -323,16 +289,16 @@ const Admin = () => {
             </CardContent>
           </Card>
 
-          <Card role="article" aria-label={`Registrations with WhatsApp: ${stats.withWhatsApp}`}>
+          <Card role="article" aria-label={`Registrations with LinkedIn: ${stats.withLinkedIn}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{t("admin.withWhatsApp")}</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("admin.withLinkedIn") || "With LinkedIn"}</CardTitle>
               <Phone className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold" aria-label={`${stats.withWhatsApp} registrations with WhatsApp`}>{stats.withWhatsApp}</div>
+              <div className="text-2xl font-bold" aria-label={`${stats.withLinkedIn} registrations with LinkedIn`}>{stats.withLinkedIn}</div>
               <p className="text-xs text-muted-foreground">
                 {stats.total > 0
-                  ? `${Math.round((stats.withWhatsApp / stats.total) * 100)}% ${t("admin.ofTotal")}`
+                  ? `${Math.round((stats.withLinkedIn / stats.total) * 100)}% ${t("admin.ofTotal")}`
                   : "0%"}
               </p>
             </CardContent>
@@ -362,4 +328,3 @@ const Admin = () => {
 };
 
 export default Admin;
-

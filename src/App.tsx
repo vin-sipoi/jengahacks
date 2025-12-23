@@ -15,6 +15,7 @@ const Sponsorship = lazy(() => import("./pages/Sponsorship"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const Admin = lazy(() => import("./pages/Admin"));
+const AdminAuth = lazy(() => import("./pages/AdminAuth"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const ManageRegistration = lazy(() => import("./pages/ManageRegistration"));
 const Health = lazy(() => import("./pages/Health"));
@@ -48,6 +49,7 @@ const AnimatedRoutes = () => {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/login" element={<AdminAuth />} />
           <Route path="/thank-you" element={<ThankYou />} />
           <Route path="/manage-registration" element={<ManageRegistration />} />
           <Route path="/health" element={<Health />} />

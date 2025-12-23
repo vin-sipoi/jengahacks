@@ -80,7 +80,7 @@ const ManageRegistration = () => {
           return;
         }
 
-        if (!data || data.length === 0) {
+        if (!data || !Array.isArray(data) || data.length === 0) {
           toast.error(t("manageRegistration.errors.notFound"));
           setIsLoading(false);
           return;
@@ -222,7 +222,7 @@ const ManageRegistration = () => {
       
       // Reload registration data
       const { data } = await callRpc('get_registration_by_token', { p_token: token });
-      if (data && data.length > 0) {
+      if (data && Array.isArray(data) && data.length > 0) {
         const reg = data[0];
         setRegistration(reg);
         setFormData((prev) => ({ ...prev, resume: null }));
