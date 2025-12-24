@@ -53,6 +53,27 @@ serve(async (req: Request) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Check if identifier is blocked
+    const emailBlocked = await supabase.rpc("is_identifier_blocked", {
+      p_identifier: email.toLowerCase().trim(),
+      p_violation_type: "email",
+    });
+    
+    if (emailBlocked.data === true) {
+      return createErrorResponse("Registration blocked due to rate limit violations", 429);
+    }
+
+    if (ipAddress && ipAddress !== "unknown") {
+      const ipBlocked = await supabase.rpc("is_identifier_blocked", {
+        p_identifier: ipAddress,
+        p_violation_type: "ip",
+      });
+      
+      if (ipBlocked.data === true) {
+        return createErrorResponse("Registration blocked due to rate limit violations", 429);
+      }
+    }
+
     // Check if registration should go to waitlist (if not already specified)
     let shouldWaitlist = is_waitlist;
     if (shouldWaitlist === undefined) {

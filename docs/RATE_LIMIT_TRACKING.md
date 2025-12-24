@@ -234,12 +234,248 @@ Review violation logs regularly to:
    SELECT * FROM pg_proc WHERE proname = 'log_email_rate_limit_violation';
    ```
 
-## Future Enhancements
+## Enhanced Features (Implemented)
 
-- [ ] Real-time violation alerts
-- [ ] Automated blocking of persistent violators
-- [ ] Violation pattern analysis
-- [ ] Integration with security monitoring tools
-- [ ] Export violation reports
+### Real-Time Violation Alerts
+
+The system now automatically creates alerts when violations occur:
+
+- **High Violation Rate Alerts**: Triggered when violations exceed thresholds in short time windows
+- **Repeated Violator Alerts**: Triggered when the same identifier violates multiple times
+- **Suspicious Pattern Alerts**: Triggered when unusual patterns are detected
+- **Auto-Blocked Alerts**: Triggered when identifiers are automatically blocked
+
+**Database Table:** `violation_alerts`
+
+**Usage:**
+```typescript
+import { getViolationAlerts, checkHighViolationRate, checkRepeatedViolators } from '@/lib/rateLimitTracking';
+
+// Get alerts
+const alerts = await getViolationAlerts(false, 'high', 50); // Unresolved, high severity, limit 50
+
+// Check for high violation rates
+await checkHighViolationRate(10, 15); // Threshold: 10 violations in 15 minutes
+
+// Check for repeated violators
+await checkRepeatedViolators(3, 24); // Threshold: 3 violations in 24 hours
+```
+
+**Automatic Triggering:**
+- Database trigger automatically creates alerts when violations are logged
+- Alerts are integrated with the monitoring system
+- Webhook notifications can be sent for critical alerts
+
+### Automated Blocking of Persistent Violators
+
+Persistent violators can be automatically blocked:
+
+**Database Table:** `blocked_identifiers`
+
+**Functions:**
+- `is_identifier_blocked(identifier, violation_type)` - Check if blocked
+- `block_identifier(...)` - Block an identifier
+- `unblock_identifier(...)` - Unblock an identifier
+- `auto_block_persistent_violators(...)` - Auto-block violators exceeding threshold
+
+**Usage:**
+```typescript
+import { 
+  isIdentifierBlocked, 
+  blockIdentifier, 
+  unblockIdentifier,
+  autoBlockPersistentViolators 
+} from '@/lib/rateLimitTracking';
+
+// Check if blocked
+const blocked = await isIdentifierBlocked('user@example.com', 'email');
+
+// Manual block
+await blockIdentifier('user@example.com', 'email', 5, 'Excessive violations', 'admin');
+
+// Auto-block persistent violators
+const blocked = await autoBlockPersistentViolators(5, 24); // 5+ violations in 24 hours
+```
+
+**Edge Function Integration:**
+The registration Edge Function automatically checks for blocked identifiers before processing requests.
+
+### Violation Pattern Analysis
+
+The system detects and analyzes violation patterns:
+
+**Pattern Types:**
+- **Burst**: Many violations in short time period
+- **Distributed**: Violations from many different identifiers
+- **Repeated**: Same identifier violating multiple times
+- **Suspicious UA**: Unusual user agent patterns
+- **Time-Based**: Violations at specific times
+
+**Database Table:** `violation_patterns`
+
+**Usage:**
+```typescript
+import { detectViolationPatterns, getViolationPatterns } from '@/lib/rateLimitTracking';
+
+// Detect patterns
+const patterns = await detectViolationPatterns(24); // Last 24 hours
+
+// Get detected patterns
+const patterns = await getViolationPatterns(24, 0.5); // Last 24 hours, min confidence 0.5
+```
+
+**Pattern Detection:**
+- Automatic pattern detection via database function
+- Confidence scores (0.0 - 1.0) indicate pattern reliability
+- High-confidence patterns trigger alerts
+
+### Integration with Security Monitoring Tools
+
+The system integrates with security monitoring tools:
+
+**Monitoring System Integration:**
+- Alerts automatically sent to monitoring system
+- Metrics tracked for violation rates
+- Health checks include violation status
+
+**Webhook Integration:**
+- Critical alerts can be sent to webhooks (Slack, Discord, etc.)
+- Configure via `VITE_MONITORING_WEBHOOK_URL`
+- Alert payload includes violation details
+
+**Sentry Integration:**
+- High and critical severity alerts sent to Sentry
+- Includes violation context and metadata
+
+**Usage:**
+```typescript
+// Alerts are automatically created and sent to monitoring system
+// Configure webhooks via environment variables:
+// VITE_MONITORING_WEBHOOK_URL=https://your-webhook-url
+// VITE_MONITORING_ALERTS=true
+```
+
+### Export Violation Reports
+
+Export violation data in multiple formats:
+
+**Export Functions:**
+- `exportViolationsCSV(...)` - Export as CSV
+- `exportViolationsJSON(...)` - Export as JSON
+- `exportViolationSummary(...)` - Export summary report
+
+**Usage:**
+```typescript
+import { 
+  exportViolationsCSV, 
+  exportViolationsJSON, 
+  exportViolationSummary,
+  downloadViolationsCSV,
+  downloadViolationsJSON
+} from '@/lib/rateLimitTracking';
+
+// Export CSV
+const csv = await exportViolationsCSV(
+  new Date('2025-01-01'), 
+  new Date('2025-01-31'),
+  'email',
+  10000
+);
+downloadViolationsCSV(csv, 'violations_january.csv');
+
+// Export JSON
+const json = await exportViolationsJSON();
+downloadViolationsJSON(json);
+
+// Export summary
+const summary = await exportViolationSummary();
+// Summary includes: totals, top violators, patterns, alerts
+```
+
+**Export Data Includes:**
+- Violation details (type, identifier, count, timestamps)
+- Top violators
+- Detected patterns
+- Alert history
+- Summary statistics
+
+## Admin Dashboard
+
+The enhanced admin dashboard (`RateLimitEnhancements` component) provides:
+
+1. **Real-Time Alerts Display** - View active violation alerts
+2. **Pattern Analysis** - View detected violation patterns
+3. **Auto-Blocking** - Trigger automatic blocking of persistent violators
+4. **Manual Blocking** - Block/unblock specific identifiers
+5. **Export Tools** - Export violations in CSV, JSON, or summary format
+
+**Access:** Admin Dashboard → Rate Limits → Enhancements tab
+
+## Database Schema
+
+### New Tables
+
+**`blocked_identifiers`**
+- Stores blocked identifiers (emails/IPs)
+- Tracks blocking reason, duration, and status
+
+**`violation_alerts`**
+- Stores violation alerts for real-time monitoring
+- Tracks alert type, severity, and resolution status
+
+**`violation_patterns`**
+- Stores detected violation patterns
+- Includes confidence scores and pattern metadata
+
+## Migration
+
+The enhancements migration is located at:
+`supabase/migrations/20251227000000_rate_limit_enhancements.sql`
+
+To apply:
+
+```bash
+# Using Supabase CLI
+supabase db push
+
+# Or manually via SQL editor
+# Copy and paste the migration SQL
+```
+
+## Maintenance
+
+### Scheduled Tasks
+
+Recommended scheduled tasks:
+
+1. **Pattern Detection** (every hour):
+   ```sql
+   SELECT * FROM detect_violation_patterns(24);
+   ```
+
+2. **Auto-Blocking** (every 6 hours):
+   ```sql
+   SELECT * FROM auto_block_persistent_violators(5, 24);
+   ```
+
+3. **High Rate Checks** (every 15 minutes):
+   ```sql
+   SELECT * FROM check_high_violation_rate(10, 15);
+   ```
+
+4. **Repeated Violator Checks** (every hour):
+   ```sql
+   SELECT * FROM check_repeated_violators(3, 24);
+   ```
+
+### Monitoring
+
+Monitor the following metrics:
+
+- Alert count by severity
+- Blocked identifier count
+- Pattern detection rate
+- Export usage
+- Auto-block success rate
 
 
