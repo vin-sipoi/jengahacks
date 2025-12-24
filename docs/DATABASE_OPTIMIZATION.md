@@ -292,11 +292,194 @@ If RPC functions fail, the application falls back to direct queries. Check:
 1. Function exists: `SELECT * FROM pg_proc WHERE proname = 'get_registrations_paginated';`
 2. Permissions: `GRANT EXECUTE ON FUNCTION get_registrations_paginated TO authenticated;`
 
-## Future Optimizations
+## Advanced Optimizations (Implemented)
 
-- [ ] Add full-text search index for better search performance
-- [ ] Implement query result caching
-- [ ] Add database connection pooling metrics
-- [ ] Create additional materialized views for common queries
-- [ ] Implement read replicas for analytics queries
+### Full-Text Search Indexes
+
+Full-text search indexes have been added for improved search performance:
+
+```sql
+-- GIN indexes for full-text search
+CREATE INDEX idx_registrations_full_name_fts ON registrations 
+USING gin(to_tsvector('english', coalesce(full_name, '')));
+
+CREATE INDEX idx_registrations_email_fts ON registrations 
+USING gin(to_tsvector('english', coalesce(email, '')));
+
+CREATE INDEX idx_registrations_search_fts ON registrations 
+USING gin(to_tsvector('english', 
+  coalesce(full_name, '') || ' ' || 
+  coalesce(email, '') || ' ' || 
+  coalesce(linkedin_url, '')
+));
+```
+
+**Benefits:**
+- Faster text searches using PostgreSQL's full-text search
+- Relevance ranking for search results
+- Better performance for complex search queries
+
+**Usage:**
+```typescript
+// Use full-text search (default when search term provided)
+const result = await getPaginatedRegistrations({
+  search: 'john doe',
+  useFullTextSearch: true, // default
+  sortBy: 'rank' // Sort by relevance
+});
+```
+
+### Query Result Caching
+
+Database-level query result caching has been implemented:
+
+```sql
+-- Cache table for query results
+CREATE TABLE query_cache (
+  cache_key TEXT PRIMARY KEY,
+  cache_data JSONB NOT NULL,
+  expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  query_type TEXT NOT NULL,
+  hit_count INTEGER DEFAULT 0
+);
+```
+
+**Functions:**
+- `get_cached_query(cache_key, query_type)` - Retrieve cached result
+- `set_cached_query(cache_key, cache_data, ttl_seconds, query_type)` - Store cached result
+- `clear_expired_cache()` - Cleanup expired entries
+
+**Usage:**
+```typescript
+import { getCachedQuery, setCachedQuery } from '@/lib/dbQueries';
+
+// Try to get from cache first
+let data = await getCachedQuery<RegistrationStats>('stats:all', 'stats');
+if (!data) {
+  // Fetch fresh data
+  data = await getRegistrationStats();
+  // Cache for 5 minutes
+  await setCachedQuery('stats:all', data, 300, 'stats');
+}
+```
+
+### Connection Pooling Metrics
+
+Connection pool monitoring has been added:
+
+```sql
+-- Metrics table
+CREATE TABLE connection_pool_metrics (
+  timestamp TIMESTAMP WITH TIME ZONE,
+  active_connections INTEGER,
+  idle_connections INTEGER,
+  waiting_connections INTEGER,
+  max_connections INTEGER,
+  utilization_percent NUMERIC(5, 2)
+);
+```
+
+**Functions:**
+- `record_connection_pool_metrics(...)` - Record current pool state
+- `get_connection_pool_metrics(hours)` - Get metrics for last N hours
+
+**Usage:**
+```typescript
+import { recordConnectionPoolMetrics, getConnectionPoolMetrics } from '@/lib/dbQueries';
+
+// Record metrics periodically
+await recordConnectionPoolMetrics({
+  active: 10,
+  idle: 5,
+  waiting: 0,
+  max: 100,
+  totalQueries: 1000,
+  avgQueryTimeMs: 45.2
+});
+
+// Get recent metrics
+const metrics = await getConnectionPoolMetrics(24); // Last 24 hours
+```
+
+### Additional Materialized Views
+
+New materialized views for common analytics queries:
+
+1. **`registration_daily_trends`** - Daily trends for last 90 days
+2. **`registration_hourly_patterns`** - Hourly registration patterns
+3. **`registration_sources`** - Breakdown by source type (LinkedIn, Resume, etc.)
+
+**Refresh Function:**
+```sql
+-- Refresh all views at once
+SELECT * FROM refresh_all_materialized_views();
+```
+
+**Usage:**
+```typescript
+import { refreshAllMaterializedViews } from '@/lib/dbQueries';
+
+// Refresh all views (call periodically)
+await refreshAllMaterializedViews();
+```
+
+### Read Replica Support
+
+Functions optimized for read replicas:
+
+```sql
+-- Analytics function that uses materialized views (can run on read replica)
+SELECT * FROM get_registration_stats_analytics();
+```
+
+**Usage:**
+```typescript
+import { getRegistrationStatsAnalytics } from '@/lib/dbQueries';
+
+// Use analytics function (optimized for read replicas)
+const stats = await getRegistrationStatsAnalytics();
+```
+
+**Note:** Read replica configuration is done at the Supabase project level. The functions are designed to work efficiently on read replicas by using materialized views.
+
+## Migration
+
+The advanced optimizations migration is located at:
+`supabase/migrations/20251226000000_advanced_database_optimizations.sql`
+
+To apply:
+
+```bash
+# Using Supabase CLI
+supabase db push
+
+# Or manually via SQL editor
+# Copy and paste the migration SQL
+```
+
+## Maintenance
+
+### Cache Cleanup
+
+Set up a scheduled job to clean expired cache entries:
+
+```sql
+-- Run daily (via cron or scheduled function)
+SELECT cleanup_expired_cache();
+```
+
+### Materialized View Refresh
+
+Refresh materialized views periodically:
+
+```sql
+-- Refresh all views (run every hour or after bulk operations)
+SELECT * FROM refresh_all_materialized_views();
+```
+
+Or via TypeScript:
+```typescript
+await refreshAllMaterializedViews();
+```
+
 
