@@ -6,6 +6,7 @@ import { Calendar, MapPin, Clock, CheckCircle2, Download, ExternalLink, ArrowLef
 import siliconSavannahLogo from "@/assets/silicon-savannah-logo.png";
 import adamurLogo from "@/assets/adamur-logo.png";
 import promptbiLogo from "@/assets/promptbi-logo.svg";
+import twinistLogo from "@/assets/twinist-logo.svg";
 import { useTranslation } from "@/hooks/useTranslation";
 import SEO from "@/components/SEO";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -336,6 +337,22 @@ const ThankYou = () => {
                           src={promptbiLogo}
                           alt=""
                           className="h-12 sm:h-16 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform max-w-[200px] sm:max-w-none"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </a>
+                    <a
+                      href="https://twinist.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group"
+                      aria-label="Twinist - Gold sponsor - Opens in new tab"
+                    >
+                      <div className="bg-foreground/95 p-4 sm:p-6 rounded-lg sm:rounded-xl hover:bg-foreground transition-colors">
+                        <img
+                          src={twinistLogo}
+                          alt=""
+                          className="h-10 sm:h-14 md:h-16 w-auto object-contain group-hover:scale-105 transition-transform max-w-[180px] sm:max-w-none"
                           aria-hidden="true"
                         />
                       </div>

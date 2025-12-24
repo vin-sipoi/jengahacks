@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import siliconSavannahLogo from "@/assets/silicon-savannah-logo.png";
 import adamurLogo from "@/assets/adamur-logo.png";
 import promptbiLogo from "@/assets/promptbi-logo.svg";
+import twinistLogo from "@/assets/twinist-logo.svg";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const Sponsors = () => {
@@ -76,6 +77,36 @@ const Sponsors = () => {
                   src={promptbiLogo}
                   alt=""
                   className="h-12 sm:h-16 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform max-w-[200px] sm:max-w-none"
+                  aria-hidden="true"
+                />
+              </div>
+            </a>
+          </div>
+        </div>
+
+        {/* Gold Sponsors */}
+        <div className="mb-8 sm:mb-10 md:mb-12">
+          <h3 id="gold-sponsors-heading" className="text-center text-xs sm:text-sm uppercase tracking-widest text-muted-foreground mb-6 sm:mb-8">
+            {t("sponsors.gold")}
+          </h3>
+          <div 
+            className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12 lg:gap-20 px-4"
+            role="list"
+            aria-labelledby="gold-sponsors-heading"
+          >
+            <a 
+              href="https://twinist.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group flex justify-center"
+              role="listitem"
+              aria-label="Twinist - Gold sponsor - Opens in new tab"
+            >
+              <div className="bg-foreground/95 p-4 sm:p-6 rounded-lg sm:rounded-xl hover:bg-foreground transition-colors flex items-center justify-center">
+                <img
+                  src={twinistLogo}
+                  alt=""
+                  className="h-10 sm:h-14 md:h-16 w-auto object-contain group-hover:scale-105 transition-transform max-w-[180px] sm:max-w-none mx-auto"
                   aria-hidden="true"
                 />
               </div>
