@@ -1,0 +1,22 @@
+<svg width="800" height="450" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+  <!-- Black background -->
+  <rect width="800" height="450" fill="#000000"/>
+  
+  <!-- Welcome/Celebration themed illustration -->
+  <!-- Celebration elements -->
+  <circle cx="200" cy="150" r="40" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="600" cy="150" r="40" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="400" cy="200" r="50" fill="none" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Sparkles/stars -->
+  <path d="M 150 100 L 155 110 L 165 110 L 157 117 L 160 127 L 150 120 L 140 127 L 143 117 L 135 110 L 145 110 Z" fill="#ffffff"/>
+  <path d="M 650 100 L 655 110 L 665 110 L 657 117 L 660 127 L 650 120 L 640 127 L 643 117 L 635 110 L 645 110 Z" fill="#ffffff"/>
+  <path d="M 350 80 L 355 90 L 365 90 L 357 97 L 360 107 L 350 100 L 340 107 L 343 97 L 335 90 L 345 90 Z" fill="#ffffff"/>
+  <path d="M 450 80 L 455 90 L 465 90 L 457 97 L 460 107 L 450 100 L 440 107 L 443 97 L 435 90 L 445 90 Z" fill="#ffffff"/>
+  
+  <!-- Welcome banner -->
+  <rect x="200" y="280" width="400" height="80" fill="none" stroke="#ffffff" stroke-width="3" rx="5"/>
+  <line x1="220" y1="310" x2="580" y2="310" stroke="#ffffff" stroke-width="2"/>
+  <line x1="220" y1="340" x2="580" y2="340" stroke="#ffffff" stroke-width="2"/>
+</svg>
+

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Calendar, Clock, ArrowLeft, ExternalLink, Share2 } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ExternalLink, Share2, Play } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -17,12 +17,12 @@ import { CACHE_KEYS, CACHE_DURATIONS } from "@/lib/cache";
 const BlogPost = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   // Use React Query for automatic caching
   const { data: post, isLoading, error } = useQuery<BlogPost | null>({
-    queryKey: [CACHE_KEYS.blog.post(id || '')],
-    queryFn: () => id ? fetchBlogPost(id) : Promise.resolve(null),
+    queryKey: [CACHE_KEYS.blog.post(id || ''), locale],
+    queryFn: () => id ? fetchBlogPost(id, locale) : Promise.resolve(null),
     enabled: !!id,
     staleTime: CACHE_DURATIONS.LONG, // Cache for 1 hour (blog posts don't change often)
     gcTime: CACHE_DURATIONS.VERY_LONG, // Keep in cache for 24 hours
@@ -90,7 +90,7 @@ const BlogPost = () => {
       <SEO 
         title={`${post.title} | JengaHacks 2026`}
         description={post.excerpt}
-        image={post.imageUrl}
+        image={post.videoThumbnailUrl || post.imageUrl}
       />
       <div className="min-h-screen bg-background">
         <Navbar />
@@ -148,8 +148,46 @@ const BlogPost = () => {
                   )}
                 </div>
 
-                {/* Featured Image */}
-                {post.imageUrl && (
+                {/* Featured Video or Image */}
+                {post.videoUrl ? (
+                  <div className="aspect-video w-full overflow-hidden rounded-lg bg-muted mb-8 relative">
+                    <video
+                      src={post.videoUrl}
+                      controls
+                      className="w-full h-full object-cover"
+                      preload="metadata"
+                      playsInline
+                      poster={post.videoThumbnailUrl || post.imageUrl}
+                      onError={(e) => {
+                        const video = e.target as HTMLVideoElement;
+                        const error = video.error;
+                        console.error("Video failed to load:", {
+                          src: post.videoUrl,
+                          errorCode: error?.code,
+                          errorMessage: error?.message,
+                          mediaError: error
+                        });
+                        // Show fallback message if video fails
+                        const container = e.currentTarget.parentElement;
+                        if (container) {
+                          const errorDiv = document.createElement('div');
+                          errorDiv.className = 'absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground p-4';
+                          errorDiv.innerHTML = `
+                            <div class="text-center">
+                              <p class="mb-2">Video format not supported by your browser.</p>
+                              <p class="text-sm">Please try using Safari or convert the video to MP4 format.</p>
+                            </div>
+                          `;
+                          container.appendChild(errorDiv);
+                        }
+                      }}
+                    >
+                      <source src={post.videoUrl} type="video/quicktime" />
+                      <source src={post.videoUrl} type="video/mp4" />
+                      Your browser does not support the video tag. Please try using Safari or convert the video to MP4 format.
+                    </video>
+                  </div>
+                ) : post.imageUrl ? (
                   <div className="aspect-video w-full overflow-hidden rounded-lg bg-muted mb-8">
                     <img
                       src={post.imageUrl}
@@ -162,7 +200,7 @@ const BlogPost = () => {
                       }}
                     />
                   </div>
-                )}
+                ) : null}
               </header>
 
               {/* Post Content */}

@@ -44,11 +44,14 @@ export const sanitizeHtml = (
     "blockquote",
     "code",
     "pre",
+    "video",
+    "source",
+    "iframe",
   ];
 
   const allowedAttr = options?.allowedAttributes
     ? Object.values(options.allowedAttributes).flat()
-    : ["href", "title", "target", "rel"];
+    : ["href", "title", "target", "rel", "src", "poster", "controls", "preload", "width", "height", "frameborder", "allow", "allowfullscreen"];
 
   const config = {
     ALLOWED_TAGS: allowedTags,

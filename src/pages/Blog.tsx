@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Clock, ArrowRight, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Calendar, Clock, ArrowRight, ExternalLink, Play } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -11,12 +12,12 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { CACHE_KEYS, CACHE_DURATIONS } from "@/lib/cache";
 
 const Blog = () => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   // Use React Query for automatic caching and refetching
   const { data: posts = [], isLoading, error } = useQuery<BlogPost[]>({
-    queryKey: [CACHE_KEYS.blog.posts],
-    queryFn: () => fetchBlogPosts(),
+    queryKey: [CACHE_KEYS.blog.posts, locale],
+    queryFn: () => fetchBlogPosts(undefined, locale),
     staleTime: CACHE_DURATIONS.MEDIUM, // Cache for 15 minutes
     gcTime: CACHE_DURATIONS.LONG, // Keep in cache for 1 hour
   });
@@ -97,19 +98,41 @@ const Blog = () => {
                           role="listitem"
                           className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col cursor-pointer h-full"
                         >
-                          {post.imageUrl && (
-                            <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
-                              <img
-                                src={post.imageUrl}
-                                alt=""
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                aria-hidden="true"
-                                loading="lazy"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.src = '/placeholder.svg';
-                                }}
-                              />
+                          {(post.videoUrl || post.imageUrl) && (
+                            <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted relative">
+                              {post.videoUrl ? (
+                                <>
+                                  <video
+                                    src={post.videoUrl}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    aria-hidden="true"
+                                    preload="metadata"
+                                    muted
+                                    playsInline
+                                    onLoadedMetadata={(e) => {
+                                      const video = e.target as HTMLVideoElement;
+                                      video.currentTime = 0.1; // Seek to first frame
+                                    }}
+                                  />
+                                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors pointer-events-none">
+                                    <div className="rounded-full bg-primary/90 p-4 group-hover:bg-primary transition-colors">
+                                      <Play className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" />
+                                    </div>
+                                  </div>
+                                </>
+                              ) : (
+                                <img
+                                  src={post.imageUrl}
+                                  alt=""
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                  aria-hidden="true"
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = '/placeholder.svg';
+                                  }}
+                                />
+                              )}
                             </div>
                           )}
                           <CardHeader>

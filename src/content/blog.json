@@ -8,7 +8,7 @@
     "publishedAt": "2025-12-15T08:00:00Z",
     "readTime": 5,
     "tags": ["announcement", "event", "tracks", "2026"],
-    "imageUrl": "https://picsum.photos/seed/jengahacks-2026-expect/800/450"
+    "imageUrl": "/city-skyline.svg"
   },
   {
     "id": "registration-now-open-2026",
@@ -19,18 +19,19 @@
     "publishedAt": "2025-12-21T08:00:00Z",
     "readTime": 2,
     "tags": ["registration", "announcement"],
-    "imageUrl": "https://picsum.photos/800/450?random=1"
+    "videoUrl": "/Nairobi.mov"
   },
   {
     "id": "welcome-to-jengahacks-2026",
     "title": "Welcome to JengaHacks 2026",
     "excerpt": "East Africa's biggest student-led hackathon is back! Join us for an incredible weekend of building, learning, and networking.",
-    "content": "Full article content goes here...",
+    "content": "<p>Welcome to JengaHacks 2026.</p><p>We are excited to officially welcome you to this year's hackathon. Whether you are joining for the first time or returning after a past event, JengaHacks 2026 is designed to be a space where ideas turn into real projects and people grow as builders.</p><p>This is a weekend about learning fast, collaborating openly, and building things that matter.</p><h2>What Is JengaHacks?</h2><p>JengaHacks is a community-focused hackathon bringing together students, developers, designers, and problem solvers from across Kenya and beyond.</p><p>It is not just about competition. It is about:</p><ul><li>Solving real problems</li><li>Learning by doing</li><li>Meeting people who care about building technology</li><li>Gaining confidence in your skills</li></ul><p>You do not need to be an expert to belong here. Curiosity and effort matter more than experience.</p><h2>What to Expect During the Event</h2><p>Over the course of the hackathon, participants will:</p><ul><li>Form teams or work solo</li><li>Choose a problem to focus on</li><li>Build a working project in a limited time</li><li>Get feedback from mentors</li><li>Present their work to judges and peers</li></ul><p>There will be structured moments to help you stay on track, along with flexibility to work in a way that suits your team. Mentors will be available throughout the event to help unblock challenges, answer questions, and offer guidance.</p><h2>Who Should Participate</h2><p>JengaHacks 2026 is open to:</p><ul><li>Students and recent graduates</li><li>Software engineers and developers</li><li>Designers, product thinkers, and creatives</li><li>Anyone interested in learning how to build technology</li></ul><p>You do not need prior hackathon experience. Many participants join to learn something new or to try building their first project from scratch.</p><h2>Our Values</h2><p>We care deeply about creating a welcoming and supportive environment.</p><p>At JengaHacks, we value:</p><ul><li>Inclusivity and respect</li><li>Collaboration over competition</li><li>Learning over perfection</li><li>Clear communication and teamwork</li></ul><p>Our goal is for every participant to leave feeling more confident and capable than when they arrived.</p><h2>How to Prepare</h2><p>If you are registered, there are a few simple ways to prepare:</p><ul><li>Think about problems you care about</li><li>Explore tools or technologies you want to try</li><li>Talk with friends about forming a team</li><li>Come ready to learn and experiment</li></ul><p>You do not need to have everything planned ahead of time. Many of the best ideas come together during the event itself.</p><h2>What's Coming Next</h2><p>In the coming weeks, we will share:</p><ul><li>Event tracks</li><li>Mentor announcements</li><li>Prize details</li><li>The full schedule</li></ul><p>Registered participants will receive updates first, so keep an eye on your email.</p><h2>Final Thoughts</h2><p>JengaHacks 2026 is about building, learning, and connecting with people who want to create positive change through technology.</p><p>We are glad you are here. We cannot wait to see what you build.</p>",
     "author": "JengaHacks Team",
     "publishedAt": "2025-12-23T10:00:00Z",
     "readTime": 5,
     "tags": ["announcement", "event"],
-    "imageUrl": "https://picsum.photos/800/450?random=2"
+    "videoUrl": "/Typing2.mov",
+    "imageUrl": "/blog-welcome.svg"
   },
   {
     "id": "meet-our-sponsors-2026",
@@ -41,7 +42,7 @@
     "publishedAt": "2025-12-10T14:30:00Z",
     "readTime": 3,
     "tags": ["sponsors", "partners"],
-    "imageUrl": "https://picsum.photos/800/450?random=3"
+    "imageUrl": "/Desktop.jpeg"
   },
   {
     "id": "hackathon-tips-36-hours",
@@ -52,6 +53,6 @@
     "publishedAt": "2025-12-05T09:15:00Z",
     "readTime": 7,
     "tags": ["tips", "guide"],
-    "imageUrl": "https://picsum.photos/800/450?random=4"
+    "videoUrl": "/Typing.mov"
   }
 ]

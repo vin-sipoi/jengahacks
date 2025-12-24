@@ -1,0 +1,103 @@
+<svg width="800" height="450" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+  <!-- Black background -->
+  <rect width="800" height="450" fill="#000000"/>
+  
+  <!-- Ground/base lines -->
+  <line x1="0" y1="420" x2="800" y2="420" stroke="#ffffff" stroke-width="2"/>
+  <line x1="0" y1="430" x2="800" y2="430" stroke="#ffffff" stroke-width="2"/>
+  <line x1="0" y1="440" x2="800" y2="440" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Left cluster - Tall skyscrapers -->
+  <!-- Tallest building with spire -->
+  <rect x="20" y="200" width="35" height="220" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="37.5" y1="200" x2="37.5" y2="180" stroke="#ffffff" stroke-width="2"/>
+  <line x1="37.5" y1="180" x2="32" y2="170" stroke="#ffffff" stroke-width="2"/>
+  <line x1="37.5" y1="180" x2="43" y2="170" stroke="#ffffff" stroke-width="2"/>
+  <!-- Windows -->
+  <circle cx="30" cy="250" r="2" fill="#ffffff"/>
+  <circle cx="45" cy="250" r="2" fill="#ffffff"/>
+  <circle cx="30" cy="280" r="2" fill="#ffffff"/>
+  <circle cx="45" cy="280" r="2" fill="#ffffff"/>
+  <circle cx="30" cy="310" r="2" fill="#ffffff"/>
+  <circle cx="45" cy="310" r="2" fill="#ffffff"/>
+  <circle cx="30" cy="340" r="2" fill="#ffffff"/>
+  <circle cx="45" cy="340" r="2" fill="#ffffff"/>
+  <circle cx="30" cy="370" r="2" fill="#ffffff"/>
+  <circle cx="45" cy="370" r="2" fill="#ffffff"/>
+  
+  <!-- Medium building left -->
+  <rect x="65" y="280" width="30" height="140" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="75" y1="290" x2="75" y2="280" stroke="#ffffff" stroke-width="1"/>
+  <line x1="85" y1="290" x2="85" y2="280" stroke="#ffffff" stroke-width="1"/>
+  <line x1="75" y1="320" x2="75" y2="310" stroke="#ffffff" stroke-width="1"/>
+  <line x1="85" y1="320" x2="85" y2="310" stroke="#ffffff" stroke-width="1"/>
+  <line x1="75" y1="350" x2="75" y2="340" stroke="#ffffff" stroke-width="1"/>
+  <line x1="85" y1="350" x2="85" y2="340" stroke="#ffffff" stroke-width="1"/>
+  
+  <!-- Tall building left -->
+  <rect x="105" y="220" width="28" height="200" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="112" y1="240" x2="112" y2="230" stroke="#ffffff" stroke-width="1"/>
+  <line x1="126" y1="240" x2="126" y2="230" stroke="#ffffff" stroke-width="1"/>
+  <line x1="112" y1="270" x2="112" y2="260" stroke="#ffffff" stroke-width="1"/>
+  <line x1="126" y1="270" x2="126" y2="260" stroke="#ffffff" stroke-width="1"/>
+  <line x1="112" y1="300" x2="112" y2="290" stroke="#ffffff" stroke-width="1"/>
+  <line x1="126" y1="300" x2="126" y2="290" stroke="#ffffff" stroke-width="1"/>
+  
+  <!-- Mid-left buildings -->
+  <rect x="145" y="300" width="25" height="120" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="152" y1="320" x2="152" y2="310" stroke="#ffffff" stroke-width="1"/>
+  <line x1="163" y1="320" x2="163" y2="310" stroke="#ffffff" stroke-width="1"/>
+  
+  <rect x="180" y="260" width="30" height="160" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="190" y1="280" x2="190" y2="270" stroke="#ffffff" stroke-width="1"/>
+  <line x1="200" y1="280" x2="200" y2="270" stroke="#ffffff" stroke-width="1"/>
+  
+  <!-- Center buildings -->
+  <rect x="220" y="320" width="28" height="100" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <rect x="258" y="290" width="32" height="130" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="274" y1="310" x2="274" y2="300" stroke="#ffffff" stroke-width="1"/>
+  <line x1="274" y1="340" x2="274" y2="330" stroke="#ffffff" stroke-width="1"/>
+  
+  <!-- Mid-right distinctive multi-tiered building -->
+  <rect x="300" y="240" width="40" height="180" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <!-- Horizontal lines suggesting floors -->
+  <line x1="300" y1="260" x2="340" y2="260" stroke="#ffffff" stroke-width="1"/>
+  <line x1="300" y1="280" x2="340" y2="280" stroke="#ffffff" stroke-width="1"/>
+  <line x1="300" y1="300" x2="340" y2="300" stroke="#ffffff" stroke-width="1"/>
+  <line x1="300" y1="320" x2="340" y2="320" stroke="#ffffff" stroke-width="1"/>
+  <line x1="300" y1="340" x2="340" y2="340" stroke="#ffffff" stroke-width="1"/>
+  <line x1="300" y1="360" x2="340" y2="360" stroke="#ffffff" stroke-width="1"/>
+  <line x1="300" y1="380" x2="340" y2="380" stroke="#ffffff" stroke-width="1"/>
+  
+  <!-- Building with gabled roof -->
+  <path d="M 350 320 L 350 420 L 380 420 L 380 320 L 365 300 Z" fill="none" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- More center-right buildings -->
+  <rect x="390" y="310" width="25" height="110" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <rect x="425" y="280" width="30" height="140" fill="none" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Far right tall skyscraper with vertical lines -->
+  <rect x="465" y="180" width="35" height="240" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <!-- Vertical ribbed lines -->
+  <line x1="475" y1="180" x2="475" y2="420" stroke="#ffffff" stroke-width="1"/>
+  <line x1="485" y1="180" x2="485" y2="420" stroke="#ffffff" stroke-width="1"/>
+  <line x1="495" y1="180" x2="495" y2="420" stroke="#ffffff" stroke-width="1"/>
+  
+  <!-- Buildings around base of tall skyscraper -->
+  <rect x="510" y="340" width="28" height="80" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <rect x="548" y="360" width="25" height="60" fill="none" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- More right side buildings -->
+  <rect x="583" y="300" width="30" height="120" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <rect x="623" y="320" width="28" height="100" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <rect x="661" y="290" width="32" height="130" fill="none" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Far right cluster -->
+  <rect x="703" y="250" width="35" height="170" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="720" y1="270" x2="720" y2="260" stroke="#ffffff" stroke-width="1"/>
+  <line x1="720" y1="300" x2="720" y2="290" stroke="#ffffff" stroke-width="1"/>
+  <line x1="720" y1="330" x2="720" y2="320" stroke="#ffffff" stroke-width="1"/>
+  
+  <rect x="748" y="280" width="30" height="140" fill="none" stroke="#ffffff" stroke-width="2"/>
+</svg>
+

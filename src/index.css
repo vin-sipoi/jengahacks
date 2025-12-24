@@ -191,6 +191,25 @@
   @apply shadow-lg;
 }
 
+/* Videos */
+.blog-post-body video {
+  @apply rounded-lg;
+  @apply my-8;
+  @apply w-full;
+  @apply h-auto;
+  @apply shadow-lg;
+  @apply bg-muted;
+}
+
+.blog-post-body iframe {
+  @apply rounded-lg;
+  @apply my-8;
+  @apply w-full;
+  @apply aspect-video;
+  @apply shadow-lg;
+  @apply border-0;
+}
+
 /* Horizontal Rules */
 .blog-post-body hr {
   @apply my-8;

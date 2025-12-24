@@ -2,10 +2,13 @@
  * Blog utilities for fetching and managing blog posts
  * Uses local JSON file (blog.json) as the primary data source
  * Optionally supports API endpoint as a fallback
+ * Supports multi-language blog posts (English and Swahili)
  */
 
 import { logger } from "./logger";
 import blogData from "@/content/blog.json";
+import blogDataSw from "@/content/blog.sw.json";
+import { getStoredLocale, type SupportedLocale } from "./locale";
 
 export interface BlogPost {
   id: string;
@@ -15,17 +18,20 @@ export interface BlogPost {
   author?: string;
   publishedAt: string;
   imageUrl?: string;
+  videoUrl?: string;
+  videoThumbnailUrl?: string;
   externalUrl?: string;
   readTime?: number;
   tags?: string[];
 }
 
 /**
- * Get blog posts from local JSON file
+ * Get blog posts from local JSON file based on locale
  * This is the primary data source for blog posts
  */
-export const getPosts = (limit?: number): BlogPost[] => {
-  const posts = blogData as BlogPost[];
+export const getPosts = (limit?: number, locale?: SupportedLocale): BlogPost[] => {
+  const currentLocale = locale || getStoredLocale();
+  const posts = (currentLocale === "sw-KE" ? blogDataSw : blogData) as BlogPost[];
 
   // Sort by date descending
   const sortedPosts = [...posts].sort((a, b) =>
@@ -38,11 +44,12 @@ export const getPosts = (limit?: number): BlogPost[] => {
 /**
  * Fetch blog posts from configured source
  * Priority: Local JSON file > API endpoint (if configured)
+ * Supports multi-language based on current locale
  */
-export const fetchBlogPosts = async (limit?: number): Promise<BlogPost[]> => {
+export const fetchBlogPosts = async (limit?: number, locale?: SupportedLocale): Promise<BlogPost[]> => {
   // Always use local JSON file first
   try {
-    const posts = getPosts(limit);
+    const posts = getPosts(limit, locale);
     if (posts.length > 0) {
       return posts;
     }
@@ -89,11 +96,12 @@ export const formatBlogDateShort = (dateString: string): string => {
 /**
  * Fetch a single blog post by ID
  * Uses local JSON file as primary source
+ * Supports multi-language based on current locale
  */
-export const fetchBlogPost = async (id: string): Promise<BlogPost | null> => {
+export const fetchBlogPost = async (id: string, locale?: SupportedLocale): Promise<BlogPost | null> => {
   // Always check local JSON file first
   try {
-    const posts = getPosts();
+    const posts = getPosts(undefined, locale);
     const post = posts.find((post) => post.id === id);
     if (post) {
       return post;
