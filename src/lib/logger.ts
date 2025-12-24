@@ -119,13 +119,31 @@ class Logger {
     error?: Error,
     context?: LogContext
   ): LogEntry {
+    // Only capture stack trace for actual errors or warnings
+    // Don't capture stack for debug/info logs to avoid console noise
+    let stack: string | undefined;
+    if (error?.stack) {
+      stack = error.stack;
+    } else if (level === 'error' || level === 'warn') {
+      // Only create Error for stack trace for errors/warnings
+      // Use a try-catch to safely capture stack without throwing
+      try {
+        const stackError = new Error();
+        // Access .stack property to trigger stack trace generation
+        stack = stackError.stack;
+      } catch {
+        // Ignore if stack trace capture fails
+        stack = undefined;
+      }
+    }
+
     return {
       level,
       message,
       timestamp: new Date().toISOString(),
       context: this.sanitizeContext(context),
       error: error || undefined,
-      stack: error?.stack || new Error().stack,
+      stack,
     };
   }
 
@@ -161,8 +179,22 @@ class Logger {
       console.error(entry.error);
     }
 
-    if (entry.stack && this.isDevelopment) {
-      console.log('%cStack:', 'color: #6b7280;', entry.stack);
+    // Only show stack trace for errors/warnings, and only in development
+    // Skip stack traces for debug/info logs to reduce console noise
+    if (entry.stack && this.isDevelopment && (entry.level === 'error' || entry.level === 'warn')) {
+      // Log stack as a string, not as an Error object
+      // Use groupCollapsed to keep console clean
+      console.groupCollapsed('%cStack Trace', 'color: #6b7280; font-size: 0.9em; cursor: pointer;');
+      // Split stack into lines and log each line separately for better formatting
+      const stackLines = entry.stack.split('\n');
+      stackLines.forEach((line, index) => {
+        if (index === 0) {
+          console.log('%c' + line, 'color: #ef4444; font-weight: bold; font-family: monospace; font-size: 0.85em;');
+        } else {
+          console.log('%c' + line, 'color: #6b7280; font-family: monospace; font-size: 0.85em;');
+        }
+      });
+      console.groupEnd();
     }
   }
 
