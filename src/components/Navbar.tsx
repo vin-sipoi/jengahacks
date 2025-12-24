@@ -69,7 +69,7 @@ const Navbar = () => {
     const navLinks = [
       { href: "#about", label: t("nav.about") },
       { href: "/prizes", label: t("nav.prizes"), isRoute: true },
-      { href: "#judges-mentors", label: t("nav.judgesMentors") },
+      { href: "/judges-mentors", label: t("nav.judgesMentors"), isRoute: true },
       { href: "#faq", label: t("nav.faq") },
       { href: "/blog", label: t("nav.blog"), isRoute: true },
       { href: "/sponsorship", label: t("nav.sponsorship"), isRoute: true },
@@ -90,7 +90,7 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-4" aria-label={t("aria.desktopNavigation")}>
             {navLinks.map((link) => {
-              const isRouteLink = link.href === "/blog" || link.href === "/sponsorship" || link.href === "/prizes";
+              const isRouteLink = link.href === "/blog" || link.href === "/sponsorship" || link.href === "/prizes" || link.href === "/judges-mentors";
               return link.isRoute ? (
                 <Link
                   key={link.href}
@@ -167,7 +167,7 @@ const Navbar = () => {
           <div className="border-t border-border pt-4">
             <div className="flex flex-col gap-3 animate-slide-in-down">
               {navLinks.map((link) => {
-                const isRouteLink = link.href === "/blog" || link.href === "/sponsorship" || link.href === "/prizes";
+                const isRouteLink = link.href === "/blog" || link.href === "/sponsorship" || link.href === "/prizes" || link.href === "/judges-mentors";
                 return link.isRoute ? (
                   <Link
                     key={link.href}
