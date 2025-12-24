@@ -11,8 +11,7 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "strict": true,
-    "target": "esnext",
-    "types": ["./deno.d.ts"]
+    "target": "esnext"
   },
-  "include": ["**/*.ts", "deno.d.ts"]
+  "include": ["**/*.ts"]
 }
