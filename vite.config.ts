@@ -55,13 +55,14 @@ export default defineConfig(({ mode }) => ({
     setupFiles: ["./src/test/setup.ts"],
     css: true,
     testTimeout: 15000, // Increase timeout for integration tests
-    // Exclude E2E tests (Playwright) from Vitest
+    // Exclude E2E tests (Playwright) and Deno tests from Vitest
     exclude: [
       "**/node_modules/**",
       "**/dist/**",
       "**/e2e/**",
       "**/.{idea,git,cache,output,temp}/**",
       "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*",
+      "**/supabase/functions/**/*.test.ts", // Deno tests use Deno.test() syntax
     ],
     coverage: {
       provider: "v8",
