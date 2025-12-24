@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,7 +31,7 @@ const RateLimitViolations = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<24 | 48 | 72>(24);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
       const [violationStats, violators] = await Promise.all([
@@ -49,11 +49,11 @@ const RateLimitViolations = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [timeRange, t]);
 
   useEffect(() => {
     loadData();
-  }, [timeRange]);
+  }, [loadData]);
 
   const getViolationTypeColor = (type: string) => {
     switch (type) {
@@ -191,6 +191,7 @@ const RateLimitViolations = () => {
 };
 
 export default RateLimitViolations;
+
 
 
 
