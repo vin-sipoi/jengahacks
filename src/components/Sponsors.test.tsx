@@ -43,7 +43,7 @@ describe("Sponsors", () => {
     const siliconSavannahLink = screen.getByLabelText(/Silicon Savannah Solutions/i);
     expect(siliconSavannahLink).toHaveAttribute(
       "href",
-      "https://siliconsavannah.solutions"
+      "https://siliconsavannahsolutions.com"
     );
     expect(siliconSavannahLink).toHaveAttribute("target", "_blank");
     expect(siliconSavannahLink).toHaveAttribute("rel", "noopener noreferrer");

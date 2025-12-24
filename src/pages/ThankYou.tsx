@@ -294,7 +294,7 @@ const ThankYou = () => {
                 <CardContent>
                   <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12 lg:gap-20 px-4">
                     <a
-                      href="https://siliconsavannah.solutions"
+                      href="https://siliconsavannahsolutions.com"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="group"

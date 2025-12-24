@@ -31,7 +31,7 @@ const Sponsors = () => {
             aria-labelledby="platinum-sponsors-heading"
           >
             <a 
-              href="https://siliconsavannah.solutions" 
+              href="https://siliconsavannahsolutions.com" 
               target="_blank" 
               rel="noopener noreferrer"
               className="group"
