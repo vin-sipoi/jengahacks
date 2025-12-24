@@ -53,8 +53,16 @@ describe("rateLimit", () => {
       expect(result.allowed).toBe(false);
       expect(result.retryAfter).toBeGreaterThan(0);
 
-      // Verify metric tracking
-      expect(monitor.trackMetric).toHaveBeenCalledWith('rate_limit_violation', 1);
+      // Verify metric tracking (with metadata)
+      expect(monitor.trackMetric).toHaveBeenCalledWith(
+        'rate_limit_violation',
+        1,
+        expect.objectContaining({
+          type: 'client',
+          identifier: 'client-localStorage',
+          attempt_count: '3'
+        })
+      );
     });
 
     it("should reset after window expires", () => {

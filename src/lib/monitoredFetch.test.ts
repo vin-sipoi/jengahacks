@@ -40,7 +40,9 @@ describe('monitoredFetch', () => {
         const url = 'https://api.example.com/data';
         await monitoredFetch(url);
 
-        expect(mockFetch).toHaveBeenCalledWith(url, undefined);
+        expect(mockFetch).toHaveBeenCalledWith(url, expect.objectContaining({
+            headers: expect.any(Headers)
+        }));
         expect(monitor.trackApiResponseTime).toHaveBeenCalledWith(
             '/data',
             100, // Duration (2nd call - 1st call = 200 - 100 = 100)
