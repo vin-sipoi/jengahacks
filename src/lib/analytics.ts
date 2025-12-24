@@ -192,6 +192,21 @@ export const trackSocialShare = (platform: string, contentType?: string, content
 };
 
 /**
+ * Track rate limit violation
+ */
+export const trackRateLimitViolation = (
+  violationType: "email" | "ip" | "client",
+  identifier?: string,
+  attemptCount?: number
+): void => {
+  trackEvent("rate_limit_violation", {
+    violation_type: violationType,
+    ...(identifier && { identifier: identifier.substring(0, 50) }),
+    ...(attemptCount && { attempt_count: attemptCount }),
+  });
+};
+
+/**
  * Check if GA is enabled
  */
 export const isGAEnabled = (): boolean => {

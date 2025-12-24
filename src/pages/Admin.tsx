@@ -52,28 +52,9 @@ const Admin = () => {
   }, []);
 
   const checkAuth = async () => {
-    try {
-      // TODO: Implement proper Supabase Auth for production security
-      const adminPassword = safeSessionStorage.getItem("admin_authenticated");
-      if (adminPassword === "authenticated") {
-        setIsAuthenticated(true);
-      } else {
-        // Prompt for password
-        const password = prompt(t("admin.enterPassword"));
-        if (password === import.meta.env.VITE_ADMIN_PASSWORD || password === "admin123") {
-          safeSessionStorage.setItem("admin_authenticated", "authenticated");
-          setIsAuthenticated(true);
-        } else {
-          toast.error(t("admin.unauthorized"));
-          navigate("/");
-        }
-      }
-    } catch (error) {
-      logger.error("Auth error", error instanceof Error ? error : new Error(String(error)));
-      navigate("/");
-    } finally {
-      setIsLoading(false);
-    }
+    // Auth is handled by useAdminAuth hook
+    // This function is kept for compatibility but doesn't need to do anything
+    // as useAdminAuth already handles authentication
   };
 
   const loadStats = async () => {
@@ -304,11 +285,4 @@ const Admin = () => {
 };
 
 export default Admin;
-function setIsAuthenticated(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
-
-function setIsLoading(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
 

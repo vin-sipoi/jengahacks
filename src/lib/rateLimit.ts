@@ -6,6 +6,7 @@
 import { safeLocalStorage } from "./polyfills";
 import { monitor } from "./monitoring";
 import { logger } from "./logger";
+import { trackClientRateLimitViolation } from "./rateLimitTracking";
 
 const RATE_LIMIT_KEY = 'jengahacks_rate_limit';
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -52,8 +53,12 @@ export const checkRateLimit = (): { allowed: boolean; retryAfter?: number } => {
     if (data.attempts >= MAX_SUBMISSIONS_PER_WINDOW) {
       const retryAfter = Math.ceil((RATE_LIMIT_WINDOW - timeSinceWindowStart) / 1000);
 
-      // Track violation
-      monitor.trackMetric('rate_limit_violation', 1);
+      // Track violation with enhanced tracking
+      trackClientRateLimitViolation(
+        'client-localStorage',
+        data.attempts,
+        retryAfter
+      );
 
       return { allowed: false, retryAfter };
     }

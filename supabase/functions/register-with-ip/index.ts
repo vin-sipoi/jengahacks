@@ -83,6 +83,40 @@ serve(async (req: Request) => {
         error.message?.includes("rate limit") ||
         error.code === "42501"
       ) {
+        // Log violation to database (non-blocking)
+        try {
+          // Get rate limit info to determine violation type and count
+          const { data: emailLimitInfo } = await supabase.rpc("get_rate_limit_info", {
+            p_email: email.toLowerCase().trim(),
+          });
+          
+          const { data: ipLimitInfo } = ipAddress
+            ? await supabase.rpc("get_ip_rate_limit_info", { p_ip_address: ipAddress })
+            : { data: null };
+
+          // Determine which limit was exceeded
+          if (emailLimitInfo && emailLimitInfo.length > 0 && !emailLimitInfo[0].allowed) {
+            // Email limit exceeded
+            await supabase.rpc("log_email_rate_limit_violation", {
+              p_email: email.toLowerCase().trim(),
+              p_attempt_count: emailLimitInfo[0].attempts,
+              p_user_agent: req.headers.get("user-agent") || null,
+              p_request_path: "/functions/v1/register-with-ip",
+            });
+          } else if (ipLimitInfo && ipLimitInfo.length > 0 && !ipLimitInfo[0].allowed) {
+            // IP limit exceeded
+            await supabase.rpc("log_ip_rate_limit_violation", {
+              p_ip_address: ipAddress,
+              p_attempt_count: ipLimitInfo[0].attempts,
+              p_user_agent: req.headers.get("user-agent") || null,
+              p_request_path: "/functions/v1/register-with-ip",
+            });
+          }
+        } catch (logError) {
+          // Don't fail the request if logging fails
+          console.error("[register-with-ip] Failed to log rate limit violation:", logError);
+        }
+
         return createErrorResponse(
           "Rate limit exceeded. Maximum 3 registrations per email or 5 per IP per hour.",
           429,
