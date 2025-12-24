@@ -13,6 +13,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 // Lazy load routes for code splitting
 const Index = lazy(() => import("./pages/Index"));
 const Sponsorship = lazy(() => import("./pages/Sponsorship"));
+const Prizes = lazy(() => import("./pages/Prizes"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const Admin = lazy(() => import("./pages/Admin"));
@@ -71,6 +72,7 @@ const AnimatedRoutes = () => {
         <Routes location={location}>
           <Route path="/" element={<Index />} />
           <Route path="/sponsorship" element={<Sponsorship />} />
+          <Route path="/prizes" element={<Prizes />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/admin" element={<Admin />} />

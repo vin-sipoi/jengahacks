@@ -68,7 +68,7 @@ const Navbar = () => {
 
     const navLinks = [
       { href: "#about", label: t("nav.about") },
-      { href: "#prizes", label: t("nav.prizes") },
+      { href: "/prizes", label: t("nav.prizes"), isRoute: true },
       { href: "#judges-mentors", label: t("nav.judgesMentors") },
       { href: "#faq", label: t("nav.faq") },
       { href: "/blog", label: t("nav.blog"), isRoute: true },
@@ -90,14 +90,14 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-4" aria-label={t("aria.desktopNavigation")}>
             {navLinks.map((link) => {
-              const isBlogOrSponsor = link.href === "/blog" || link.href === "/sponsorship";
+              const isRouteLink = link.href === "/blog" || link.href === "/sponsorship" || link.href === "/prizes";
               return link.isRoute ? (
                 <Link
                   key={link.href}
                   to={link.href}
                   className={cn(
                     "transition-all duration-300 font-medium relative group",
-                    isBlogOrSponsor 
+                    isRouteLink 
                       ? "text-[#999999] hover:text-[#999999]/80" 
                       : "text-primary hover:text-primary/80"
                   )}
@@ -105,7 +105,7 @@ const Navbar = () => {
                   {link.label}
                   <span className={cn(
                     "absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full",
-                    isBlogOrSponsor ? "bg-[#999999]" : "bg-primary"
+                    isRouteLink ? "bg-[#999999]" : "bg-primary"
                   )} />
                 </Link>
               ) : (
@@ -167,7 +167,7 @@ const Navbar = () => {
           <div className="border-t border-border pt-4">
             <div className="flex flex-col gap-3 animate-slide-in-down">
               {navLinks.map((link) => {
-                const isBlogOrSponsor = link.href === "/blog" || link.href === "/sponsorship";
+                const isRouteLink = link.href === "/blog" || link.href === "/sponsorship" || link.href === "/prizes";
                 return link.isRoute ? (
                   <Link
                     key={link.href}
@@ -175,7 +175,7 @@ const Navbar = () => {
                     role="menuitem"
                     className={cn(
                       "transition-all duration-300 font-medium transform hover:translate-x-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded px-2 py-1",
-                      isBlogOrSponsor 
+                      isRouteLink 
                         ? "text-[#999999] hover:text-[#999999]/80" 
                         : "text-primary hover:text-primary/80"
                     )}
