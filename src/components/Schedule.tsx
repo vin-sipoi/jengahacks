@@ -16,7 +16,7 @@ import {
 interface ScheduleItemProps {
   time: string;
   title: string;
-  icon: any;
+  icon: import("lucide-react").LucideIcon;
   isLast?: boolean;
 }
 

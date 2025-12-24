@@ -97,9 +97,9 @@ vi.mock("@/hooks/useTranslation", () => ({
 }));
 
 describe("Registration", () => {
-  let uploadMock: any;
-  let insertMock: any;
-  let invokeMock: any;
+  let uploadMock: ReturnType<typeof vi.fn>;
+  let insertMock: ReturnType<typeof vi.fn>;
+  let invokeMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -125,13 +125,20 @@ describe("Registration", () => {
       headers: {},
       fetch: vi.fn(),
       shouldThrowOnError: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     vi.mocked(supabase.from).mockReturnValue({
       insert: insertMock,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
-    vi.mocked(supabase.functions.invoke).mockImplementation(invokeMock);
+    vi.mocked(supabase.functions.invoke).mockImplementation(
+      invokeMock as unknown as (
+        functionName: string,
+        options?: Parameters<typeof supabase.functions.invoke>[1]
+      ) => ReturnType<typeof supabase.functions.invoke>
+    );
     
     // Set up default rpc mock
     vi.mocked(supabase.rpc).mockResolvedValue({ data: null, error: null, count: null, status: 200, statusText: "OK" });
@@ -279,7 +286,7 @@ describe("Registration", () => {
     
     // Wait for submission to complete
     await waitFor(() => {
-      expect(insertMock).toHaveBeenCalled();
+      expect(invokeMock).toHaveBeenCalled();
     }, { timeout: 5000 });
   });
 

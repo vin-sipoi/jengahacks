@@ -83,20 +83,22 @@ export const registrationService = {
     accessToken: string | null;
   }): Promise<{ registrationId: string | null; error?: Error }> {
     try {
-      const { data: registrationData, error: insertError } = await supabase
-        .from("registrations")
-        .insert({
-          full_name: data.fullName,
-          email: data.email,
-          whatsapp_number: data.whatsapp || null,
-          linkedin_url: data.linkedIn || null,
-          resume_path: data.resumePath || null,
-          is_waitlist: isWaitlist,
-          access_token: accessToken || undefined,
-        })
-        .select("id")
-        .single();
+      const { data: registrationData, error: insertError } = await supabase.functions.invoke(
+        "register-with-ip",
+        {
+          body: {
+            full_name: data.fullName,
+            email: data.email,
+            whatsapp_number: data.whatsapp || null,
+            linkedin_url: data.linkedIn || null,
+            resume_path: data.resumePath || null,
+            is_waitlist: isWaitlist,
+            access_token: accessToken || undefined,
+          },
+        }
+      );
 
+      // Handle function error structure (which might wrap errors)
       if (insertError) {
         logger.error(
           "Registration insert error",
@@ -106,7 +108,15 @@ export const registrationService = {
         return { registrationId: null, error: insertError };
       }
 
-      return { registrationId: registrationData?.id || null };
+      // Check for success in the response data 
+      if (registrationData && !registrationData.success) {
+        // Re-construct error from response if success is false
+        const error = new Error(registrationData.error || "Registration failed");
+        logger.error("Registration function error", error, { email: data.email, fullName: data.fullName });
+        return { registrationId: null, error };
+      }
+
+      return { registrationId: registrationData?.data?.id || null };
     } catch (error) {
       logger.error(
         "Registration insert error",

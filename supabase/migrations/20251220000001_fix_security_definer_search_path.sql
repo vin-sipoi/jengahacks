@@ -1,7 +1,7 @@
 -- Fix SECURITY DEFINER search_path vulnerability
 -- This migration addresses the DEFINER_OR_RPC_BYPASS security issue
--- by setting search_path to empty string for all SECURITY DEFINER functions
--- This prevents search_path manipulation attacks
+-- by setting search_path to pg_catalog, public for all SECURITY DEFINER functions
+-- This prevents search_path manipulation attacks while allowing unqualified public schema references
 
 -- Fix check_registration_rate_limit function
 CREATE OR REPLACE FUNCTION check_registration_rate_limit(
@@ -11,7 +11,7 @@ CREATE OR REPLACE FUNCTION check_registration_rate_limit(
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = pg_catalog, public
 AS $$
 DECLARE
   v_email_count INTEGER;
@@ -60,7 +60,7 @@ RETURNS TABLE(
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = pg_catalog, public
 AS $$
 DECLARE
   v_recent_count INTEGER;
@@ -97,7 +97,7 @@ CREATE OR REPLACE FUNCTION check_ip_rate_limit(
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = pg_catalog, public
 AS $$
 DECLARE
   v_recent_count INTEGER;
@@ -133,7 +133,7 @@ RETURNS TABLE(
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = pg_catalog, public
 AS $$
 DECLARE
   v_recent_count INTEGER;
@@ -169,9 +169,9 @@ END;
 $$;
 
 -- Update function comments to document security fix
-COMMENT ON FUNCTION check_registration_rate_limit IS 'Checks if email (3/hour) or IP (5/hour) has exceeded rate limit. Uses SECURITY DEFINER with SET search_path = '' to prevent search_path manipulation attacks.';
-COMMENT ON FUNCTION get_rate_limit_info IS 'Returns rate limit status and retry information for an email. Uses SECURITY DEFINER with SET search_path = '' to prevent search_path manipulation attacks.';
-COMMENT ON FUNCTION check_ip_rate_limit IS 'Checks if IP address has exceeded rate limit of 5 registrations per hour. Uses SECURITY DEFINER with SET search_path = '' to prevent search_path manipulation attacks.';
-COMMENT ON FUNCTION get_ip_rate_limit_info IS 'Returns IP-based rate limit status and retry information. Uses SECURITY DEFINER with SET search_path = '' to prevent search_path manipulation attacks.';
+COMMENT ON FUNCTION check_registration_rate_limit IS 'Checks if email (3/hour) or IP (5/hour) has exceeded rate limit. Uses SECURITY DEFINER with SET search_path = pg_catalog, public to prevent search_path manipulation attacks.';
+COMMENT ON FUNCTION get_rate_limit_info IS 'Returns rate limit status and retry information for an email. Uses SECURITY DEFINER with SET search_path = pg_catalog, public to prevent search_path manipulation attacks.';
+COMMENT ON FUNCTION check_ip_rate_limit IS 'Checks if IP address has exceeded rate limit of 5 registrations per hour. Uses SECURITY DEFINER with SET search_path = pg_catalog, public to prevent search_path manipulation attacks.';
+COMMENT ON FUNCTION get_ip_rate_limit_info IS 'Returns IP-based rate limit status and retry information. Uses SECURITY DEFINER with SET search_path = pg_catalog, public to prevent search_path manipulation attacks.';
 
 

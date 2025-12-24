@@ -20,7 +20,7 @@ export function handleCORS(req: Request) {
 /**
  * Creates a standard JSON response with CORS headers.
  */
-export function createResponse(body: any, status = 200) {
+export function createResponse(body: unknown, status = 200) {
     return new Response(JSON.stringify(body), {
         status,
         headers: {

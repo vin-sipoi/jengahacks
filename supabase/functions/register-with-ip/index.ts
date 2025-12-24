@@ -12,6 +12,7 @@ interface RegistrationData {
   linkedin_url?: string | null;
   resume_path?: string | null;
   is_waitlist?: boolean;
+  access_token?: string;
 }
 
 serve(async (req: Request) => {
@@ -37,7 +38,7 @@ serve(async (req: Request) => {
       ipAddress = null;
     }
 
-    const { full_name, email, whatsapp_number, linkedin_url, resume_path, is_waitlist }: RegistrationData =
+    const { full_name, email, whatsapp_number, linkedin_url, resume_path, is_waitlist, access_token }: RegistrationData =
       await req.json();
 
     // Validate required fields
@@ -68,6 +69,7 @@ serve(async (req: Request) => {
         resume_path: resume_path || null,
         ip_address: ipAddress,
         is_waitlist: shouldWaitlist || false,
+        access_token: access_token || null,
       })
       .select()
       .single();

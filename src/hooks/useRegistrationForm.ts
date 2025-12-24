@@ -81,7 +81,7 @@ export const useRegistrationForm = () => {
         setErrors((prev) => ({ ...prev, [name]: undefined }));
       }
     },
-    [validateField]
+    [validateField, t]
   );
 
   const validateAllFields = useCallback(
@@ -110,7 +110,7 @@ export const useRegistrationForm = () => {
 
       return newErrors;
     },
-    [formData, hasLinkedIn, hasResume, validateField, t]
+    [formData, hasLinkedIn, hasResume, validateFieldRef, t]
   );
 
   const resetForm = useCallback(() => {

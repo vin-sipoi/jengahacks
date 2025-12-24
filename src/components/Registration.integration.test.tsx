@@ -171,8 +171,7 @@ describe("Registration Integration Tests", () => {
     mockFunctionsInvoke = vi.fn().mockResolvedValue({ data: null, error: null, count: null, status: 200, statusText: "OK" });
 
     // Set up mocked functions for supabase.storage.from to fully match StorageFileApi 
-     
-    vi.mocked(supabase.storage.from).mockImplementation(((bucket: string) => ({
+    vi.mocked(supabase.storage.from).mockReturnValue({
       upload: uploadMock,
       download: vi.fn(),
       createSignedUrl: vi.fn(),
@@ -187,13 +186,15 @@ describe("Registration Integration Tests", () => {
       fetch: vi.fn(),
       shouldThrowOnError: true,
       throwOnError: vi.fn(),
-    } as any)) as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
 
     // Set up mocked functions for supabase.from to return required table methods
      
     vi.mocked(supabase.from).mockImplementation(() =>
       ({
         insert: insertMock,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any)
     );
 
@@ -242,15 +243,18 @@ describe("Registration Integration Tests", () => {
 
       // Wait for submission to complete
       await waitFor(() => {
-        expect(insertMock).toHaveBeenCalled();
+        expect(mockFunctionsInvoke).toHaveBeenCalled();
       }, { timeout: 5000 });
 
-      // Verify database insert was called with correct data
-      expect(insertMock).toHaveBeenCalledWith(
+      // Verify Edge Function was called with correct data
+      expect(mockFunctionsInvoke).toHaveBeenCalledWith(
+        "register-with-ip",
         expect.objectContaining({
-          full_name: expect.stringMatching(/John\s*Doe/),
-          email: "john.doe@example.com",
-          linkedin_url: expect.stringContaining("linkedin.com/in/johndoe"),
+          body: expect.objectContaining({
+            full_name: expect.stringMatching(/John\s*Doe/),
+            email: "john.doe@example.com",
+            linkedin_url: expect.stringContaining("linkedin.com/in/johndoe"),
+          }),
         })
       );
 
@@ -307,9 +311,9 @@ describe("Registration Integration Tests", () => {
         file
       );
 
-      // Wait for database insert
+      // Wait for database insert (via Edge Function)
       await waitFor(() => {
-        expect(insertMock).toHaveBeenCalled();
+        expect(mockFunctionsInvoke).toHaveBeenCalled();
       }, { timeout: 10000 });
 
       // Verify success
@@ -348,16 +352,16 @@ describe("Registration Integration Tests", () => {
 
       // Wait for submission
       await waitFor(() => {
-        expect(insertMock).toHaveBeenCalled();
+        expect(mockFunctionsInvoke).toHaveBeenCalled();
       }, { timeout: 10000 });
 
       // Verify WhatsApp number was included (normalized format)
-      const insertCalls = insertMock.mock.calls;
-      expect(insertCalls.length).toBeGreaterThan(0);
-      const lastCall = insertCalls[insertCalls.length - 1][0];
-      expect(lastCall).toMatchObject(
+      expect(mockFunctionsInvoke).toHaveBeenCalledWith(
+        expect.any(String),
         expect.objectContaining({
-          whatsapp_number: expect.stringMatching(/254712345678|\+254712345678/),
+          body: expect.objectContaining({
+            whatsapp_number: expect.stringMatching(/254712345678|\+254712345678/),
+          }),
         })
       );
 
@@ -400,8 +404,8 @@ describe("Registration Integration Tests", () => {
         expect(toast.error).toHaveBeenCalled();
       }, { timeout: 10000 });
 
-      // Verify database insert was NOT called
-      expect(insertMock).not.toHaveBeenCalled();
+      // Verify Edge Function was NOT called
+      expect(mockFunctionsInvoke).not.toHaveBeenCalled();
 
       // Note: Rate limit errors don't currently call trackRegistration
       // This is expected behavior - rate limiting happens before submission
@@ -446,8 +450,8 @@ describe("Registration Integration Tests", () => {
       await waitFor(() => {
         // Upload error toast should be shown
         expect(toast.error).toHaveBeenCalled();
-        // Insert should still be called (registration continues even if upload fails)
-        expect(insertMock).toHaveBeenCalled();
+        // Insert (invoke) should still be called (registration continues even if upload fails)
+        expect(mockFunctionsInvoke).toHaveBeenCalled();
       }, { timeout: 10000 });
 
       // If insert succeeds, registration is successful (upload error is non-blocking)
@@ -526,7 +530,7 @@ describe("Registration Integration Tests", () => {
       });
 
       // Verify no submission occurred
-      expect(insertMock).not.toHaveBeenCalled();
+      expect(mockFunctionsInvoke).not.toHaveBeenCalled();
       expect(toast.success).not.toHaveBeenCalled();
     });
 
@@ -557,7 +561,7 @@ describe("Registration Integration Tests", () => {
         expect(screen.getByText(/Please provide either your LinkedIn profile or upload your resume/i)).toBeInTheDocument();
       }, { timeout: 10000 });
 
-      expect(insertMock).not.toHaveBeenCalled();
+      expect(mockFunctionsInvoke).not.toHaveBeenCalled();
     });
   });
 
@@ -565,9 +569,10 @@ describe("Registration Integration Tests", () => {
     it("should handle database errors gracefully", async () => {
       const user = userEvent.setup();
       
-      // Mock database insert to fail (duplicate email)
-      insertMock.mockResolvedValueOnce({
-        error: { message: "Database error", code: "23505" },
+      // Mock function invoke to fail
+      mockFunctionsInvoke.mockResolvedValueOnce({
+        data: { success: false, error: "Database error" },
+        error: null // The function call itself succeeds, but returns application error
       });
 
       render(<Registration />);
@@ -592,7 +597,8 @@ describe("Registration Integration Tests", () => {
       // Wait for error handling
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalled();
-        expect(insertMock).toHaveBeenCalled();
+        expect(mockFunctionsInvoke).toHaveBeenCalled();
+        // Since we mock the function response to be success: false, the service throws "Database error" or "Registration failed"
       }, { timeout: 10000 });
 
       // Verify error was tracked - database errors should call trackRegistration(false)
@@ -634,8 +640,8 @@ describe("Registration Integration Tests", () => {
         // Should show error for missing CAPTCHA - look for the specific error message
         const captchaError = screen.getByText(/Please complete the CAPTCHA|complete.*CAPTCHA/i);
         expect(captchaError).toBeInTheDocument();
-        // Form should not submit (insertMock should not be called)
-        expect(insertMock).not.toHaveBeenCalled();
+        // Form should not submit
+        expect(mockFunctionsInvoke).not.toHaveBeenCalled();
       }, { timeout: 5000 });
     });
   });
@@ -666,7 +672,7 @@ describe("Registration Integration Tests", () => {
       // Wait for success and form submission
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalled();
-        expect(insertMock).toHaveBeenCalled();
+        expect(mockFunctionsInvoke).toHaveBeenCalled();
       }, { timeout: 15000 });
 
       // Verify form was reset - form resets after successful submission

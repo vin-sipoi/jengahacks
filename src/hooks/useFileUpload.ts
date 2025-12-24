@@ -87,7 +87,7 @@ export const useFileUpload = () => {
         };
       }
     },
-    [validateFile]
+    [validateFileRef]
   );
 
   const resetFileInput = useCallback(() => {
