@@ -16,7 +16,7 @@ ADD COLUMN IF NOT EXISTS access_token TEXT UNIQUE;
 
 -- Generate access tokens for existing registrations
 UPDATE public.registrations 
-SET access_token = encode(gen_random_bytes(32), 'base64')
+SET access_token = replace(gen_random_uuid()::text, '-', '')
 WHERE access_token IS NULL;
 
 -- Create trigger to automatically generate access token for new registrations
@@ -28,7 +28,7 @@ SET search_path = ''
 AS $$
 BEGIN
   IF NEW.access_token IS NULL THEN
-    NEW.access_token := encode(gen_random_bytes(32), 'base64');
+    NEW.access_token := replace(gen_random_uuid()::text, '-', '');
   END IF;
   RETURN NEW;
 END;
@@ -57,9 +57,9 @@ SET search_path = ''
 AS $$
 BEGIN
   -- Generate a URL-safe base64 token (32 bytes = 44 characters)
-  RETURN encode(gen_random_bytes(32), 'base64')
+  RETURN replace(gen_random_uuid()::text, '-', '')
     -- Replace URL-unsafe characters
-    || encode(gen_random_bytes(4), 'base64');
+    || substring(md5(random()::text), 1, 8);
 END;
 $$;
 
