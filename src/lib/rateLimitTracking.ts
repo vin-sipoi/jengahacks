@@ -48,7 +48,7 @@ export const trackClientRateLimitViolation = (
     monitor.trackMetric("rate_limit_violation", 1, {
       type: "client",
       identifier: identifier.substring(0, 50), // Limit length
-      attempt_count: attemptCount,
+      attempt_count: String(attemptCount),
     });
 
     // Track in analytics

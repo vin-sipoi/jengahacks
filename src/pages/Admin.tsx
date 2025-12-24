@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, Users, Phone, FileText, Calendar } from "lucide-react";
 import RegistrationsTable from "@/components/admin/RegistrationsTable";
 import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
+import RateLimitViolations from "@/components/admin/RateLimitViolations";
 import { toast } from "sonner";
 import { useTranslation } from "@/hooks/useTranslation";
 import { formatDateTimeShort } from "@/lib/i18n";
@@ -268,6 +269,7 @@ const Admin = () => {
             <TabsList role="tablist" aria-label="Dashboard sections">
               <TabsTrigger value="registrations" role="tab" aria-controls="registrations-panel">{t("admin.registrations")}</TabsTrigger>
               <TabsTrigger value="analytics" role="tab" aria-controls="analytics-panel">{t("admin.analytics")}</TabsTrigger>
+              <TabsTrigger value="rateLimits" role="tab" aria-controls="rateLimits-panel">{t("admin.rateLimits")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="registrations" className="space-y-4" id="registrations-panel" role="tabpanel" aria-labelledby="registrations-tab">
@@ -276,6 +278,10 @@ const Admin = () => {
 
             <TabsContent value="analytics" className="space-y-4" id="analytics-panel" role="tabpanel" aria-labelledby="analytics-tab">
               <AnalyticsDashboard stats={stats} />
+            </TabsContent>
+
+            <TabsContent value="rateLimits" className="space-y-4" id="rateLimits-panel" role="tabpanel" aria-labelledby="rateLimits-tab">
+              <RateLimitViolations />
             </TabsContent>
           </Tabs>
         </section>
