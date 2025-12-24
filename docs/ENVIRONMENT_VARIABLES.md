@@ -363,44 +363,18 @@ VITE_SENTRY_RELEASE=abc123def456
 **Type:** `string`  
 **Required:** ❌ No  
 **Example:** `https://api.example.com/blog/posts`  
-**Description:** API endpoint for fetching blog posts.
+**Description:** Optional API endpoint for fetching blog posts.
 
 **Usage:**
-- Used by blog feature to fetch posts
-- Falls back to RSS feed if not provided
+- Used as a fallback if local blog.json file is empty or unavailable
+- Blog posts are primarily stored in `src/content/blog.json`
 - Can be used for custom blog API integration
 
 **Format:**
 - Must return JSON array of blog post objects
 - See `src/lib/blog.ts` for expected format
 
----
-
-#### `VITE_BLOG_RSS_URL`
-
-**Type:** `string`  
-**Required:** ❌ No  
-**Example:** `https://medium.com/feed/@jengahacks`  
-**Description:** RSS feed URL for blog posts.
-
-**Usage:**
-- Primary source for blog posts if API URL not provided
-- Parsed to extract blog post data
-- Supports Medium, WordPress, and other RSS feeds
-
----
-
-#### `VITE_RSS_PROXY_URL`
-
-**Type:** `string`  
-**Required:** ❌ No  
-**Example:** `https://rss-proxy.example.com`  
-**Description:** CORS proxy URL for RSS feeds.
-
-**Usage:**
-- Used when RSS feed doesn't allow CORS
-- Proxy must support RSS feed forwarding
-- Falls back to direct RSS URL if not provided
+**Note:** The blog system uses local JSON storage (`src/content/blog.json`) as the primary data source. The API endpoint is only used as an optional fallback.
 
 ---
 
@@ -1172,8 +1146,6 @@ const isEnabled = import.meta.env.VITE_GA_ENABLED; // This is a string!
 - [ ] `VITE_LOCALE`
 - [ ] `VITE_TIMEZONE`
 - [ ] `VITE_BLOG_API_URL`
-- [ ] `VITE_BLOG_RSS_URL`
-- [ ] `VITE_RSS_PROXY_URL`
 
 ---
 
@@ -1219,10 +1191,8 @@ VITE_DISCORD_URL=https://discord.gg/jengahacks
 VITE_LOCALE=en
 VITE_TIMEZONE=Africa/Nairobi
 
-# Blog (optional)
+# Blog (optional - uses local blog.json by default)
 VITE_BLOG_API_URL=https://api.example.com/blog/posts
-VITE_BLOG_RSS_URL=https://medium.com/feed/@jengahacks
-VITE_RSS_PROXY_URL=https://rss-proxy.example.com
 ```
 
 ---

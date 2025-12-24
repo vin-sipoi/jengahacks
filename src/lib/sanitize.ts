@@ -5,7 +5,7 @@
 import DOMPurify from "dompurify";
 
 /**
- * Sanitize HTML content from external sources (e.g., RSS feeds, blog posts)
+ * Sanitize HTML content from blog posts
  * This prevents XSS attacks by removing dangerous HTML/JavaScript
  * 
  * @param html - Raw HTML string from external source
@@ -63,11 +63,11 @@ export const sanitizeHtml = (
 
 /**
  * Sanitize and render HTML content safely
- * Use this when rendering content from external sources like Medium RSS feeds
+ * Use this when rendering HTML content from blog posts
  * 
  * @example
  * ```tsx
- * const blogContent = sanitizeHtml(mediumRssFeedItem.content);
+ * const blogContent = sanitizeHtml(blogPost.content);
  * <div dangerouslySetInnerHTML={{ __html: blogContent }} />
  * ```
  */

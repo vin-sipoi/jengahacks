@@ -1,10 +1,11 @@
 /**
  * Blog utilities for fetching and managing blog posts
- * Supports multiple data sources: API, RSS feed, CMS, or static content
+ * Uses local JSON file (blog.json) as the primary data source
+ * Optionally supports API endpoint as a fallback
  */
 
 import { logger } from "./logger";
-import { EXCERPT_MAX_LENGTH } from "./constants";
+import blogData from "@/content/blog.json";
 
 export interface BlogPost {
   id: string;
@@ -20,85 +21,8 @@ export interface BlogPost {
 }
 
 /**
- * Fetch blog posts from configured source
- * Priority: API endpoint > RSS feed > Static content
- */
-export const fetchBlogPosts = async (limit?: number): Promise<BlogPost[]> => {
-  const apiUrl = import.meta.env.VITE_BLOG_API_URL;
-  const rssUrl = import.meta.env.VITE_BLOG_RSS_URL;
-
-  try {
-    // Try API endpoint first
-    if (apiUrl) {
-      const response = await fetch(apiUrl);
-      if (response.ok) {
-        const data = await response.json();
-        const posts = Array.isArray(data) ? data : data.posts || [];
-        return limit ? posts.slice(0, limit) : posts;
-      }
-    }
-
-    // Try RSS feed
-    if (rssUrl) {
-      const posts = await fetchRSSFeed(rssUrl);
-      return limit ? posts.slice(0, limit) : posts;
-    }
-  } catch (error) {
-    logger.error("Error fetching blog posts", error instanceof Error ? error : new Error(String(error)), { apiUrl, rssUrl });
-  }
-
-  // Fallback to empty array or mock data in development
-  if (import.meta.env.DEV) {
-    return getPosts(limit);
-  }
-
-  return [];
-};
-
-/**
- * Fetch and parse RSS feed
- */
-const fetchRSSFeed = async (rssUrl: string): Promise<BlogPost[]> => {
-  try {
-    // Use a CORS proxy or backend endpoint for RSS parsing
-    // RSS parsing requires server-side processing or a CORS-enabled RSS parser
-    const proxyUrl = import.meta.env.VITE_RSS_PROXY_URL || rssUrl;
-    const response = await fetch(proxyUrl);
-    const text = await response.text();
-
-    // Parse RSS XML (simplified - use a proper RSS parser library in production)
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(text, "text/xml");
-    const items = xml.querySelectorAll("item");
-
-    return Array.from(items).map((item, index) => {
-      const title = item.querySelector("title")?.textContent || "";
-      const description = item.querySelector("description")?.textContent || "";
-      const link = item.querySelector("link")?.textContent || "";
-      const pubDate = item.querySelector("pubDate")?.textContent || "";
-      const author = item.querySelector("author")?.textContent || item.querySelector("dc:creator")?.textContent || "";
-
-      return {
-        id: `rss-${index}`,
-        title,
-        excerpt: description.substring(0, EXCERPT_MAX_LENGTH) + (description.length > EXCERPT_MAX_LENGTH ? "..." : ""),
-        content: description,
-        author,
-        publishedAt: pubDate,
-        externalUrl: link,
-        readTime: Math.ceil(description.length / 1000), // Rough estimate
-      };
-    });
-  } catch (error) {
-    logger.error("Error parsing RSS feed", error instanceof Error ? error : new Error(String(error)), { rssUrl });
-    return [];
-  }
-};
-
-import blogData from "@/content/blog.json";
-
-/**
- * Get blog posts from static JSON file
+ * Get blog posts from local JSON file
+ * This is the primary data source for blog posts
  */
 export const getPosts = (limit?: number): BlogPost[] => {
   const posts = blogData as BlogPost[];
@@ -109,6 +33,39 @@ export const getPosts = (limit?: number): BlogPost[] => {
   );
 
   return limit ? sortedPosts.slice(0, limit) : sortedPosts;
+};
+
+/**
+ * Fetch blog posts from configured source
+ * Priority: Local JSON file > API endpoint (if configured)
+ */
+export const fetchBlogPosts = async (limit?: number): Promise<BlogPost[]> => {
+  // Always use local JSON file first
+  try {
+    const posts = getPosts(limit);
+    if (posts.length > 0) {
+      return posts;
+    }
+  } catch (error) {
+    logger.error("Error loading blog posts from local file", error instanceof Error ? error : new Error(String(error)));
+  }
+
+  // Fallback to API endpoint if configured (optional)
+  const apiUrl = import.meta.env.VITE_BLOG_API_URL;
+  if (apiUrl) {
+    try {
+      const response = await fetch(apiUrl);
+      if (response.ok) {
+        const data = await response.json();
+        const posts = Array.isArray(data) ? data : data.posts || [];
+        return limit ? posts.slice(0, limit) : posts;
+      }
+    } catch (error) {
+      logger.error("Error fetching blog posts from API", error instanceof Error ? error : new Error(String(error)), { apiUrl });
+    }
+  }
+
+  return [];
 };
 
 import { formatDate as i18nFormatDate, formatDateShort as i18nFormatDateShort } from "./i18n";
@@ -131,15 +88,25 @@ export const formatBlogDateShort = (dateString: string): string => {
 
 /**
  * Fetch a single blog post by ID
+ * Uses local JSON file as primary source
  */
 export const fetchBlogPost = async (id: string): Promise<BlogPost | null> => {
-  const apiUrl = import.meta.env.VITE_BLOG_API_URL;
-  const rssUrl = import.meta.env.VITE_BLOG_RSS_URL;
-
+  // Always check local JSON file first
   try {
-    // Try API endpoint first
-    if (apiUrl) {
-      // If API supports individual post fetching
+    const posts = getPosts();
+    const post = posts.find((post) => post.id === id);
+    if (post) {
+      return post;
+    }
+  } catch (error) {
+    logger.error("Error loading blog post from local file", error instanceof Error ? error : new Error(String(error)), { id });
+  }
+
+  // Fallback to API endpoint if configured (optional)
+  const apiUrl = import.meta.env.VITE_BLOG_API_URL;
+  if (apiUrl) {
+    try {
+      // Try individual post endpoint first
       const postUrl = `${apiUrl}/${id}`;
       const response = await fetch(postUrl);
       if (response.ok) {
@@ -154,21 +121,9 @@ export const fetchBlogPost = async (id: string): Promise<BlogPost | null> => {
         const posts = Array.isArray(data) ? data : data.posts || [];
         return posts.find((post: BlogPost) => post.id === id) || null;
       }
+    } catch (error) {
+      logger.error("Error fetching blog post from API", error instanceof Error ? error : new Error(String(error)), { id, apiUrl });
     }
-
-    // Try RSS feed
-    if (rssUrl) {
-      const posts = await fetchRSSFeed(rssUrl);
-      return posts.find((post) => post.id === id) || null;
-    }
-  } catch (error) {
-    logger.error("Error fetching blog post", error instanceof Error ? error : new Error(String(error)), { id, apiUrl, rssUrl });
-  }
-
-  // Fallback to mock data in development
-  if (import.meta.env.DEV) {
-    const Posts = getPosts();
-    return Posts.find((post) => post.id === id) || null;
   }
 
   return null;

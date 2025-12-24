@@ -57,25 +57,28 @@ describe("blog utilities", () => {
   });
 
   describe("fetchBlogPosts", () => {
-    it("should return mock posts in development when no API configured", async () => {
-      // Mock environment variables
-      const originalEnv = import.meta.env;
+    it("should return posts from local JSON file", async () => {
       vi.stubEnv("VITE_BLOG_API_URL", "");
-      vi.stubEnv("VITE_BLOG_RSS_URL", "");
-      vi.stubEnv("DEV", true);
 
       const posts = await fetchBlogPosts();
       expect(posts.length).toBeGreaterThan(0);
+      expect(posts[0]).toHaveProperty("id");
+      expect(posts[0]).toHaveProperty("title");
     });
 
-    it("should handle API fetch errors gracefully", async () => {
+    it("should limit posts when limit is provided", async () => {
+      const posts = await fetchBlogPosts(2);
+      expect(posts.length).toBe(2);
+    });
+
+    it("should handle API fetch errors gracefully and fallback to local", async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
       vi.stubEnv("VITE_BLOG_API_URL", "https://api.example.com/posts");
-      vi.stubEnv("DEV", true);
 
       const posts = await fetchBlogPosts();
-      // Should fallback to mock posts in dev
+      // Should fallback to local posts
       expect(Array.isArray(posts)).toBe(true);
+      expect(posts.length).toBeGreaterThan(0);
     });
   });
 });
