@@ -57,8 +57,8 @@ export async function getPaginatedRegistrations(
 
   try {
     // Use full-text search function if search term provided and enabled
-    const functionName = search && useFullTextSearch 
-      ? "get_registrations_paginated_fts" 
+    const functionName = search && useFullTextSearch
+      ? "get_registrations_paginated_fts"
       : "get_registrations_paginated";
 
     const { data, error } = await callRpc<
@@ -341,7 +341,7 @@ export async function setCachedQuery<T>(
   try {
     await callRpc("set_cached_query", {
       p_cache_key: cacheKey,
-      p_cache_data: cacheData as any,
+      p_cache_data: cacheData as unknown,
       p_ttl_seconds: ttlSeconds,
       p_query_type: queryType,
     });

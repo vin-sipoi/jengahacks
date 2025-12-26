@@ -81,7 +81,7 @@ export const useRegistrationForm = () => {
         setErrors((prev) => ({ ...prev, [name]: undefined }));
       }
     },
-    [validateField, t]
+    [t]
   );
 
   const validateAllFields = useCallback(

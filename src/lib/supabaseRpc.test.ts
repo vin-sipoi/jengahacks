@@ -17,7 +17,7 @@ describe('supabaseRpc', () => {
   describe('callRpc', () => {
     it('should return data on successful RPC call', async () => {
       const mockData = { result: 'success', value: 42 };
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: mockData,
         error: null,
       });
@@ -31,7 +31,7 @@ describe('supabaseRpc', () => {
 
     it('should return error on failed RPC call', async () => {
       const mockError = { message: 'RPC failed', code: 'PGRST116' };
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: null,
         error: mockError,
       });
@@ -47,7 +47,7 @@ describe('supabaseRpc', () => {
 
     it('should handle non-Error error objects', async () => {
       const mockError = { message: 'Error message' };
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: null,
         error: mockError,
       });
@@ -62,7 +62,7 @@ describe('supabaseRpc', () => {
 
     it('should handle exceptions thrown during RPC call', async () => {
       const thrownError = new Error('Network error');
-      (supabase.rpc as any).mockRejectedValue(thrownError);
+      vi.mocked(supabase.rpc).mockRejectedValue(thrownError);
 
       const result = await callRpc('test_function', { param: 'value' });
 
@@ -72,7 +72,7 @@ describe('supabaseRpc', () => {
     });
 
     it('should handle non-Error exceptions', async () => {
-      (supabase.rpc as any).mockRejectedValue('String error');
+      vi.mocked(supabase.rpc).mockRejectedValue('String error');
 
       const result = await callRpc('test_function');
 
@@ -83,7 +83,7 @@ describe('supabaseRpc', () => {
 
     it('should work with empty args', async () => {
       const mockData = { result: 'success' };
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: mockData,
         error: null,
       });
@@ -96,7 +96,7 @@ describe('supabaseRpc', () => {
     });
 
     it('should handle null data response', async () => {
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: null,
         error: null,
       });
@@ -111,7 +111,7 @@ describe('supabaseRpc', () => {
   describe('callRpcOrThrow', () => {
     it('should return data on successful RPC call', async () => {
       const mockData = { result: 'success', value: 42 };
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: mockData,
         error: null,
       });
@@ -123,7 +123,7 @@ describe('supabaseRpc', () => {
 
     it('should throw error on failed RPC call', async () => {
       const mockError = { message: 'RPC failed', code: 'PGRST116' };
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: null,
         error: mockError,
       });
@@ -138,7 +138,7 @@ describe('supabaseRpc', () => {
     });
 
     it('should throw error when data is null', async () => {
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: null,
         error: null,
       });
@@ -150,14 +150,14 @@ describe('supabaseRpc', () => {
 
     it('should throw error on exception during RPC call', async () => {
       const thrownError = new Error('Network error');
-      (supabase.rpc as any).mockRejectedValue(thrownError);
+      vi.mocked(supabase.rpc).mockRejectedValue(thrownError);
 
       await expect(callRpcOrThrow('test_function')).rejects.toThrow('Network error');
     });
 
     it('should work with empty args', async () => {
       const mockData = { result: 'success' };
-      (supabase.rpc as any).mockResolvedValue({
+      vi.mocked(supabase.rpc).mockResolvedValue({
         data: mockData,
         error: null,
       });
