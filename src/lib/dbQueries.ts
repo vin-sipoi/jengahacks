@@ -293,19 +293,8 @@ async function getRegistrationStatsFallback(): Promise<RegistrationStats> {
  * Call this periodically or after bulk operations
  */
 export async function refreshStatsView(): Promise<void> {
-  try {
-    const { error } = await supabase.rpc("refresh_registration_stats");
-    if (error) {
-      throw error;
-    }
-  } catch (error) {
-    // Materialized view refresh might not be available, ignore error
-    // Only log warnings in development
-    const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';
-    if (isDevelopment) {
-      console.warn("Could not refresh stats view", error);
-    }
-  }
+  // Materialized view refresh is not implemented - this is a no-op
+  // The feature can be added later via database migration if needed
 }
 
 /**
@@ -313,19 +302,8 @@ export async function refreshStatsView(): Promise<void> {
  * Call this periodically to keep views up to date
  */
 export async function refreshAllMaterializedViews(): Promise<void> {
-  try {
-    const { error } = await supabase.rpc("refresh_all_materialized_views");
-    if (error) {
-      throw error;
-    }
-  } catch (error) {
-    // Materialized view refresh might not be available, ignore error
-    // Only log warnings in development
-    const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';
-    if (isDevelopment) {
-      console.warn("Could not refresh materialized views", error);
-    }
-  }
+  // Materialized view refresh is not implemented - this is a no-op
+  // The feature can be added later via database migration if needed
 }
 
 /**

@@ -19,12 +19,7 @@ serve(async (req: Request) => {
     }
 
     // Create admin client with service role key (bypasses RLS)
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    });
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get authorization header - REQUIRED for authenticated access
     const authHeader = req.headers.get("Authorization");

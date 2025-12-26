@@ -9,8 +9,8 @@ export const corsHeaders = {
  */
 export function handleCORS(req: Request) {
     if (req.method === "OPTIONS") {
-        return new Response("ok", {
-            status: 204, // No content for preflight
+        return new Response(null, {
+            status: 204,
             headers: corsHeaders
         });
     }
