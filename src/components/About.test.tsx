@@ -24,6 +24,28 @@ describe("About", () => {
     expect(screen.getByText("Learn & Grow")).toBeInTheDocument();
   });
 
+  it("should have correct links for feature cards", () => {
+    render(<About />);
+    
+    // Build & Ship -> /#register
+    const buildCard = screen.getByText("Build & Ship").closest("a");
+    expect(buildCard).toHaveAttribute("href", "/#register");
+
+    // Network -> /judges-mentors
+    const networkCard = screen.getByText("Network").closest("a");
+    expect(networkCard).toHaveAttribute("href", "/judges-mentors");
+
+    // Learn & Grow -> /#schedule
+    const learnCard = screen.getByText("Learn & Grow").closest("a");
+    expect(learnCard).toHaveAttribute("href", "/#schedule");
+
+    // Win Big -> No link (div)
+    const winCard = screen.getByText("Win Big").closest("a");
+    expect(winCard).not.toBeInTheDocument();
+    const winCardDiv = screen.getByText("Win Big").closest("div.block");
+    expect(winCardDiv).toBeInTheDocument();
+  });
+
   it("should render feature descriptions", () => {
     render(<About />);
     expect(

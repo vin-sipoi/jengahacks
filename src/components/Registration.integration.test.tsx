@@ -231,8 +231,6 @@ describe("Registration Integration Tests", () => {
 
       await user.type(nameInput, "John Doe");
       await user.type(emailInput, "john.doe@example.com");
-      await user.type(nameInput, "John Doe");
-      await user.type(emailInput, "john.doe@example.com");
       const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
       await user.type(whatsappInput, "+254712345678");
       await user.type(linkedInInput, "linkedin.com/in/johndoe");
@@ -289,8 +287,6 @@ describe("Registration Integration Tests", () => {
       const nameInput = screen.getByLabelText(/Full Name/i);
       const emailInput = screen.getByLabelText(/Email Address/i);
       const resumeInput = screen.getByLabelText(/Resume/i);
-
-      await user.type(nameInput, "Jane Smith");
       await user.type(nameInput, "Jane Smith");
       await user.type(emailInput, "jane.smith@example.com");
       const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
@@ -398,8 +394,6 @@ describe("Registration Integration Tests", () => {
 
       await user.type(nameInput, "David Lee");
       await user.type(emailInput, "david@example.com");
-      await user.type(nameInput, "David Lee");
-      await user.type(emailInput, "david@example.com");
       const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
       await user.type(whatsappInput, "+254733445566");
       await user.type(linkedInInput, "linkedin.com/in/david");
@@ -445,8 +439,6 @@ describe("Registration Integration Tests", () => {
       const nameInput = screen.getByLabelText(/Full Name/i);
       const emailInput = screen.getByLabelText(/Email Address/i);
       const resumeInput = screen.getByLabelText(/Resume/i);
-
-      await user.type(nameInput, "Eve Adams");
       await user.type(nameInput, "Eve Adams");
       await user.type(emailInput, "eve@example.com");
       const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
@@ -543,9 +535,7 @@ describe("Registration Integration Tests", () => {
       // Wait for validation errors
       await waitFor(() => {
         expect(screen.getByText(/Full name is required/i)).toBeInTheDocument();
-        expect(screen.getByText(/Full name is required/i)).toBeInTheDocument();
         expect(screen.getByText(/Email address is required/i)).toBeInTheDocument();
-        expect(screen.getByText(/WhatsApp number is required/i)).toBeInTheDocument();
         expect(screen.getByText(/WhatsApp number is required/i)).toBeInTheDocument();
       });
 
@@ -564,6 +554,8 @@ describe("Registration Integration Tests", () => {
 
       await user.type(nameInput, "Frank Miller");
       await user.type(emailInput, "frank@example.com");
+      const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
+      await user.type(whatsappInput, "+254755667788");
 
       // Complete CAPTCHA
       const captchaTrigger = screen.getByTestId("recaptcha-trigger");
@@ -601,8 +593,6 @@ describe("Registration Integration Tests", () => {
       const emailInput = screen.getByLabelText(/Email Address/i);
       const linkedInInput = screen.getByLabelText(/LinkedIn Profile/i);
 
-      await user.type(nameInput, "Grace Hopper");
-      await user.type(emailInput, "grace@example.com");
       await user.type(nameInput, "Grace Hopper");
       await user.type(emailInput, "grace@example.com");
       const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
@@ -649,8 +639,6 @@ describe("Registration Integration Tests", () => {
 
       await user.type(nameInput, "Henry Ford");
       await user.type(emailInput, "henry@example.com");
-      await user.type(nameInput, "Henry Ford");
-      await user.type(emailInput, "henry@example.com");
       const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);
       await user.type(whatsappInput, "+254777889900");
       await user.type(linkedInInput, "linkedin.com/in/henry");
@@ -684,8 +672,6 @@ describe("Registration Integration Tests", () => {
       const emailInput = screen.getByLabelText(/Email Address/i) as HTMLInputElement;
       const linkedInInput = screen.getByLabelText(/LinkedIn Profile/i) as HTMLInputElement;
 
-      await user.type(nameInput, "Iris Watson");
-      await user.type(emailInput, "iris@example.com");
       await user.type(nameInput, "Iris Watson");
       await user.type(emailInput, "iris@example.com");
       const whatsappInput = screen.getByLabelText(/WhatsApp Number/i);

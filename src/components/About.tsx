@@ -1,4 +1,5 @@
 import { Code, Users, Trophy, Lightbulb, MessageSquare, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -11,11 +12,13 @@ const About = () => {
       icon: Code,
       title: t("about.features.build.title"),
       description: t("about.features.build.description"),
+      link: "/#register",
     },
     {
       icon: Users,
       title: t("about.features.network.title"),
       description: t("about.features.network.description"),
+      link: "/judges-mentors",
     },
     {
       icon: Trophy,
@@ -26,6 +29,7 @@ const About = () => {
       icon: Lightbulb,
       title: t("about.features.learn.title"),
       description: t("about.features.learn.description"),
+      link: "/#schedule",
     },
   ];
   return (
@@ -47,20 +51,31 @@ const About = () => {
         </header>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6" role="list" aria-label="Event features">
-          {features.map((feature, index) => (
-            <article
-              key={feature.title}
-              role="listitem"
-              className="group p-4 sm:p-6 bg-card border border-border rounded-lg sm:rounded-xl hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/20 transition-colors" aria-hidden="true">
-                <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+          {features.map((feature, index) => {
+            const Card = (
+              <article
+                role="listitem"
+                className="group p-4 sm:p-6 bg-card border border-border rounded-lg sm:rounded-xl hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 h-full"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/20 transition-colors" aria-hidden="true">
+                  <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                </div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-sm sm:text-base text-muted-foreground">{feature.description}</p>
+              </article>
+            );
+
+            return feature.link ? (
+              <Link key={feature.title} to={feature.link} className="block h-full">
+                {Card}
+              </Link>
+            ) : (
+              <div key={feature.title} className="block h-full">
+                {Card}
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm sm:text-base text-muted-foreground">{feature.description}</p>
-            </article>
-          ))}
+            );
+          })}
         </div>
 
         {/* Tracks */}
