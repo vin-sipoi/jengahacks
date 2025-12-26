@@ -112,6 +112,7 @@ vi.mock("@/hooks/useTranslation", () => ({
         "registration.errors.resumeInvalidType": "Please upload a PDF file (.pdf extension required)",
         "registration.errors.resumeType": "Please upload a PDF file (.pdf extension required)",
         "registration.errors.captchaRequired": "Please complete the CAPTCHA",
+        "registration.errors.whatsappRequired": "WhatsApp number is required",
         "registration.errors.rateLimit": "Too many registration attempts. Please try again after {time}.",
         "registration.errors.failed": "Registration failed. Please try again.",
         "common.selected": "Selected",

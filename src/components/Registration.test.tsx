@@ -73,6 +73,7 @@ vi.mock("@/hooks/useTranslation", () => ({
         "registration.errors.fullNameInvalid": "Please enter a valid full name (2-100 characters, letters and spaces only)",
         "registration.errors.emailRequired": "Email address is required",
         "registration.errors.emailInvalid": "Please enter a valid email address",
+        "registration.errors.whatsappRequired": "WhatsApp number is required",
         "registration.errors.whatsappInvalid": "Please enter a valid WhatsApp number (e.g., +254712345678 or 0712345678)",
         "registration.errors.linkedinInvalid": "Please enter a valid LinkedIn URL (e.g., linkedin.com/in/yourprofile)",
         "registration.errors.resumeRequired": "Please provide either your LinkedIn profile or upload your resume",
