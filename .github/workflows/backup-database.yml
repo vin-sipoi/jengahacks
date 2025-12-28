@@ -32,10 +32,12 @@ jobs:
         with:
           version: latest
 
-      - name: Login to Supabase
-        run: supabase login --token ${{ secrets.SUPABASE }}
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE }}
+      - name: Check Supabase Secret
+        run: |
+          if [ -z "${{ secrets.SUPABASE_ACCESS_TOKEN }}" ]; then
+            echo "❌ SUPABASE_ACCESS_TOKEN is not set in GitHub Secrets"
+            exit 1
+          fi
 
       - name: Create backup directory
         run: mkdir -p backups/database
@@ -47,6 +49,7 @@ jobs:
           gzip "$BACKUP_FILE"
           echo "BACKUP_FILE=${BACKUP_FILE}.gz" >> $GITHUB_ENV
         env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
 
       - name: Verify backup integrity
@@ -132,10 +135,12 @@ jobs:
         with:
           version: latest
 
-      - name: Login to Supabase
-        run: supabase login --token ${{ secrets.SUPABASE }}
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE }}
+      - name: Check Supabase Secret
+        run: |
+          if [ -z "${{ secrets.SUPABASE_ACCESS_TOKEN }}" ]; then
+            echo "❌ SUPABASE_ACCESS_TOKEN is not set in GitHub Secrets"
+            exit 1
+          fi
 
       - name: Create backup directory
         run: mkdir -p backups/database
@@ -147,6 +152,7 @@ jobs:
           gzip "$BACKUP_FILE"
           echo "BACKUP_FILE=${BACKUP_FILE}.gz" >> $GITHUB_ENV
         env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           STAGING_SUPABASE_PROJECT_REF: ${{ secrets.STAGING_SUPABASE_PROJECT_REF }}
 
       - name: Verify backup integrity
