@@ -12,6 +12,23 @@ test.describe('Registration Flow', () => {
     await page.waitForLoadState('networkidle');
     // Scroll to registration section
     await page.locator('#register').scrollIntoViewIfNeeded();
+
+    // Mock RPC calls
+    await page.route('**/rest/v1/rpc/should_add_to_waitlist', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(false),
+      });
+    });
+
+    await page.route('**/rest/v1/rpc/generate_access_token', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify('mock-token'),
+      });
+    });
   });
 
   test('should display registration form', async ({ page }) => {
@@ -55,7 +72,7 @@ test.describe('Registration Flow', () => {
     const submitButton = page.getByRole('button', { name: /Complete Registration/i });
     await submitButton.click();
 
-    await expect(page.getByText(/LinkedIn profile or resume is required/i)).toBeVisible();
+    await expect(page.getByText(/provide either your LinkedIn profile or upload your resume/i)).toBeVisible();
   });
 
   test('should show success message after successful registration', async ({ page }) => {

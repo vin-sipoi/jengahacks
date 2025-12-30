@@ -52,3 +52,9 @@ coverage
 # Misc
 .cache
 .turbo
+
+.cursorrules/*
+
+
+# Sentry Config File
+.env.sentry-build-plugin

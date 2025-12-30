@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -8,17 +9,45 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  plugins: [react()].filter(Boolean),
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@supabase/supabase-js',
+      'framer-motion',
+      'lucide-react',
+    ],
+    esbuildOptions: {
+      target: 'es2020',
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  plugins: [
+    react(),
+    // Put the Sentry vite plugin after all other plugins
+    ...(process.env.SENTRY_AUTH_TOKEN
+      ? [
+          sentryVitePlugin({
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+            org: "visana",
+            project: "javascript-react",
+          }),
+        ]
+      : []),
+  ],
   build: {
     target: ["es2015", "edge88", "firefox78", "chrome87", "safari14"],
     cssTarget: ["chrome64", "firefox67", "safari12"],
     minify: "esbuild",
-    polyfillModulePreload: true,
+    sourcemap: true, // Source map generation must be turned on
+    modulePreload: {
+      polyfill: true,
+    },
     // Generate manifest for better caching
     manifest: true,
     rollupOptions: {
@@ -26,7 +55,7 @@ export default defineConfig(({ mode }) => ({
         // Add content hash to filenames for better caching
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: (assetInfo) => {
+        assetFileNames: (assetInfo: { name?: string }) => {
           // Different cache strategies for different asset types
           if (assetInfo.name?.endsWith('.css')) {
             return 'assets/[name]-[hash].css';

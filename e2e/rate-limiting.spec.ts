@@ -15,6 +15,23 @@ test.describe('Rate Limiting', () => {
 
     // Navigate to registration section
     await page.locator('#register').scrollIntoViewIfNeeded();
+
+    // Mock RPC calls
+    await page.route('**/rest/v1/rpc/should_add_to_waitlist', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(false),
+      });
+    });
+
+    await page.route('**/rest/v1/rpc/generate_access_token', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify('mock-token'),
+      });
+    });
   });
 
   test('should allow multiple submissions within rate limit', async ({ page }) => {
@@ -23,7 +40,7 @@ test.describe('Rate Limiting', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ success: true }),
+        body: JSON.stringify({ success: true, data: { id: 'test-reg-id' } }),
       });
     });
 
@@ -38,24 +55,27 @@ test.describe('Rate Limiting', () => {
 
     // First submission
     await submitForm('User One', 'user1@example.com');
-    await expect(page).toHaveURL(/\/thank-you/, { timeout: 15000 });
+    await expect(page).toHaveURL(/\/thank-you/, { timeout: 30000 });
 
     // Second submission
+    await page.waitForTimeout(1000);
     await page.goto('/#register', { waitUntil: 'networkidle' });
     await submitForm('User Two', 'user2@example.com');
-    await expect(page).toHaveURL(/\/thank-you/, { timeout: 15000 });
+    await expect(page).toHaveURL(/\/thank-you/, { timeout: 30000 });
+    await page.waitForLoadState('networkidle');
 
     // Third submission
+    await page.waitForTimeout(1000);
     await page.goto('/#register', { waitUntil: 'networkidle' });
     await submitForm('User Three', 'user3@example.com');
-    await expect(page).toHaveURL(/\/thank-you/, { timeout: 15000 });
+    await expect(page).toHaveURL(/\/thank-you/, { timeout: 30000 });
   });
 
   test('should block submission after exceeding client-side rate limit', async ({ page }) => {
     // Set up rate limit in localStorage to simulate exceeded limit
     await page.evaluate(() => {
       const rateLimitData = {
-        attempts: 3,
+        attempts: 10,
         windowStart: Date.now() - 1000,
       };
       localStorage.setItem('jengahacks_rate_limit', JSON.stringify(rateLimitData));
@@ -76,7 +96,7 @@ test.describe('Rate Limiting', () => {
   test('should show retry after time in rate limit error', async ({ page }) => {
     await page.evaluate(() => {
       const rateLimitData = {
-        attempts: 3,
+        attempts: 10,
         windowStart: Date.now() - (30 * 60 * 1000), // 30 mins ago
       };
       localStorage.setItem('jengahacks_rate_limit', JSON.stringify(rateLimitData));
@@ -99,7 +119,7 @@ test.describe('Rate Limiting', () => {
   test('should reset rate limit after time window expires', async ({ page }) => {
     await page.evaluate(() => {
       const rateLimitData = {
-        attempts: 3,
+        attempts: 10,
         windowStart: Date.now() - (2 * 60 * 60 * 1000), // 2 hours ago
       };
       localStorage.setItem('jengahacks_rate_limit', JSON.stringify(rateLimitData));

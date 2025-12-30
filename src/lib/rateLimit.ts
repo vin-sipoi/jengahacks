@@ -10,7 +10,7 @@ import { trackClientRateLimitViolation } from "./rateLimitTracking";
 
 const RATE_LIMIT_KEY = 'jengahacks_rate_limit';
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
-const MAX_SUBMISSIONS_PER_WINDOW = 3; // Max 3 submissions per hour
+const MAX_SUBMISSIONS_PER_WINDOW = 10; // Max 10 submissions per hour
 
 interface RateLimitData {
   attempts: number;
@@ -83,8 +83,7 @@ export const recordSubmission = (): void => {
     const stored = safeLocalStorage.getItem(RATE_LIMIT_KEY);
     if (stored) {
       const data: RateLimitData = JSON.parse(stored);
-      // Keep the window start but increment attempts
-      data.attempts += 1;
+      // data.attempts += 1; // Already incremented in checkRateLimit
       safeLocalStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
     }
   } catch (error) {

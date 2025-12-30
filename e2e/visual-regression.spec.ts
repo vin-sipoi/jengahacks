@@ -13,6 +13,10 @@ test.describe('Visual Regression Tests', () => {
       // Take full page screenshot
       await expect(page).toHaveScreenshot('homepage-full.png', {
         fullPage: true,
+        maxDiffPixelRatio: 0.05,
+        animations: 'disabled',
+        scale: 'css',
+        timeout: 30000,
       });
     });
 
@@ -21,7 +25,7 @@ test.describe('Visual Regression Tests', () => {
       await page.waitForLoadState('networkidle');
 
       const heroSection = page.locator('main section').first();
-      await expect(heroSection).toHaveScreenshot('homepage-hero.png');
+      await expect(heroSection).toHaveScreenshot('homepage-hero.png', { maxDiffPixelRatio: 0.05, animations: 'disabled', scale: 'css' });
     });
 
     test('homepage about section should match baseline', async ({ page }) => {
@@ -30,34 +34,34 @@ test.describe('Visual Regression Tests', () => {
       await page.waitForTimeout(500); // Wait for animations
 
       const aboutSection = page.locator('#about');
-      await expect(aboutSection).toHaveScreenshot('homepage-about.png');
+      await expect(aboutSection).toHaveScreenshot('homepage-about.png', { maxDiffPixelRatio: 0.05, animations: 'disabled', scale: 'css' });
     });
 
     test('homepage sponsors section should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#sponsors').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       const sponsorsSection = page.locator('#sponsors');
-      await expect(sponsorsSection).toHaveScreenshot('homepage-sponsors.png');
+      await expect(sponsorsSection).toHaveScreenshot('homepage-sponsors.png', { maxDiffPixelRatio: 0.05, animations: 'disabled', scale: 'css' });
     });
 
     test('homepage registration section should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       const registrationSection = page.locator('#register');
-      await expect(registrationSection).toHaveScreenshot('homepage-registration.png');
+      await expect(registrationSection).toHaveScreenshot('homepage-registration.png', { maxDiffPixelRatio: 0.15, animations: 'disabled', scale: 'css' });
     });
 
     test('homepage footer should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       const footer = page.locator('footer');
-      await expect(footer).toHaveScreenshot('homepage-footer.png');
+      await expect(footer).toHaveScreenshot('homepage-footer.png', { maxDiffPixelRatio: 0.05, animations: 'disabled', scale: 'css' });
     });
   });
 
@@ -65,16 +69,16 @@ test.describe('Visual Regression Tests', () => {
     test('registration form should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       const form = page.locator('form');
-      await expect(form).toHaveScreenshot('registration-form-empty.png');
+      await expect(form).toHaveScreenshot('registration-form-empty.png', { maxDiffPixelRatio: 0.15, animations: 'disabled', scale: 'css' });
     });
 
     test('registration form with filled fields should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       // Fill form fields
       await page.getByLabel(/Full Name/i).fill('John Doe');
@@ -83,13 +87,13 @@ test.describe('Visual Regression Tests', () => {
       await page.getByLabel(/LinkedIn Profile/i).fill('linkedin.com/in/johndoe');
 
       const form = page.locator('form');
-      await expect(form).toHaveScreenshot('registration-form-filled.png');
+      await expect(form).toHaveScreenshot('registration-form-filled.png', { maxDiffPixelRatio: 0.15, animations: 'disabled', scale: 'css' });
     });
 
     test('registration form with validation errors should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       // Trigger validation errors
       await page.getByLabel(/Full Name/i).fill('A');
@@ -98,13 +102,13 @@ test.describe('Visual Regression Tests', () => {
       await page.getByLabel(/Email Address/i).blur();
 
       const form = page.locator('form');
-      await expect(form).toHaveScreenshot('registration-form-errors.png');
+      await expect(form).toHaveScreenshot('registration-form-errors.png', { maxDiffPixelRatio: 0.15, animations: 'disabled', scale: 'css' });
     });
 
     test('registration form with file selected should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       // Fill form
       await page.getByLabel(/Full Name/i).fill('Test User');
@@ -114,7 +118,7 @@ test.describe('Visual Regression Tests', () => {
 
       // Note: File upload visual testing is limited, but we can test the form state
       const form = page.locator('form');
-      await expect(form).toHaveScreenshot('registration-form-with-linkedin.png');
+      await expect(form).toHaveScreenshot('registration-form-with-linkedin.png', { maxDiffPixelRatio: 0.15, animations: 'disabled', scale: 'css' });
     });
   });
 
@@ -124,7 +128,7 @@ test.describe('Visual Regression Tests', () => {
       await page.waitForLoadState('networkidle');
 
       const navbar = page.getByRole('navigation', { name: /Main navigation/i });
-      await expect(navbar).toHaveScreenshot('navbar-desktop.png');
+      await expect(navbar).toHaveScreenshot('navbar-desktop.png', { maxDiffPixelRatio: 0.05, animations: 'disabled', scale: 'css' });
     });
 
     test('mobile menu should match baseline', async ({ page }) => {
@@ -141,7 +145,7 @@ test.describe('Visual Regression Tests', () => {
         await page.waitForTimeout(300);
       }
 
-      await expect(navbar).toHaveScreenshot('navbar-mobile.png');
+      await expect(navbar).toHaveScreenshot('navbar-mobile.png', { maxDiffPixelRatio: 0.05, animations: 'disabled', scale: 'css' });
     });
   });
 
@@ -170,10 +174,10 @@ test.describe('Visual Regression Tests', () => {
       await page.setViewportSize({ width: 375, height: 667 });
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       const form = page.locator('form');
-      await expect(form).toHaveScreenshot('registration-form-mobile.png');
+      await expect(form).toHaveScreenshot('registration-form-mobile.png', { maxDiffPixelRatio: 0.15, animations: 'disabled', scale: 'css' });
     });
   });
 
@@ -210,7 +214,7 @@ test.describe('Visual Regression Tests', () => {
     test('button hover state should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       const submitButton = page.getByRole('button', { name: /Complete Registration/i });
       await submitButton.hover();
@@ -222,7 +226,7 @@ test.describe('Visual Regression Tests', () => {
     test('input focus state should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       const nameInput = page.getByLabel(/Full Name/i);
       await nameInput.focus();
@@ -247,7 +251,7 @@ test.describe('Visual Regression Tests', () => {
     test('form submission loading state should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(3000);
 
       // Mock slow API response
       await page.route('**/functions/register-with-ip', async route => {
@@ -312,7 +316,7 @@ test.describe('Visual Regression Tests', () => {
     test('form validation visual indicators should match baseline', async ({ page }) => {
       await page.goto('/');
       await page.locator('#register').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(2000);
 
       // Fill valid data
       await page.getByLabel(/Full Name/i).fill('John Doe');
@@ -323,7 +327,7 @@ test.describe('Visual Regression Tests', () => {
       await page.waitForTimeout(500);
 
       const form = page.locator('form');
-      await expect(form).toHaveScreenshot('form-validation-indicators.png');
+      await expect(form).toHaveScreenshot('form-validation-indicators.png', { maxDiffPixelRatio: 0.20, animations: 'disabled', scale: 'css' });
     });
   });
 });

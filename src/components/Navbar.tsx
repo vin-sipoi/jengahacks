@@ -69,6 +69,7 @@ const Navbar = () => {
 
     const navLinks = [
       { href: "#about", label: t("nav.about") },
+      { href: "#sponsors", label: t("nav.sponsors") },
       { href: "/prizes", label: t("nav.prizes"), isRoute: true },
       { href: "/judges-mentors", label: t("nav.judgesMentors"), isRoute: true },
       { href: "/faq", label: t("nav.faq"), isRoute: true },
@@ -209,9 +210,15 @@ const Navbar = () => {
               <div className="pt-2 border-t border-border">
                 <LanguageSwitcher variant="compact" className="w-full justify-start" />
               </div>
-              <Button variant="hero" size="sm" asChild>
-                <a href="#register" onClick={() => setIsOpen(false)}>{t("common.joinNow")}</a>
-              </Button>
+                <Button variant="hero" size="sm" asChild>
+                  <a 
+                    href="#register" 
+                    aria-label={`${t("common.joinNow")} - ${t("aria.navigateToRegistration")}`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {t("common.joinNow")}
+                  </a>
+                </Button>
             </div>
           </div>
         </div>
