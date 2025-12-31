@@ -4,6 +4,7 @@ test.describe('Rate Limiting', () => {
   test.beforeEach(async ({ page }) => {
     // Disable CAPTCHA for testing via the runtime override
     await page.addInitScript(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).VITE_RECAPTCHA_SITE_KEY = '';
     });
 

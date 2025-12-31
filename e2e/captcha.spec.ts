@@ -6,6 +6,7 @@ test.describe('CAPTCHA Integration', () => {
   test('should not render CAPTCHA when site key is overridden to empty', async ({ page }) => {
     // Disable CAPTCHA for testing via the runtime override
     await page.addInitScript(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).VITE_RECAPTCHA_SITE_KEY = '';
     });
 
@@ -20,6 +21,7 @@ test.describe('CAPTCHA Integration', () => {
   test('should handle missing CAPTCHA site key gracefully', async ({ page }) => {
     // Force site key to be empty
     await page.addInitScript(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).VITE_RECAPTCHA_SITE_KEY = '';
     });
 

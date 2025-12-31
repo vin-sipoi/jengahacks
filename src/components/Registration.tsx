@@ -31,8 +31,8 @@ const Registration = () => {
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const hasCompletedRef = useRef(false);
 
-  const RECAPTCHA_SITE_KEY = (window as any).VITE_RECAPTCHA_SITE_KEY !== undefined 
-    ? (window as any).VITE_RECAPTCHA_SITE_KEY 
+  const RECAPTCHA_SITE_KEY = window.VITE_RECAPTCHA_SITE_KEY !== undefined 
+    ? window.VITE_RECAPTCHA_SITE_KEY 
     : (import.meta.env.VITE_RECAPTCHA_SITE_KEY || "");
   const [hasStartedTracking, setHasStartedTracking] = useState(false);
 
