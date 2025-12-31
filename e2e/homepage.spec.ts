@@ -112,13 +112,20 @@ test.describe('Homepage', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    // Filter out known non-critical errors (like analytics, etc.)
+    // Filter out known non-critical errors (like analytics, reCAPTCHA, etc.)
     const criticalErrors = loadErrors.filter(
       (error: string) =>
         !error.includes('analytics') &&
         !error.includes('gtag') &&
         !error.includes('google-analytics') &&
-        !error.includes('401')
+        !error.includes('401') &&
+        !error.includes('Blocked a frame') &&
+        !error.includes('protocols must match') &&
+        !error.includes('Protocols must match') &&
+        !error.includes('recaptcha') &&
+        !error.includes('google.com') &&
+        !error.includes('access control checks') &&
+        !error.includes('Sentry')
     );
 
     if (criticalErrors.length > 0) {

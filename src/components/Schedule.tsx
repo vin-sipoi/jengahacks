@@ -44,7 +44,7 @@ const Schedule = () => {
   const day1Events = [
     { time: "08:00 AM", title: t("schedule.events.checkin"), icon: Coffee },
     { time: "09:30 AM", title: t("schedule.events.opening"), icon: Presentation },
-    { time: "11:00 AM", title: t("schedule.events.hackingStarts"), icon: Code },
+    { time: "10:30 AM", title: t("schedule.events.hackingStarts"), icon: Code },
     { time: "01:00 PM", title: t("schedule.events.lunch"), icon: Utensils },
     { time: "03:00 PM", title: t("schedule.events.workshopSupabase"), icon: Lightbulb },
     { time: "07:00 PM", title: t("schedule.events.dinner"), icon: Utensils },

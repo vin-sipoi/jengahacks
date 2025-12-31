@@ -1,0 +1,349 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - link "Skip to main content" [ref=e4]:
+      - /url: "#main-content"
+    - generic [ref=e5]:
+      - navigation "Main navigation" [ref=e6]:
+        - generic [ref=e8]:
+          - link "JengaHacks Home - Navigate to homepage" [ref=e9]:
+            - /url: /
+            - generic [ref=e10]:
+              - img [ref=e11]
+              - generic [ref=e20]: JengaHacks
+          - navigation "Desktop navigation" [ref=e21]:
+            - link "About" [ref=e22]:
+              - /url: "#about"
+              - text: About
+            - link "Sponsors" [ref=e23]:
+              - /url: "#sponsors"
+              - text: Sponsors
+            - link "Prizes" [ref=e24]:
+              - /url: /prizes
+              - text: Prizes
+            - link "Judges & Mentors" [ref=e25]:
+              - /url: /judges-mentors
+              - text: Judges & Mentors
+            - link "FAQ" [ref=e26]:
+              - /url: /faq
+              - text: FAQ
+            - link "Blog" [ref=e27]:
+              - /url: /blog
+              - text: Blog
+            - link "Become a Sponsor" [ref=e28]:
+              - /url: /sponsorship
+              - text: Become a Sponsor
+            - button "English" [ref=e29] [cursor=pointer]:
+              - img
+              - generic [ref=e30]: English
+            - link "Join Now - Navigate to registration form" [ref=e31]:
+              - /url: "#register"
+              - text: Join Now
+      - main [ref=e32]:
+        - region "JengaHacks 2026 - East Africa's Premier Hackathon" [ref=e33]:
+          - generic [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e40]
+              - heading "JENGAHACKS" [level=1] [ref=e41]
+              - paragraph [ref=e42]: Built in Nairobi. Ready for the World.
+            - paragraph [ref=e43]: 36 hours of innovation, collaboration, and building solutions that matter. Join East Africa's premier hackathon.
+            - list "Event details" [ref=e44]:
+              - listitem [ref=e45]:
+                - img [ref=e46]
+                - time [ref=e48]: February 21-22, 2026
+              - listitem [ref=e49]:
+                - img [ref=e50]
+                - 'generic "Event location: Nairobi, Kenya" [ref=e53]': Nairobi, Kenya
+            - navigation "Main actions" [ref=e54]:
+              - link "Register Now - Navigate to registration form" [ref=e55]:
+                - /url: "#register"
+                - text: Register Now
+                - img
+              - link "Learn More - Navigate to about section" [ref=e56]:
+                - /url: "#about"
+                - text: Learn More
+            - group "Event statistics" [ref=e57]:
+              - generic [ref=e58]:
+                - generic "100 plus" [ref=e59]: 100+
+                - generic [ref=e60]: Hackers
+              - generic [ref=e61]:
+                - generic "36" [ref=e62]
+                - generic [ref=e63]: Hours
+            - button "Scroll down to see more content" [ref=e64] [cursor=pointer]
+        - region "Why JengaHacks?" [ref=e68]:
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - heading "Why JengaHacks?" [level=2] [ref=e72]
+              - paragraph [ref=e73]: We're building the future of Kenyan technology, one hack at a time.
+            - list "Event features" [ref=e74]:
+              - link "Build & Ship 36 hours to turn your ideas into working prototypes with mentorship from industry experts." [ref=e75]:
+                - /url: /#register
+                - listitem [ref=e76]:
+                  - img [ref=e78]
+                  - heading "Build & Ship" [level=3] [ref=e81]
+                  - paragraph [ref=e82]: 36 hours to turn your ideas into working prototypes with mentorship from industry experts.
+              - link "Network Connect with fellow developers, designers, and entrepreneurs from across East Africa." [ref=e83]:
+                - /url: /judges-mentors
+                - listitem [ref=e84]:
+                  - img [ref=e86]
+                  - heading "Network" [level=3] [ref=e91]
+                  - paragraph [ref=e92]: Connect with fellow developers, designers, and entrepreneurs from across East Africa.
+              - link "Win Big Compete for prizes, mentorship opportunities, and the glory of it all." [ref=e93]:
+                - /url: /prizes
+                - listitem [ref=e94]:
+                  - img [ref=e96]
+                  - heading "Win Big" [level=3] [ref=e102]
+                  - paragraph [ref=e103]: Compete for prizes, mentorship opportunities, and the glory of it all.
+              - link "Learn & Grow Workshops, talks, and hands-on sessions with leading tech companies and innovators." [ref=e104]:
+                - /url: /#schedule
+                - listitem [ref=e105]:
+                  - img [ref=e107]
+                  - heading "Learn & Grow" [level=3] [ref=e109]
+                  - paragraph [ref=e110]: Workshops, talks, and hands-on sessions with leading tech companies and innovators.
+            - generic [ref=e111]:
+              - heading "Hackathon Tracks" [level=3] [ref=e112]
+              - list "Hackathon Tracks" [ref=e113]:
+                - 'listitem "Hackathon track: FinTech" [ref=e114]': FinTech
+                - 'listitem "Hackathon track: HealthTech" [ref=e115]': HealthTech
+                - 'listitem "Hackathon track: AgriTech" [ref=e116]': AgriTech
+                - 'listitem "Hackathon track: EdTech" [ref=e117]': EdTech
+                - 'listitem "Hackathon track: Climate Tech" [ref=e118]': Climate Tech
+                - 'listitem "Hackathon track: JobTech" [ref=e119]': JobTech
+                - 'listitem "Hackathon track: AI/ML" [ref=e120]': AI/ML
+                - 'listitem "Hackathon track: Open Innovation" [ref=e121]': Open Innovation
+            - complementary "Community information" [ref=e122]:
+              - generic [ref=e123]:
+                - img [ref=e125]
+                - heading "Join Our Community" [level=3] [ref=e127]
+                - paragraph [ref=e128]: Connect with participants, mentors, and organizers on Discord. Get updates, ask questions, and network!
+                - link "Join Discord Server - Opens Discord community in new tab" [ref=e129]:
+                  - /url: https://discord.com/invite/dU5g936a
+                  - img
+                  - text: Join Discord Server
+                  - img
+        - region "Our Sponsors" [ref=e131]:
+          - generic [ref=e132]:
+            - heading "Our Sponsors" [level=2] [ref=e134]
+            - generic [ref=e135]:
+              - heading "Platinum Partners" [level=3] [ref=e136]
+              - list "Platinum Partners" [ref=e137]:
+                - listitem "Silicon Savannah Solutions - Platinum sponsor - Opens in new tab" [ref=e138]:
+                  - img [ref=e140]
+                - 'listitem "Adamur - #BeyondCode - Platinum sponsor - Opens in new tab" [ref=e141]':
+                  - img [ref=e143]
+                - listitem "PromptBI - Platinum sponsor - Opens in new tab" [ref=e144]:
+                  - img [ref=e146]
+            - generic [ref=e147]:
+              - heading "Gold Partners" [level=3] [ref=e148]
+              - list "Gold Partners" [ref=e149]:
+                - listitem "Twinist - Gold sponsor - Opens in new tab" [ref=e150]:
+                  - img [ref=e152]
+            - complementary "Become a sponsor" [ref=e153]:
+              - generic [ref=e154]:
+                - heading "Become a Sponsor" [level=3] [ref=e155]
+                - paragraph [ref=e156]: Partner with us to shape the future of technology in East Africa.
+                - link "Join Us → - Navigate to sponsorship page" [ref=e157]:
+                  - /url: /sponsorship
+                  - text: Join Us →
+        - generic [ref=e160]:
+          - generic [ref=e161]:
+            - generic [ref=e162]:
+              - img [ref=e163]
+              - text: Timeline
+            - heading "Event Schedule" [level=2] [ref=e165]
+            - paragraph [ref=e166]: 36 hours of non-stop building, learning, and fun. Plan your weekend accordingly.
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - heading "Saturday, Feb 21" [level=3] [ref=e171]
+              - generic [ref=e172]:
+                - generic [ref=e174]:
+                  - img [ref=e177]
+                  - generic [ref=e179]:
+                    - generic [ref=e180]:
+                      - img [ref=e181]
+                      - text: 08:00 AM
+                    - heading "Check-in & Breakfast" [level=4] [ref=e184]
+                - generic [ref=e186]:
+                  - img [ref=e189]
+                  - generic [ref=e192]:
+                    - generic [ref=e193]:
+                      - img [ref=e194]
+                      - text: 09:30 AM
+                    - heading "Opening Ceremony" [level=4] [ref=e197]
+                - generic [ref=e199]:
+                  - img [ref=e202]
+                  - generic [ref=e205]:
+                    - generic [ref=e206]:
+                      - img [ref=e207]
+                      - text: 10:30 AM
+                    - heading "Hacking Starts" [level=4] [ref=e210]
+                - generic [ref=e212]:
+                  - img [ref=e215]
+                  - generic [ref=e218]:
+                    - generic [ref=e219]:
+                      - img [ref=e220]
+                      - text: 01:00 PM
+                    - heading "Lunch" [level=4] [ref=e223]
+                - generic [ref=e225]:
+                  - img [ref=e228]
+                  - generic [ref=e230]:
+                    - generic [ref=e231]:
+                      - img [ref=e232]
+                      - text: 03:00 PM
+                    - 'heading "Workshop: Building with Supabase" [level=4] [ref=e235]'
+                - generic [ref=e237]:
+                  - img [ref=e240]
+                  - generic [ref=e243]:
+                    - generic [ref=e244]:
+                      - img [ref=e245]
+                      - text: 07:00 PM
+                    - heading "Dinner" [level=4] [ref=e248]
+                - generic [ref=e250]:
+                  - img [ref=e252]
+                  - generic [ref=e254]:
+                    - generic [ref=e255]:
+                      - img [ref=e256]
+                      - text: 09:00 PM
+                    - heading "Late Night Snacks" [level=4] [ref=e259]
+            - generic [ref=e260]:
+              - heading "Sunday, Feb 22" [level=3] [ref=e263]
+              - generic [ref=e264]:
+                - generic [ref=e266]:
+                  - img [ref=e269]
+                  - generic [ref=e271]:
+                    - generic [ref=e272]:
+                      - img [ref=e273]
+                      - text: 08:00 AM
+                    - heading "Breakfast" [level=4] [ref=e276]
+                - generic [ref=e278]:
+                  - img [ref=e281]
+                  - generic [ref=e283]:
+                    - generic [ref=e284]:
+                      - img [ref=e285]
+                      - text: 10:00 AM
+                    - 'heading "Workshop: Pitching Your Project" [level=4] [ref=e288]'
+                - generic [ref=e290]:
+                  - img [ref=e293]
+                  - generic [ref=e296]:
+                    - generic [ref=e297]:
+                      - img [ref=e298]
+                      - text: 01:00 PM
+                    - heading "Lunch" [level=4] [ref=e301]
+                - generic [ref=e303]:
+                  - img [ref=e306]
+                  - generic [ref=e309]:
+                    - generic [ref=e310]:
+                      - img [ref=e311]
+                      - text: 04:00 PM
+                    - heading "Hacking Ends & Submission" [level=4] [ref=e314]
+                - generic [ref=e316]:
+                  - img [ref=e319]
+                  - generic [ref=e322]:
+                    - generic [ref=e323]:
+                      - img [ref=e324]
+                      - text: 05:00 PM
+                    - heading "Judging & Presentations" [level=4] [ref=e327]
+                - generic [ref=e329]:
+                  - img [ref=e331]
+                  - generic [ref=e337]:
+                    - generic [ref=e338]:
+                      - img [ref=e339]
+                      - text: 08:00 PM
+                    - heading "Awards & Closing Ceremony" [level=4] [ref=e342]
+        - generic [ref=e344]:
+          - generic [ref=e347]:
+            - generic [ref=e348]:
+              - heading "Register Now" [level=2] [ref=e349]
+              - paragraph [ref=e350]: Secure your spot at JengaHacks 2026. Limited to 200 participants.
+            - generic [ref=e351]:
+              - generic [ref=e352]:
+                - generic [ref=e353]: Full Name *
+                - textbox "Full Name *" [ref=e355]:
+                  - /placeholder: John Doe
+              - generic [ref=e356]:
+                - generic [ref=e357]: Email Address *
+                - textbox "Email Address *" [ref=e359]:
+                  - /placeholder: john.doe@example.com
+              - generic [ref=e360]:
+                - generic [ref=e361]:
+                  - img [ref=e363]
+                  - text: WhatsApp Number *
+                - textbox "WhatsApp Number *" [ref=e366]:
+                  - /placeholder: +254 700 000000
+              - generic [ref=e367]:
+                - generic [ref=e368]:
+                  - img [ref=e370]
+                  - text: LinkedIn Profile
+                - textbox "LinkedIn Profile" [ref=e375]:
+                  - /placeholder: linkedin.com/in/yourprofile
+              - generic [ref=e376]:
+                - generic [ref=e377]:
+                  - img [ref=e378]
+                  - text: Resume (PDF only, max 5MB)
+                - button "Resume (PDF only, max 5MB)" [ref=e382]
+              - iframe [ref=e390]:
+                - generic [ref=f3e2]:
+                  - generic [ref=f3e3]:
+                    - checkbox "I'm not a robot" [ref=f3e7]
+                    - generic [ref=f3e11]: I'm not a robot
+                  - generic [ref=f3e12]:
+                    - generic [ref=f3e15]: reCAPTCHA
+                    - generic [ref=f3e16]:
+                      - link "Privacy" [ref=f3e17]:
+                        - /url: https://www.google.com/intl/en/policies/privacy/
+                      - text: "-"
+                      - link "Terms" [ref=f3e18]:
+                        - /url: https://www.google.com/intl/en/policies/terms/
+              - button "Complete Registration" [ref=e391] [cursor=pointer]
+              - paragraph [ref=e392]: We use this information to connect you with hiring companies and sponsors who are looking for talented participants like you.
+          - status [ref=e393]
+      - contentinfo [ref=e395]:
+        - generic [ref=e396]:
+          - generic [ref=e398]:
+            - generic [ref=e399]:
+              - img [ref=e400]
+              - generic [ref=e409]: JengaHacks
+            - paragraph [ref=e410]: Built in Nairobi. Ready for the World.
+          - generic [ref=e411]:
+            - generic [ref=e413]:
+              - generic [ref=e414]: "Share:"
+              - button "Share via..." [ref=e415] [cursor=pointer]:
+                - img
+                - text: Share via...
+              - button "Twitter" [ref=e416] [cursor=pointer]:
+                - img
+                - text: Twitter
+              - button "Facebook" [ref=e417] [cursor=pointer]:
+                - img
+                - text: Facebook
+              - button "LinkedIn" [ref=e418] [cursor=pointer]:
+                - img
+                - text: LinkedIn
+              - button "WhatsApp" [ref=e419] [cursor=pointer]:
+                - img
+                - text: WhatsApp
+              - button "Reddit" [ref=e420] [cursor=pointer]:
+                - img
+                - text: Reddit
+              - button "Telegram" [ref=e421] [cursor=pointer]:
+                - img
+                - text: Telegram
+              - button "Email" [ref=e422] [cursor=pointer]:
+                - img
+                - text: Email
+              - button "Copy Link" [ref=e423] [cursor=pointer]:
+                - img
+                - text: Copy Link
+            - generic [ref=e424]:
+              - paragraph [ref=e425]: © 2025 JengaHacks. All rights reserved.
+              - link "Run by Mimi Si Roboti Mimi Si Roboti" [ref=e426]:
+                - /url: https://www.linkedin.com/company/mimisiroboti
+                - generic [ref=e427]: Run by
+                - img "Mimi Si Roboti" [ref=e428]
+                - generic [ref=e429]: Mimi Si Roboti
+```

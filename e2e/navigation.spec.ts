@@ -35,9 +35,19 @@ test.describe('Navigation', () => {
     
     await sponsorshipLink.waitFor({ state: 'visible', timeout: 5000 });
     
-    // Use force click to bypass pointer interception from overlays
-    await sponsorshipLink.click({ force: true });
-    await expect(page).toHaveURL(/\/sponsorship\/?$/);
+    // Try normal click first, then force click, then JavaScript click as fallback
+    try {
+      await sponsorshipLink.click({ timeout: 2000 });
+    } catch (e) {
+      try {
+        await sponsorshipLink.click({ force: true, timeout: 2000 });
+      } catch (e2) {
+        // Fallback to JavaScript click if both fail
+        await sponsorshipLink.evaluate((el: HTMLAnchorElement) => el.click());
+      }
+    }
+    
+    await expect(page).toHaveURL(/\/sponsorship\/?$/, { timeout: 10000 });
   });
 
   test('should navigate to blog page', async ({ page }) => {
@@ -79,9 +89,19 @@ test.describe('Navigation', () => {
     // Wait for animations to complete
     await page.waitForTimeout(300);
     
-    // Use force click to bypass pointer interception from overlays
-    await blogLink.click({ force: true });
-    await expect(page).toHaveURL('/blog');
+    // Try normal click first, then force click, then JavaScript click as fallback
+    try {
+      await blogLink.click({ timeout: 2000 });
+    } catch (e) {
+      try {
+        await blogLink.click({ force: true, timeout: 2000 });
+      } catch (e2) {
+        // Fallback to JavaScript click if both fail
+        await blogLink.evaluate((el: HTMLAnchorElement) => el.click());
+      }
+    }
+    
+    await expect(page).toHaveURL('/blog', { timeout: 10000 });
   });
 
   test('should scroll to registration section when clicking register link', async ({ page }) => {

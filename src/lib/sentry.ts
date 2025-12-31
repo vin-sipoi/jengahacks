@@ -53,14 +53,40 @@ export const initSentry = () => {
       // Filter out known non-critical errors
       if (event.exception) {
         const error = hint.originalException;
+        const errorMessage = error instanceof Error ? error.message : String(error);
         
         // Ignore network errors (common and usually not actionable)
-        if (error instanceof TypeError && error.message.includes("fetch")) {
+        if (error instanceof TypeError && errorMessage.includes("fetch")) {
           return null;
         }
         
         // Ignore ResizeObserver errors (common browser quirk)
-        if (error instanceof Error && error.message.includes("ResizeObserver")) {
+        if (error instanceof Error && errorMessage.includes("ResizeObserver")) {
+          return null;
+        }
+        
+        // Ignore reCAPTCHA cross-origin frame errors (common in development with HTTP localhost)
+        if (errorMessage.includes("Blocked a frame") && 
+            (errorMessage.includes("google.com") || errorMessage.includes("recaptcha"))) {
+          return null;
+        }
+        
+        // Ignore protocol mismatch errors (HTTP localhost accessing HTTPS resources)
+        if (errorMessage.includes("protocols must match") || 
+            errorMessage.includes("Protocols must match")) {
+          return null;
+        }
+      }
+      
+      // Also filter by error message in the event itself
+      if (event.message) {
+        const message = typeof event.message === 'string' ? event.message : event.message.formatted || '';
+        if (message.includes("Blocked a frame") && 
+            (message.includes("google.com") || message.includes("recaptcha"))) {
+          return null;
+        }
+        if (message.includes("protocols must match") || 
+            message.includes("Protocols must match")) {
           return null;
         }
       }

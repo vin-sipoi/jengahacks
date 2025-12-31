@@ -9,6 +9,10 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  // Configure source maps - use inline in development to avoid loading issues
+  esbuild: {
+    sourcemap: mode === 'development' ? 'inline' : true,
+  },
   optimizeDeps: {
     include: [
       'react',
