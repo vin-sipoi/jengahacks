@@ -62,7 +62,27 @@ export const monitoredFetch = async (
         monitor.trackApiResponseTime(endpoint, duration, false);
 
         if (error instanceof Error) {
-            monitor.trackError(error, { context: 'monitoredFetch', endpoint, duration });
+            // Add more context for debugging
+            const errorContext: Record<string, unknown> = {
+                context: 'monitoredFetch',
+                endpoint,
+                duration,
+                url: typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url,
+            };
+            
+            // Add request method if available
+            if (fetchOptions?.method) {
+                errorContext.method = fetchOptions.method;
+            }
+            
+            // Add headers info (without sensitive data)
+            if (fetchOptions?.headers) {
+                const headers = new Headers(fetchOptions.headers);
+                errorContext.hasAuth = headers.has('authorization');
+                errorContext.hasApiKey = headers.has('apikey');
+            }
+            
+            monitor.trackError(error, errorContext);
         }
 
         throw error;

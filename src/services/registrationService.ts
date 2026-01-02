@@ -120,20 +120,68 @@ export const registrationService = {
         return { registrationId: null, error };
       }
 
-      const { data: registrationData, error: insertError } = await supabase.functions.invoke(
-        "register-with-ip",
-        {
-          body: {
-            full_name: data.fullName,
-            email: data.email,
-            whatsapp_number: data.whatsapp || null,
-            linkedin_url: data.linkedIn || null,
-            resume_path: data.resumePath || null,
-            is_waitlist: isWaitlist,
-            access_token: accessToken || undefined,
-          },
+      let registrationData;
+      let insertError;
+      
+      try {
+        // Log the exact URL we're calling for debugging
+        const functionUrl = `${supabaseUrl}/functions/v1/register-with-ip`;
+        logger.info("Invoking Edge Function", {
+          functionUrl,
+          email: data.email,
+          hasBody: true,
+        });
+
+        const result = await supabase.functions.invoke(
+          "register-with-ip",
+          {
+            body: {
+              full_name: data.fullName,
+              email: data.email,
+              whatsapp_number: data.whatsapp || null,
+              linkedin_url: data.linkedIn || null,
+              resume_path: data.resumePath || null,
+              is_waitlist: isWaitlist,
+              access_token: accessToken || undefined,
+            },
+          }
+        );
+        registrationData = result.data;
+        insertError = result.error;
+      } catch (fetchError) {
+        // Handle fetch errors (network issues, CORS, etc.)
+        const errorMessage = fetchError instanceof Error ? fetchError.message : String(fetchError);
+        const errorStack = fetchError instanceof Error ? fetchError.stack : undefined;
+        
+        // Enhanced error logging with more context
+        logger.error("Edge Function fetch error", fetchError instanceof Error ? fetchError : new Error(String(fetchError)), {
+          email: data.email,
+          fullName: data.fullName,
+          supabaseUrl,
+          functionUrl: `${supabaseUrl}/functions/v1/register-with-ip`,
+          errorMessage,
+          errorStack,
+          errorType: fetchError instanceof TypeError ? "TypeError" : typeof fetchError,
+          isNetworkError: errorMessage.includes("Failed to fetch") || errorMessage.includes("NetworkError"),
+          isCorsError: errorMessage.includes("CORS") || errorMessage.includes("cors"),
+          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+        });
+        
+        // Provide user-friendly error message
+        let userMessage = "Network error: Unable to connect to the registration service.";
+        if (errorMessage.includes("Failed to fetch") || errorMessage.includes("NetworkError")) {
+          userMessage = "Network error: Please check your internet connection and try again. If the problem persists, the service may be temporarily unavailable.";
+        } else if (errorMessage.includes("CORS") || errorMessage.includes("cors")) {
+          userMessage = "Connection error: Please check your browser settings or try a different browser.";
+        } else if (errorMessage.includes("timeout")) {
+          userMessage = "Request timeout: The service took too long to respond. Please try again.";
         }
-      );
+        
+        return { 
+          registrationId: null, 
+          error: new Error(userMessage) 
+        };
+      }
 
       // Handle function error structure (which might wrap errors)
       if (insertError) {
@@ -165,6 +213,9 @@ export const registrationService = {
           if (errorObj.status) errorDetails.status = errorObj.status;
           if (errorObj.statusCode) errorDetails.statusCode = errorObj.statusCode;
           if (errorObj.context) errorDetails.context = errorObj.context;
+          if (errorObj.name) errorDetails.errorName = errorObj.name;
+          // Log the full error object for debugging
+          errorDetails.fullError = JSON.stringify(insertError, Object.getOwnPropertyNames(insertError));
         }
 
         // Check for common error scenarios
