@@ -21,7 +21,8 @@
     "no": "Hapana",
     "previous": "Iliyotangulia",
     "next": "Ifuatayo",
-    "page": "Ukurasa"
+    "page": "Ukurasa",
+    "backToHome": "Rudi Nyumbani"
   },
   "hero": {
     "title": "JengaHacks 2026 - Hackathon Kuu ya Afrika Mashariki",
@@ -107,6 +108,7 @@
       "fullNameMustIncludeLastName": "Tafadhali ingiza jina lako la kwanza na la mwisho (limegawanywa na nafasi)",
       "emailRequired": "Anwani ya barua pepe inahitajika",
       "emailInvalid": "Tafadhali ingiza anwani halali ya barua pepe",
+      "whatsappRequired": "Nambari ya WhatsApp inahitajika",
       "whatsappInvalid": "Tafadhali ingiza nambari halali ya WhatsApp (mfano: +254712345678 au 0712345678)",
       "linkedinInvalid": "Tafadhali ingiza wasifu halali wa LinkedIn (mfano: johndoe, in/johndoe, au linkedin.com/in/johndoe)",
       "resumeRequired": "Tafadhali toa wasifu wako wa LinkedIn au pakia resume yako",
@@ -118,6 +120,7 @@
       "duplicateEmail": "Barua pepe hii tayari imesajiliwa",
       "duplicateEmailHelp": "Anwani hii ya barua pepe tayari imetumika kujiandikisha. Ikiwa hii ni barua pepe yako, tafadhali angalia kikasha chako cha barua pepe kwa ujumbe wa uthibitishaji na maelezo ya usajili wako. Vinginevyo, tafadhali tumia anwani tofauti ya barua pepe ili kuendelea.",
       "duplicateEmailSuggestion": "Tayari umesajiliwa? Angalia barua pepe yako kwa ujumbe wa uthibitishaji au tumia anwani tofauti ya barua pepe.",
+      "pleaseWait": "Tafadhali subiri tunapoangalia barua pepe yako",
       "failed": "Usajili umeshindwa. Tafadhali jaribu tena.",
       "formErrors": "Tafadhali rekebisha makosa kwenye fomu"
     },

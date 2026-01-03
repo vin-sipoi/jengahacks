@@ -505,7 +505,7 @@ const ManageRegistration = () => {
                       ) : (
                         <>
                           <X className="w-4 h-4 mr-2" />
-                          {t("manageRegistration.cancel")}
+                          {t("manageRegistration.cancelButton")}
                         </>
                       )}
                     </Button>
