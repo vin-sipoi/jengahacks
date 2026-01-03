@@ -25,6 +25,8 @@ export const sanitizeHtml = (
     return "";
   }
 
+  // More restrictive tag list - removed iframe and video for better security
+  // Only allow basic formatting and safe media tags
   const allowedTags = options?.allowedTags || [
     "p",
     "br",
@@ -44,21 +46,31 @@ export const sanitizeHtml = (
     "blockquote",
     "code",
     "pre",
-    "video",
-    "source",
-    "iframe",
+    // Removed: "video", "source", "iframe" for better security
+    // Add back only if absolutely necessary with strict CSP
   ];
 
+  // Restrictive attribute list - removed potentially dangerous attributes
   const allowedAttr = options?.allowedAttributes
     ? Object.values(options.allowedAttributes).flat()
-    : ["href", "title", "target", "rel", "src", "poster", "controls", "preload", "width", "height", "frameborder", "allow", "allowfullscreen", "class"];
+    : [
+        "href", 
+        "title", 
+        "target", 
+        "rel", 
+        // Removed: "src", "poster", "controls", "preload", "width", "height", 
+        // "frameborder", "allow", "allowfullscreen" for better security
+        // Only allow "class" if needed for styling
+      ];
 
   const config = {
     ALLOWED_TAGS: allowedTags,
     ALLOWED_ATTR: allowedAttr,
-    ALLOW_DATA_ATTR: false,
+    ALLOW_DATA_ATTR: false, // Never allow data attributes
     KEEP_CONTENT: true,
-    ADD_ATTR: ["target"],
+    ADD_ATTR: ["target"], // Add target="_blank" to links
+    FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "form", "input", "button"], // Explicitly forbid dangerous tags
+    FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover", "style"], // Forbid event handlers and inline styles
   };
 
   return DOMPurify.sanitize(html, config);

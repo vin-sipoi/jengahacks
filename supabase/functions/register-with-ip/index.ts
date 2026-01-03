@@ -15,6 +15,53 @@ interface RegistrationData {
   access_token?: string;
 }
 
+/**
+ * Validate IPv4 or IPv6 address
+ */
+function isValidIP(ip: string): boolean {
+  // IPv4 regex: 0.0.0.0 to 255.255.255.255
+  const ipv4Regex = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+  
+  // IPv6 regex (simplified - allows compressed format)
+  const ipv6Regex = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/;
+  
+  return ipv4Regex.test(ip) || ipv6Regex.test(ip);
+}
+
+/**
+ * Validate email format
+ */
+function isValidEmail(email: string): boolean {
+  if (!email || email.length > 254) {
+    return false;
+  }
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  return emailRegex.test(email);
+}
+
+/**
+ * Validate WhatsApp number format
+ */
+function isValidWhatsAppNumber(phone: string | null | undefined): boolean {
+  if (!phone || phone.trim().length === 0) {
+    return false;
+  }
+  const cleaned = phone.trim().replace(/[\s\-()]/g, '');
+  const phoneRegex = /^\+?[1-9]\d{6,14}$/;
+  return phoneRegex.test(cleaned);
+}
+
+/**
+ * Validate LinkedIn URL format
+ */
+function isValidLinkedInUrl(url: string | null | undefined): boolean {
+  if (!url || url.trim().length === 0) {
+    return true; // Optional field
+  }
+  const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/i;
+  return linkedinRegex.test(url.trim());
+}
+
 serve(async (req: Request) => {
   const corsResponse = handleCORS(req);
   if (corsResponse) return corsResponse;
@@ -26,11 +73,11 @@ serve(async (req: Request) => {
     const realIp = req.headers.get("x-real-ip");
     const clientIp = forwardedFor?.split(",")[0]?.trim() || realIp || "unknown";
 
-    // Parse IP address (handle IPv4 and IPv6)
+    // Parse and validate IP address (handle IPv4 and IPv6)
     let ipAddress: string | null = null;
     try {
-      // Validate and normalize IP
-      if (clientIp !== "unknown" && clientIp.match(/^[\d.:a-fA-F]+$/)) {
+      // Validate IP address format
+      if (clientIp !== "unknown" && isValidIP(clientIp)) {
         ipAddress = clientIp;
       }
     } catch (error) {
@@ -43,9 +90,43 @@ serve(async (req: Request) => {
     const { full_name, email, whatsapp_number, linkedin_url, resume_path, is_waitlist, access_token }: RegistrationData =
       await req.json();
 
-    // Validate required fields
-    if (!full_name || !email) {
-      return createErrorResponse("full_name and email are required", 400);
+    // Comprehensive input validation
+    if (!full_name || typeof full_name !== "string") {
+      return createErrorResponse("Full name is required", 400, "VALIDATION_ERROR", req);
+    }
+    
+    if (full_name.length < 2 || full_name.length > 100) {
+      return createErrorResponse("Full name must be between 2 and 100 characters", 400, "VALIDATION_ERROR", req);
+    }
+    
+    if (!email || typeof email !== "string") {
+      return createErrorResponse("Email is required", 400, "VALIDATION_ERROR", req);
+    }
+    
+    if (!isValidEmail(email)) {
+      return createErrorResponse("Invalid email format", 400, "VALIDATION_ERROR", req);
+    }
+    
+    if (email.length > 254) {
+      return createErrorResponse("Email is too long", 400, "VALIDATION_ERROR", req);
+    }
+    
+    if (whatsapp_number !== null && whatsapp_number !== undefined && !isValidWhatsAppNumber(whatsapp_number)) {
+      return createErrorResponse("Invalid WhatsApp number format", 400, "VALIDATION_ERROR", req);
+    }
+    
+    if (linkedin_url !== null && linkedin_url !== undefined && !isValidLinkedInUrl(linkedin_url)) {
+      return createErrorResponse("Invalid LinkedIn URL format", 400, "VALIDATION_ERROR", req);
+    }
+    
+    if (resume_path !== null && resume_path !== undefined) {
+      if (typeof resume_path !== "string" || resume_path.length > 255) {
+        return createErrorResponse("Invalid resume path", 400, "VALIDATION_ERROR", req);
+      }
+      // Validate resume path format (should be sanitized filename)
+      if (!/^[\d]+-[a-zA-Z0-9]+\.pdf$/.test(resume_path)) {
+        return createErrorResponse("Invalid resume path format", 400, "VALIDATION_ERROR", req);
+      }
     }
 
     // Create Supabase client
@@ -139,18 +220,20 @@ serve(async (req: Request) => {
         }
 
         return createErrorResponse(
-          "Rate limit exceeded. Maximum 3 registrations per email or 5 per IP per hour.",
+          "Rate limit exceeded. Please try again later.",
           429,
-          "RATE_LIMIT_EXCEEDED"
+          "RATE_LIMIT_EXCEEDED",
+          req
         );
       }
 
       // Check for duplicate email
       if (error.code === "23505") {
-        return createErrorResponse("This email is already registered", 409, "DUPLICATE_EMAIL");
+        return createErrorResponse("This email is already registered", 409, "DUPLICATE_EMAIL", req);
       }
 
-      return createErrorResponse(error.message, 500, error.code);
+      // Generic error for all other cases
+      return createErrorResponse("An error occurred processing your registration", 500, error.code, req);
     }
 
     return createResponse({
@@ -159,9 +242,9 @@ serve(async (req: Request) => {
         id: data.id,
         email: data.email,
       },
-    });
+    }, 200, req);
   } catch (error) {
-    return createErrorResponse(error instanceof Error ? error.message : "Unknown error", 500);
+    return createErrorResponse("An error occurred processing your request", 500, undefined, req);
   }
 });
 

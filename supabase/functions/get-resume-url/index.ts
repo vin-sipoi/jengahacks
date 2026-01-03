@@ -26,7 +26,7 @@ serve(async (req: Request) => {
     
     if (!authHeader) {
       console.error("No authorization header provided");
-      return createErrorResponse("Unauthorized - Authentication required", 401);
+      return createErrorResponse("Unauthorized - Authentication required", 401, "UNAUTHORIZED", req);
     }
 
     // Verify Supabase Auth token
@@ -35,7 +35,7 @@ serve(async (req: Request) => {
 
     if (authError || !user) {
       console.error("Auth error:", authError?.message || "No user found");
-      return createErrorResponse("Unauthorized - Invalid token", 401);
+      return createErrorResponse("Unauthorized - Invalid token", 401, "UNAUTHORIZED", req);
     }
 
     // Check if user has admin role
@@ -47,19 +47,25 @@ serve(async (req: Request) => {
 
     if (rolesError) {
       console.error("Error checking admin role:", rolesError.message);
-      return createErrorResponse("Error verifying permissions", 500);
+      return createErrorResponse("Error verifying permissions", 500, undefined, req);
     }
 
     if (!roles || roles.length === 0) {
       console.error("User does not have admin role:", user.id);
-      return createErrorResponse("Forbidden - Admin access required", 403);
+      return createErrorResponse("Forbidden - Admin access required", 403, "FORBIDDEN", req);
     }
 
     // Parse request body
     const { resume_path }: GetResumeUrlRequest = await req.json();
 
+    // Validate input
     if (!resume_path || typeof resume_path !== "string") {
-      return createErrorResponse("Invalid request - resume_path required", 400);
+      return createErrorResponse("Invalid request - resume_path required", 400, "VALIDATION_ERROR", req);
+    }
+    
+    // Validate resume path format (should be sanitized filename: timestamp-randomstring.pdf)
+    if (resume_path.length > 255 || !/^[\d]+-[a-zA-Z0-9]+\.pdf$/.test(resume_path)) {
+      return createErrorResponse("Invalid resume path format", 400, "VALIDATION_ERROR", req);
     }
 
     // Verify the resume exists and belongs to a registration
@@ -71,7 +77,7 @@ serve(async (req: Request) => {
 
     if (regError || !registration) {
       console.error("Resume not found:", resume_path);
-      return createErrorResponse("Resume not found", 404);
+      return createErrorResponse("Resume not found", 404, "NOT_FOUND", req);
     }
 
     // Generate signed URL with 1 hour expiration
@@ -81,7 +87,7 @@ serve(async (req: Request) => {
 
     if (urlError || !signedUrlData) {
       console.error("Error creating signed URL:", urlError);
-      return createErrorResponse("Failed to generate download URL", 500);
+      return createErrorResponse("Failed to generate download URL", 500, undefined, req);
     }
 
     console.log("Resume URL generated for admin:", user.email);
@@ -90,12 +96,9 @@ serve(async (req: Request) => {
       success: true,
       url: signedUrlData.signedUrl,
       expires_at: new Date(Date.now() + 3600 * 1000).toISOString(),
-    });
+    }, 200, req);
   } catch (error) {
     console.error("Error in get-resume-url function:", error);
-    return createErrorResponse(
-      error instanceof Error ? error.message : "Internal server error",
-      500
-    );
+    return createErrorResponse("An error occurred processing your request", 500, undefined, req);
   }
 });

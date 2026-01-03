@@ -13,13 +13,18 @@ serve(async (req: Request) => {
 
   try {
     if (!RECAPTCHA_SECRET_KEY) {
-      return createErrorResponse("reCAPTCHA secret key not configured", 500);
+      return createErrorResponse("reCAPTCHA secret key not configured", 500, undefined, req);
     }
 
     const { token }: VerifyRequest = await req.json();
 
-    if (!token) {
-      return createErrorResponse("CAPTCHA token is required", 400);
+    // Validate input
+    if (!token || typeof token !== "string") {
+      return createErrorResponse("CAPTCHA token is required", 400, "VALIDATION_ERROR", req);
+    }
+    
+    if (token.length > 2000) {
+      return createErrorResponse("Invalid CAPTCHA token format", 400, "VALIDATION_ERROR", req);
     }
 
     // Verify token with Google reCAPTCHA API
@@ -30,7 +35,7 @@ serve(async (req: Request) => {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: `secret=${RECAPTCHA_SECRET_KEY}&response=${token}`,
+        body: `secret=${RECAPTCHA_SECRET_KEY}&response=${encodeURIComponent(token)}`,
       }
     );
 
@@ -41,9 +46,9 @@ serve(async (req: Request) => {
       score: verifyData.score, // For v3, score indicates bot likelihood
       challenge_ts: verifyData.challenge_ts,
       hostname: verifyData.hostname,
-    });
+    }, 200, req);
   } catch (error) {
-    return createErrorResponse(error instanceof Error ? error.message : "Unknown error", 500);
+    return createErrorResponse("An error occurred verifying CAPTCHA", 500, undefined, req);
   }
 });
 

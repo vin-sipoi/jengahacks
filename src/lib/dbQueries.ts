@@ -145,10 +145,20 @@ async function getPaginatedRegistrationsFallback(
     .range(offset, offset + limit - 1);
 
   // Apply search filter if provided
+  // Escape special characters to prevent injection
   if (search) {
-    const searchLower = search.toLowerCase();
+    const searchLower = search.toLowerCase().trim();
+    // Escape special ILIKE characters: %, _, \
+    const escapedSearch = searchLower
+      .replace(/\\/g, "\\\\")
+      .replace(/%/g, "\\%")
+      .replace(/_/g, "\\_");
+    
+    // Limit search length to prevent abuse
+    const safeSearch = escapedSearch.substring(0, 100);
+    
     query = query.or(
-      `full_name.ilike.%${searchLower}%,email.ilike.%${searchLower}%,linkedin_url.ilike.%${searchLower}%`
+      `full_name.ilike.%${safeSearch}%,email.ilike.%${safeSearch}%,linkedin_url.ilike.%${safeSearch}%`
     );
   }
 
