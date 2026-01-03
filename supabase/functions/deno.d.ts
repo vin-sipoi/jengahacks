@@ -32,3 +32,18 @@ declare namespace Deno {
         port: number;
     }
 }
+
+// Deno standard library HTTP server types
+declare module "https://deno.land/std@0.168.0/http/server.ts" {
+    /**
+     * Serves HTTP requests with the given handler.
+     * @param handler The handler function that processes requests
+     * @returns A promise that resolves when the server is ready
+     */
+    export function serve(handler: (req: Request) => Response | Promise<Response>): void;
+}
+
+// Supabase client types
+declare module "https://esm.sh/@supabase/supabase-js@2" {
+    export function createClient(url: string, key: string): any;
+}

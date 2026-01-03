@@ -29,7 +29,9 @@ export const registrationService = {
       if (error) {
         // If function doesn't exist yet, return false (graceful degradation)
         // This allows the form to work even if migration hasn't been run
-        logger.warn("Email check function not available", error);
+        logger.warn("Email check function not available", {
+          error: error instanceof Error ? error.message : String(error),
+        });
         return { exists: false };
       }
 
@@ -221,13 +223,19 @@ export const registrationService = {
         // Handle specific error codes
         if (errorCode === "DUPLICATE_EMAIL" || errorMessage.toLowerCase().includes("already registered")) {
           const duplicateError = new Error("This email is already registered");
-          logger.warn("Duplicate email registration attempt", duplicateError, { email: data.email });
+          logger.warn("Duplicate email registration attempt", { 
+            error: duplicateError.message,
+            email: data.email 
+          });
           return { registrationId: null, error: duplicateError };
         }
         
         if (errorCode === "RATE_LIMIT_EXCEEDED" || errorMessage.toLowerCase().includes("rate limit")) {
           const rateLimitError = new Error("Rate limit exceeded. Please try again later.");
-          logger.warn("Rate limit exceeded", rateLimitError, { email: data.email });
+          logger.warn("Rate limit exceeded", { 
+            error: rateLimitError.message,
+            email: data.email 
+          });
           return { registrationId: null, error: rateLimitError };
         }
         

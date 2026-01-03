@@ -290,6 +290,96 @@ Set up alerts for backup failures (see `BACKUP_STRATEGY.md`).
 3. Ensure sufficient disk space
 4. Review restore logs
 
+### `create_admin_user.sql`
+
+SQL script to grant admin role to a Supabase user.
+
+**Usage:**
+1. First, create a user in Supabase Auth (Dashboard → Authentication → Users)
+2. Open Supabase SQL Editor
+3. Edit `scripts/create_admin_user.sql` and replace `'admin@example.com'` with your admin email
+4. Run the script in SQL Editor
+
+**Options:**
+- Grant admin by email (recommended)
+- Grant admin by user ID
+- List all users and their roles
+- Remove admin role from a user
+
+**Example:**
+```sql
+-- Grant admin role to user@example.com
+DO $$
+DECLARE
+  admin_user_id UUID;
+  admin_email TEXT := 'user@example.com';
+BEGIN
+  SELECT id INTO admin_user_id
+  FROM auth.users
+  WHERE email = admin_email;
+  
+  INSERT INTO public.user_roles (user_id, role)
+  VALUES (admin_user_id, 'admin')
+  ON CONFLICT (user_id, role) DO NOTHING;
+END $$;
+```
+
+### `create_admin_user.sh`
+
+Interactive shell script to guide you through admin user creation.
+
+**Usage:**
+```bash
+./scripts/create_admin_user.sh <project-ref>
+```
+
+**What it does:**
+- Prompts for admin email and password
+- Provides step-by-step instructions
+- Generates SQL to grant admin role
+
+**Note:** This script provides guidance. You still need to:
+1. Create the user in Supabase Dashboard
+2. Run the generated SQL in Supabase SQL Editor
+
+## Admin Portal Setup
+
+### Initial Setup
+
+1. **Run the migration:**
+   ```bash
+   supabase migration up
+   ```
+   This creates the `user_roles` table and `app_role` enum.
+
+2. **Create admin user:**
+   - Go to Supabase Dashboard → Authentication → Users
+   - Click "Add User" → "Create new user"
+   - Enter email and password
+   - Click "Create User"
+
+3. **Grant admin role:**
+   - Go to Supabase Dashboard → SQL Editor
+   - Run `scripts/create_admin_user.sql` (edit email first)
+   - Or use the interactive script: `./scripts/create_admin_user.sh`
+
+4. **Access admin portal:**
+   - Navigate to `/admin/login` on your site
+   - Log in with the email and password you created
+   - You'll be redirected to `/admin` dashboard
+
+### Verify Admin Access
+
+Run this SQL to see all users and their roles:
+```sql
+SELECT 
+  u.email,
+  array_agg(ur.role::text) as roles
+FROM auth.users u
+LEFT JOIN public.user_roles ur ON u.id = ur.user_id
+GROUP BY u.email;
+```
+
 ## Related Documentation
 
 - [Backup Strategy](../BACKUP_STRATEGY.md) - Comprehensive backup documentation

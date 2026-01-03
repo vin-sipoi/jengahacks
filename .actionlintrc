@@ -1,0 +1,20 @@
+# Actionlint configuration
+# This file configures actionlint to ignore warnings about optional secrets
+# that have fallback values in GitHub Actions workflows
+
+# Ignore warnings about context access for optional secrets
+# These secrets are intentionally optional and use fallback values (|| '')
+ignore:
+  - 'Context access might be invalid: STAGING_RECAPTCHA_SITE_KEY'
+  - 'Context access might be invalid: STAGING_GA_MEASUREMENT_ID'
+  - 'Context access might be invalid: STAGING_SENTRY_DSN'
+  - 'Context access might be invalid: STAGING_DISCORD_URL'
+  - 'Context access might be invalid: DISCORD_URL'
+  - 'Context access might be invalid: VERCEL_TOKEN'
+  - 'Context access might be invalid: NETLIFY_AUTH_TOKEN'
+  - 'Context access might be invalid: VERCEL_ORG_ID'
+  - 'Context access might be invalid: VERCEL_STAGING_PROJECT_ID'
+  - 'Context access might be invalid: VERCEL_PROJECT_ID'
+  - 'Context access might be invalid: NETLIFY_STAGING_SITE_ID'
+  - 'Context access might be invalid: NETLIFY_SITE_ID'
+
