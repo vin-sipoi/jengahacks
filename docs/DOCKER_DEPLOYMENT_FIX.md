@@ -70,3 +70,4 @@ supabase functions logs register-with-ip --project-ref <your-project-ref>
 - Use the Supabase Dashboard to upload the function manually
 - Or use GitHub Actions for automated deployment
 
+
