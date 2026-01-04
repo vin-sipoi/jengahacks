@@ -95,16 +95,40 @@ const AdminAuth = () => {
         return;
       }
 
+      const trimmedEmail = email.trim();
+      logger.debug("Attempting login", { email: trimmedEmail, passwordLength: password.length });
+      
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email: trimmedEmail,
         password: password,
       });
 
       if (error) {
-        logger.error("Login error", error);
+        logger.error("Login error", error, { 
+          email: trimmedEmail,
+          errorCode: error.status,
+          errorMessage: error.message 
+        });
         // Provide more user-friendly error messages
         if (error.message.includes("Invalid login credentials")) {
           toast.error(t("adminAuth.errors.invalidCredentials") || "Invalid email or password. Please check your credentials and try again.");
+          console.error("🔍 Detailed troubleshooting:");
+          console.error("Email used:", trimmedEmail);
+          console.error("Password length:", password.length);
+          console.error("Error status:", error.status);
+          console.error("");
+          console.error("💡 Check these in Supabase Dashboard:");
+          console.error("1. Authentication → Users → Find your user");
+          console.error("2. Verify email matches exactly (case-sensitive)");
+          console.error("3. Check 'Email Confirmed' status - should be green/confirmed");
+          console.error("4. Try resetting the password if unsure");
+          console.error("");
+          console.error("📋 Run this SQL to check user status:");
+          console.error(`   SELECT email, email_confirmed_at, encrypted_password IS NOT NULL as has_password`);
+          console.error(`   FROM auth.users WHERE LOWER(email) = LOWER('${trimmedEmail}');`);
+          console.error("");
+          console.error("🔧 If email is not confirmed, run this SQL to confirm it:");
+          console.error(`   UPDATE auth.users SET email_confirmed_at = NOW() WHERE LOWER(email) = LOWER('${trimmedEmail}');`);
         } else if (error.message.includes("Email not confirmed")) {
           toast.error(t("adminAuth.errors.emailNotConfirmed") || "Please confirm your email address before logging in.");
         } else if (error.message.includes("User not found")) {
